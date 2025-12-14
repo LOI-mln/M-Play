@@ -2,11 +2,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import LiveTvPage from './pages/LiveTvPage';
-import PlayerPage from './pages/PlayerPage'; // Placeholder
+import MoviesPage from './pages/MoviesPage';
+import SeriesPage from './pages/SeriesPage';
+import SeriesDetailsPage from './pages/SeriesDetailsPage';
+import PlayerPage from './pages/PlayerPage';
 import useAuthStore from './store/useAuthStore';
-
-// Temporary Player Placeholder
-const PlayerPlaceholder = () => <div className="text-white p-10">Video Player Loading...</div>;
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
@@ -32,9 +32,26 @@ function App() {
             </ProtectedRoute>
           } />
 
-          <Route path="/player/live/:streamId" element={
+          <Route path="/movies" element={
             <ProtectedRoute>
-              {/* Implemented in next step */}
+              <MoviesPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/series" element={
+            <ProtectedRoute>
+              <SeriesPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/series/:seriesId" element={
+            <ProtectedRoute>
+              <SeriesDetailsPage />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/player/:type/:streamId" element={
+            <ProtectedRoute>
               <PlayerPage />
             </ProtectedRoute>
           } />

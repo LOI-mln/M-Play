@@ -40,7 +40,7 @@ const LoginPage = () => {
                     <div className="bg-red-600 p-3 rounded-full mb-4 shadow-lg shadow-red-900/20">
                         <Tv size={32} className="text-white" />
                     </div>
-                    <h1 className="text-3xl font-bold text-white tracking-tight">XC Player</h1>
+                    <h1 className="text-3xl font-bold text-white tracking-tight">M-Play</h1>
                     <p className="text-neutral-400 mt-2">Enter your Xtream Codes API details</p>
                 </div>
 

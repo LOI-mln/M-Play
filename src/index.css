@@ -7,3 +7,161 @@
     @apply bg-neutral-900 text-white;
   }
 }
+
+.video-js {
+  width: 100% !important;
+  height: 100% !important;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Big Play Button - Modern & Centered */
+.video-js .vjs-big-play-button {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  line-height: 76px;
+  /* vert align */
+  font-size: 40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+}
+
+.video-js:hover .vjs-big-play-button {
+  background-color: #f00;
+  border-color: #f00;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* Control Bar - Sleek Gradient */
+.video-js .vjs-control-bar {
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.9));
+  height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+/* Progress Bar Container */
+.video-js .vjs-progress-control {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  display: flex;
+  align-items: flex-end;
+  transition: all 0.2s;
+}
+
+/* The actual clickable slider area */
+.video-js .vjs-progress-holder {
+  height: 3px;
+  transition: height 0.2s;
+}
+
+.video-js .vjs-progress-control:hover .vjs-progress-holder {
+  height: 5px;
+}
+
+/* Progress Bar Colors */
+.video-js .vjs-slider {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.video-js .vjs-load-progress {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.video-js .vjs-play-progress {
+  background-color: #f00;
+}
+
+.video-js .vjs-play-progress:before {
+  font-size: 14px;
+  color: #f00;
+  top: -5px;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  transform: scale(0);
+}
+
+.video-js .vjs-progress-control:hover .vjs-play-progress:before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Volume */
+.video-js .vjs-volume-panel {
+  margin-left: 10px;
+}
+
+.video-js .vjs-volume-level {
+  background-color: #fff;
+}
+
+/* Icons & text */
+.video-js .vjs-control {
+  width: 36px;
+}
+
+.video-js .vjs-icon-placeholder:before {
+  font-size: 20px;
+}
+
+.video-js .vjs-time-control {
+  font-size: 13px;
+  line-height: 54px;
+  font-weight: 500;
+  padding: 0 5px;
+}
+
+.video-js .vjs-remaining-time {
+  display: none;
+}
+
+/* Time Display - Clean text */
+.video-js .vjs-time-divider,
+.video-js .vjs-duration {
+  display: block !important;
+  padding: 0 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.video-js .vjs-remaining-time {
+  display: none;
+  /* YouTube shows current / duration usually */
+}
+
+/* Icons */
+.video-js .vjs-button {
+  width: 3em;
+}
+
+/* Buttons */
+.video-js .vjs-control {
+  width: 4em;
+}
+
+.video-js .vjs-button:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Time Tooltip */
+.video-js .vjs-time-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Remove Text Shadows from icons */
+.video-js .vjs-icon-placeholder:before {
+  text-shadow: none;
+}

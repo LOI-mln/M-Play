@@ -1,30 +1,44 @@
 import React, { useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
 import useAuthStore from '../store/useAuthStore';
 import { getStreamUrl } from '../api/xcClient';
 import { ArrowLeft, AlertTriangle } from 'lucide-react';
 
 const PlayerPage = () => {
-    const { streamId } = useParams();
+    const { type, streamId } = useParams(); // type: live, movie, series
+    const [searchParams] = useSearchParams();
+    const extension = searchParams.get('ext') || (type === 'live' ? 'm3u8' : 'mp4');
+
     const navigate = useNavigate();
     const { dns, user } = useAuthStore();
     const playerRef = useRef(null);
     const [error, setError] = useState(false);
 
     // Construct URL
-    // We try .m3u8 for browser compatibility first
-    const streamUrl = getStreamUrl(dns, user.username, user.password, streamId, 'm3u8');
+    const streamUrl = getStreamUrl(dns, user.username, user.password, streamId, extension, type);
 
     const videoJsOptions = {
-        autoplay: true,
+        autoplay: false, // Force user click to ensure audio plays
+        muted: false,
         controls: true,
+        controlBar: {
+            volumePanel: { inline: true }
+        },
         responsive: true,
         fluid: true,
         fill: true,
         sources: [{
             src: streamUrl,
-            type: 'application/x-mpegURL'
+            // If live, force HLS. If VOD, try to infer.
+            // video/mp4 is safe for mp4. video/x-matroska (mkv) is not supported in Chrome.
+            // If it is MKV, we can't easily play it without transcoding. 
+            // However, often XC servers create links that redirect to mp4 or allow transcoding.
+            // But let's set 'video/mp4' as default for non-m3u8 to give it a shot, 
+            // or leave type undefined for browser detection if not m3u8.
+            // Video.js handles 'video/mp4' well.
+            type: extension === 'm3u8' ? 'application/x-mpegURL' : (extension === 'mkv' ? 'video/webm' : `video/${extension}`)
+            // Chrome plays some WEBM/MKV. If fails, user gets error.
         }],
         html5: {
             vhs: {
@@ -37,6 +51,20 @@ const PlayerPage = () => {
 
     const handlePlayerReady = (player) => {
         playerRef.current = player;
+
+        // Force volume to 100% on load
+        player.on('loadedmetadata', () => {
+            player.muted(false);
+            player.volume(1.0);
+        });
+
+        // Double check on play to override any browser policy
+        player.on('play', () => {
+            if (player.muted()) {
+                player.muted(false);
+                player.volume(1.0);
+            }
+        });
 
         // Handle errors
         player.on('error', () => {
@@ -54,7 +82,7 @@ const PlayerPage = () => {
                     className="flex items-center gap-2 text-white hover:text-red-500 transition-colors"
                 >
                     <ArrowLeft size={28} />
-                    <span className="font-bold text-lg drop-shadow-md">Back to Channels</span>
+                    <span className="font-bold text-lg drop-shadow-md">Back</span>
                 </button>
             </div>
 
@@ -69,6 +97,7 @@ const PlayerPage = () => {
                         <p className="text-neutral-400">
                             Unable to play this stream. The format might not be supported in this browser or the stream is offline.
                         </p>
+                        <p className="text-xs text-neutral-600 font-mono break-all">{streamUrl}</p>
                         <button
                             onClick={() => window.location.reload()}
                             className="px-6 py-2 bg-neutral-800 hover:bg-neutral-700 rounded-lg text-white transition-colors"
