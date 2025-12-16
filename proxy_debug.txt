@@ -1,0 +1,139 @@
+2025-12-16 18:00:46 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMzMyMDA2Lm1rdg==
+2025-12-16 18:00:46 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1332006.mkv
+2025-12-16 18:00:46 - CMD: ffmpeg -user_agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 2 -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1332006.mkv' -c:v copy -c:a aac -b:a 192k -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60.  8.100 / 60.  8.100
+  libavcodec     62. 11.100 / 62. 11.100
+  libavformat    62.  3.100 / 62.  3.100
+  libavdevice    62.  1.100 / 62.  1.100
+  libavfilter    11.  4.100 / 11.  4.100
+  libswscale      9.  1.100 /  9.  1.100
+  libswresample   6.  1.100 /  6.  1.100
+Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1332006.mkv':
+  Metadata:
+    title           : Christy
+    encoder         : libebml v1.4.5 + libmatroska v1.7.1
+    creation_time   : 2025-12-09T09:10:44.000000Z
+  Duration: 02:14:59.46, start: 0.000000, bitrate: 10679 kb/s
+  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x802 [SAR 1:1 DAR 960:401], 23.98 fps, 23.98 tbr, 1k tbn (default)
+    Metadata:
+      BPS             : 9909221
+      DURATION        : 02:14:59.425000000
+      NUMBER_OF_FRAMES: 194192
+      NUMBER_OF_BYTES : 10032374958
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:1(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 384 kb/s (default)
+    Metadata:
+      title           : VFQ : French
+      BPS             : 384000
+      DURATION        : 02:14:59.456000000
+      NUMBER_OF_FRAMES: 253108
+      NUMBER_OF_BYTES : 388773888
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:2(eng): Audio: ac3, 48000 Hz, 5.1(side), fltp, 384 kb/s
+    Metadata:
+      title           : VO : English
+      BPS             : 384000
+      DURATION        : 02:14:59.456000000
+      NUMBER_OF_FRAMES: 253108
+      NUMBER_OF_BYTES : 388773888
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:3(fre): Subtitle: subrip (srt) (default) (forced)
+    Metadata:
+      title           : VFQ : Forced
+      BPS             : 0
+      DURATION        : 02:06:12.281000000
+      NUMBER_OF_FRAMES: 10
+      NUMBER_OF_BYTES : 448
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:4(fre): Subtitle: subrip (srt)
+    Metadata:
+      title           : VFQ : Full
+      BPS             : 57
+      DURATION        : 02:14:01.208000000
+      NUMBER_OF_FRAMES: 1591
+      NUMBER_OF_BYTES : 57470
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:5(fre): Subtitle: subrip (srt) (hearing impaired)
+    Metadata:
+      title           : VFQ : Full SDH
+      BPS             : 66
+      DURATION        : 02:14:04.128000000
+      NUMBER_OF_FRAMES: 2039
+      NUMBER_OF_BYTES : 66791
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:6(eng): Subtitle: subrip (srt)
+    Metadata:
+      title           : VO : Full
+      BPS             : 47
+      DURATION        : 02:05:45.059000000
+      NUMBER_OF_FRAMES: 1519
+      NUMBER_OF_BYTES : 44782
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:7(eng): Subtitle: subrip (srt) (hearing impaired)
+    Metadata:
+      title           : VO : Full SDH
+      BPS             : 53
+      DURATION        : 02:09:57.268000000
+      NUMBER_OF_FRAMES: 1771
+      NUMBER_OF_BYTES : 52220
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (ac3 (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to 'pipe:1':
+  Metadata:
+    title           : Christy
+    encoder         : Lavf62.3.100
+  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x802 [SAR 1:1 DAR 960:401], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
+    Metadata:
+      BPS             : 9909221
+      DURATION        : 02:14:59.425000000
+      NUMBER_OF_FRAMES: 194192
+      NUMBER_OF_BYTES : 10032374958
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 aac
+      title           : VFQ : French
+      BPS             : 384000
+      DURATION        : 02:14:59.456000000
+      NUMBER_OF_FRAMES: 253108
+      NUMBER_OF_BYTES : 388773888
+      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-12-09 09:10:44
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+frame=  413 fps=0.0 q=-1.0 size=   13069KiB time=00:00:17.18 bitrate=6230.6kbits/s speed=34.2x elapsed=0:00:00.50    frame=  867 fps=863 q=-1.0 size=   23557KiB time=00:00:36.11 bitrate=5343.0kbits/s speed=35.9x elapsed=0:00:01.00    frame= 1019 fps=676 q=-1.0 size=   31148KiB time=00:00:42.45 bitrate=6009.9kbits/s speed=28.2x elapsed=0:00:01.50    frame= 1692 fps=841 q=-1.0 size=   46363KiB time=00:01:10.52 bitrate=5385.2kbits/s speed=35.1x elapsed=0:00:02.01    frame= 1913 fps=762 q=-1.0 size=   56388KiB time=00:01:19.74 bitrate=5792.5kbits/s speed=31.7x elapsed=0:00:02.51    frame= 2126 fps=705 q=-1.0 size=   73378KiB time=00:01:28.62 bitrate=6782.3kbits/s speed=29.4x elapsed=0:00:03.01    [http @ 0x855006ee0] Stream ends prematurely at 90791077, should be 10812699153
+[http @ 0x855006ee0] Will reconnect at 90791077 in 0 second(s), error=Input/output error.
+frame= 2243 fps=637 q=-1.0 size=   81211KiB time=00:01:33.50 bitrate=7114.6kbits/s speed=26.5x elapsed=0:00:03.52    frame= 2301 fps=571 q=-1.0 size=   81211KiB time=00:01:36.01 bitrate=6929.1kbits/s speed=23.8x elapsed=0:00:04.02    frame= 2301 fps=508 q=-1.0 size=   81211KiB time=00:01:36.01 bitrate=6929.1kbits/s speed=21.2x elapsed=0:00:04.52    frame= 2301 fps=457 q=-1.0 size=   81211KiB time=00:01:36.01 bitrate=6929.1kbits/s speed=19.1x elapsed=0:00:05.03    [aost#0:1/aac @ 0x854cdc300] Error submitting a packet to the muxer: Broken pipe
+    Last message repeated 1 times
+[out#0/mp4 @ 0x855009380] Error muxing a packet
+[out#0/mp4 @ 0x855009380] Task finished with error code: -32 (Broken pipe)
+[out#0/mp4 @ 0x855009380] Terminating thread with return code -32 (Broken pipe)
+[out#0/mp4 @ 0x855009380] Error writing trailer: Broken pipe
+[out#0/mp4 @ 0x855009380] Error closing file: Broken pipe
+[out#0/mp4 @ 0x855009380] video:83233KiB audio:2257KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 2301 fps=419 q=-1.0 Lsize=   84187KiB time=00:01:36.01 bitrate=7183.0kbits/s speed=17.5x elapsed=0:00:05.49    
+[aac @ 0x855134000] Qavg: 1746.592
+Conversion failed!
