@@ -56,6 +56,15 @@ switch ($url) {
     case '/live/watch':
         (new App\Controllers\LiveController())->regarder();
         break;
+    case '/series':
+        (new App\Controllers\SeriesController())->index();
+        break;
+    case '/series/details':
+        (new App\Controllers\SeriesController())->details();
+        break;
+    case '/series/watch':
+        (new App\Controllers\SeriesController())->watch();
+        break;
     case '/logout':
         (new App\Controllers\AuthController())->logout();
         break;
