@@ -104,7 +104,7 @@ ob_start();
                     <div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                             <?php foreach ($episodesSaison as $ep): ?>
-                                <a href="/series/watch?id=<?= $ep['id'] ?>&ext=<?= $ep['container_extension'] ?>"
+                                <a href="/series/watch?id=<?= $ep['id'] ?>&ext=<?= $ep['container_extension'] ?>&duration=<?= urlencode($ep['info']['duration'] ?? '') ?>"
                                     class="flex items-center gap-4 p-4 rounded-lg hover:bg-white/5 transition group border border-transparent hover:border-gray-800">
 
                                     <!-- Numéro Épisode -->

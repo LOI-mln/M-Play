@@ -37,16 +37,22 @@ class ProxyController
         // On redirige stderr vers stdout pour le debug dans le log si besoin, 
         // ou on le capture séparément. Ici on loggue la commande.
         // -ac 2 : Force le downmix Stéréo (fixes 5.1 AAC compatibility issues)
-        // -strict experimental : Pour d'anciens encoders AAC
+        // -strict experimental        // Paramètre de début (Seek) en secondes
+        $startTime = isset($_GET['start']) ? (int) $_GET['start'] : 0;
 
-        // -user_agent : Spoof browser to avoid blocking
-        // -reconnect 1 : Auto reconnect on drop
-        // -reconnect_at_eof 1 : Reconnect at end if incomplete
-        // -reconnect_streamed 1 : For streams
-        // -reconnect_delay_max 2 : Fast reconnect
-        $cmd = "ffmpeg -user_agent \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\" -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 2 -i " . escapeshellarg($decodedUrl) . " -c:v copy -c:a aac -b:a 192k -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>" . escapeshellarg($logFile);
+        // Construction de la commande FFmpeg
+        // -ss avant -i pour un seek rapide (input seeking)
+        $seekParam = $startTime > 0 ? "-ss $startTime" : "";
 
-        file_put_contents($logFile, date('Y-m-d H:i:s') . " - CMD: $cmd\n", FILE_APPEND);
+        // Commande optimisée :
+        // -copyts : Copie les timestamps (important pour le seek ?) - Test sans pour l'instant
+        // -c:v copy : On ne re-encode PAS la video (CPU save), on la copie juste.
+        // -c:a aac : On re-encode l'audio en AAC stéréo (Le fix).
+        // -movflags frag_keyframe+empty_moov : Pour le streaming MP4 fragmenté.
+        $cmd = "ffmpeg $seekParam -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent \"Mozilla/5.0\" -i " . escapeshellarg($decodedUrl) . " -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>" . escapeshellarg($logFile);
+
+        // Log de la commande pour débug
+        file_put_contents(__DIR__ . '/../../proxy_debug.txt', date('[Y-m-d H:i:s] ') . "CMD: $cmd" . PHP_EOL, FILE_APPEND);
 
         // Execution
         $fp = popen($cmd, 'r');

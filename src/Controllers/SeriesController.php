@@ -164,6 +164,7 @@ class SeriesController
     {
         $streamId = $_GET['id'] ?? null;
         $extension = $_GET['ext'] ?? 'mp4';
+        $duration = $_GET['duration'] ?? ''; // Passé depuis la vue détails
 
         if (!$streamId) {
             die("Épisode introuvable.");

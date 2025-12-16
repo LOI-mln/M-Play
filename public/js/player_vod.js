@@ -24,7 +24,21 @@ const timeCurrent = document.getElementById('time-current');
 const timeDuration = document.getElementById('time-duration');
 
 // Initialisation HLS via Window Config
-const { streamUrlHls, streamUrlDirect, streamUrlTranscode } = window.VodConfig;
+const { streamUrlHls, streamUrlDirect, streamUrlTranscode, duration: rawDuration } = window.VodConfig;
+
+// Parsing de la durée (format "hh:mm:ss" ou secondes)
+let staticDuration = 0;
+if (rawDuration) {
+    if (rawDuration.includes(':')) {
+        const parts = rawDuration.split(':').reverse();
+        staticDuration += parseInt(parts[0] || 0); // sec
+        staticDuration += (parseInt(parts[1] || 0) * 60); // min
+        staticDuration += (parseInt(parts[2] || 0) * 3600); // hour
+    } else {
+        staticDuration = parseInt(rawDuration);
+    }
+}
+console.log("Static Duration (PHP):", staticDuration);
 
 let hls;
 
@@ -36,6 +50,7 @@ function loadVideo() {
 
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
             console.log("HLS found and parsed.");
+            // HLS a souvent la bonne durée, mais on garde staticDuration en backup
         });
 
         hls.on(Hls.Events.ERROR, function (event, data) {
@@ -161,35 +176,124 @@ function majIcons(isPlaying) {
 btnLecture.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
 video.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
 
+// Helper to get real duration
+function getDuration() {
+    if (staticDuration > 0) return staticDuration;
+    return (video.duration && isFinite(video.duration)) ? video.duration : 0;
+}
+
+// SEEK LOGIC (Updated for Transcoding)
+let currentTranscodeOffset = 0; // Offset en secondes si on seek en mode transcode
+let isTranscoding = false; // Flag pour savoir si on est en mode transcode
+
+function loadTranscode(startTime = 0) {
+    console.log("Loading Transcoded Source (AAC):", streamUrlTranscode, "Start:", startTime);
+    if (hls) hls.destroy();
+
+    isTranscoding = true;
+    currentTranscodeOffset = startTime;
+
+    // Affichage chargement
+    const chargement = document.getElementById('chargement');
+    chargement.style.display = 'flex';
+
+    // On ajoute le parametre start seulement si > 0
+    let url = streamUrlTranscode;
+    if (startTime > 0) {
+        url += "&start=" + Math.floor(startTime);
+    }
+
+    video.src = url;
+    video.load();
+    video.play().then(() => {
+        chargement.style.display = 'none';
+        majIcons(true);
+    }).catch(e => console.error(e));
+}
+
 // Seek Bar Logic
 video.addEventListener('timeupdate', () => {
-    if (video.duration && isFinite(video.duration)) {
-        const pct = (video.currentTime / video.duration) * 100;
+    const d = getDuration();
+    if (d > 0) {
+        // En mode transcode, le temps affiché = temps du buffer + offset du seek
+        const realCurrentTime = isTranscoding ? (video.currentTime + currentTranscodeOffset) : video.currentTime;
+
+        const pct = (realCurrentTime / d) * 100;
         progressBar.style.width = pct + '%';
         thumb.style.left = pct + '%';
-        seekSlider.value = video.currentTime;
-        // Avoid NaN
-        timeCurrent.innerText = formatTime(video.currentTime || 0);
+        seekSlider.value = realCurrentTime;
+        seekSlider.max = d;
+
+        timeCurrent.innerText = formatTime(realCurrentTime || 0);
+        timeDuration.innerText = formatTime(d);
     }
 });
 
 video.addEventListener('loadedmetadata', () => {
-    if (isFinite(video.duration)) {
-        timeDuration.innerText = formatTime(video.duration);
-        seekSlider.max = video.duration;
+    const d = getDuration();
+    if (d > 0) {
+        timeDuration.innerText = formatTime(d);
+        seekSlider.max = d;
     }
 });
 
-seekSlider.addEventListener('input', (e) => {
-    // Pendant le seek, on reset le timer
+// Event SEEK (Input change)
+seekSlider.addEventListener('change', (e) => {
+    // Note: 'change' se déclenche à la fin du drag, 'input' en continu. 
+    // Pour le seek serveur, on préfère 'change' pour éviter de spammer.
+    const val = parseFloat(e.target.value);
+
+    // Si on est en Transcode, on DOIT recharger le stream
+    if (isTranscoding && staticDuration > 0) {
+        loadTranscode(val);
+    } else {
+        // Standard seek
+        if (isFinite(video.duration)) {
+            video.currentTime = val;
+        }
+    }
     resetInactivityTimer();
-    const val = e.target.value;
-    const pct = (val / video.duration) * 100;
+});
+
+seekSlider.addEventListener('input', (e) => {
+    // Just visual update during drag
+    resetInactivityTimer();
+    const val = parseFloat(e.target.value);
+    const d = getDuration();
+    const pct = (val / d) * 100;
+
     progressBar.style.width = pct + '%';
     thumb.style.left = pct + '%';
     timeCurrent.innerText = formatTime(val);
-    video.currentTime = val;
 });
+
+// TOOLTIP HOVER
+const seekContainer = document.getElementById('seek-container');
+const timeTooltip = document.getElementById('time-tooltip');
+
+if (seekContainer && timeTooltip) {
+    seekContainer.addEventListener('mousemove', (e) => {
+        const rect = seekContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const width = rect.width;
+
+        // Calcul du temps survolé
+        const d = getDuration();
+        if (d > 0) {
+            const pct = Math.max(0, Math.min(1, x / width));
+            const time = pct * d;
+
+            // Positionnement
+            timeTooltip.style.left = (pct * 100) + '%';
+            timeTooltip.innerText = formatTime(time);
+            timeTooltip.style.opacity = '1';
+        }
+    });
+
+    seekContainer.addEventListener('mouseleave', () => {
+        timeTooltip.style.opacity = '0';
+    });
+}
 
 function formatTime(s) {
     if (!s || s < 0) s = 0;

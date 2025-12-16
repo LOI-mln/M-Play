@@ -163,6 +163,14 @@ class MoviesController
         $streamUrlHls = "$hote/movie/$username/$password/$streamId.m3u8";
         $streamUrlDirect = "$hote/movie/$username/$password/$streamId.$originalExt";
 
+        // Récupération de la durée via l'API (pour la barre de progression transcodée)
+        // L'API movies list ne donne pas la durée précise, on fait un get_vod_info rapide.
+        $urlInfo = "$hote/player_api.php?username=$username&password=$password&action=get_vod_info&vod_id=$streamId";
+        $infoData = @file_get_contents($urlInfo);
+        $infoJson = json_decode($infoData, true);
+        $duration = $infoJson['info']['duration'] ?? ''; // Format attendu: "01:55:20" ou "115"
+
+
         // Transcodage (Fix Audio) par notre proxy local
         // On encode l'URL source Direct pour la passer au proxy
         // IMPORTANT: urlencode après base64_encode pour éviter que les '+' deviennent des espaces

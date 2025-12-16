@@ -97,10 +97,17 @@
                     </div>
 
                     <!-- Seek Bar (Moved Here - Flex Grow) -->
-                    <div class="flex-grow flex items-center gap-3 group/seek">
-                        <span id="time-current" class="text-xs text-gray-300 font-mono w-10 text-right">00:00</span>
-                        <div
-                            class="relative flex-grow h-1 bg-gray-600 rounded-full cursor-pointer hover:h-1.5 transition-all">
+                    <div class="flex-grow flex items-center gap-3 group/seek relative">
+                        <span id="time-current"
+                            class="text-xs text-gray-300 font-sans font-bold w-12 text-right">00:00</span>
+
+                        <div class="relative flex-grow h-1 bg-gray-600 rounded-full cursor-pointer hover:h-1.5 transition-all"
+                            id="seek-container">
+                            <!-- Tooltip Time Hover -->
+                            <div id="time-tooltip"
+                                class="absolute bottom-4 -translate-x-1/2 bg-black/80 text-white text-xs font-sans font-bold py-1 px-2 rounded opacity-0 transition-opacity pointer-events-none z-20 whitespace-nowrap">
+                                00:00</div>
+
                             <div class="absolute inset-0 rounded-full overflow-hidden">
                                 <div id="progress-bar" class="absolute top-0 left-0 h-full bg-red-600 w-0"></div>
                             </div>
@@ -110,7 +117,7 @@
                             <input type="range" id="seek-slider" min="0" max="100" step="0.1" value="0"
                                 class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
                         </div>
-                        <span id="time-duration" class="text-xs text-gray-500 font-mono w-10">00:00</span>
+                        <span id="time-duration" class="text-xs text-gray-500 font-sans font-bold w-12">00:00</span>
                     </div>
 
                     <!-- Plein écran -->
@@ -133,7 +140,8 @@
         window.VodConfig = {
             streamUrlHls: '<?= $streamUrlHls ?>',
             streamUrlDirect: '<?= $streamUrlDirect ?>',
-            streamUrlTranscode: '<?= $streamUrlTranscode ?>'
+            streamUrlTranscode: '<?= $streamUrlTranscode ?>',
+            duration: '<?= $duration ?? '' ?>'
         };
     </script>
 
