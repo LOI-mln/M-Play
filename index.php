@@ -44,6 +44,15 @@ switch ($url) {
     case '/live':
         (new App\Controllers\LiveController())->index();
         break;
+    case '/movies':
+        (new App\Controllers\MoviesController())->index();
+        break;
+    case '/movies/watch':
+        (new App\Controllers\MoviesController())->watch();
+        break;
+    case '/stream/transcode':
+        (new App\Controllers\ProxyController())->transcode();
+        break;
     case '/live/watch':
         (new App\Controllers\LiveController())->regarder();
         break;

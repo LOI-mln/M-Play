@@ -1,0 +1,364 @@
+<?php
+// Vue pour le lecteur VOD (Movies)
+// On utilise le tag <video> standard car c'est un fichier MP4/MKV direct
+?>
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Film - M-Play</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Outfit:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #000;
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen overflow-hidden flex flex-col bg-black">
+
+    <!-- La Vidéo -->
+    <div class="relative w-full h-full bg-black overflow-hidden select-none" id="conteneur-video">
+        <!-- Header (Retour) -->
+        <div id="player-header"
+            class="absolute top-0 left-0 w-full p-6 bg-gradient-to-b from-black/90 to-transparent z-50 transition-opacity duration-500 opacity-100 flex justify-between items-start">
+            <a href="/movies"
+                class="text-white hover:text-red-600 transition flex items-center gap-2 font-bold uppercase tracking-wider w-fit">
+                <span>&larr;</span> Retour aux films
+            </a>
+
+            <!-- (Bouton Fix Audio supprimé car automatique) -->
+        </div>
+
+        <!-- Video (No Autoplay -> Click to Play for Sound) -->
+        <video id="lecteur-video" class="w-full h-full object-contain">
+            <!-- Source will be set by JS -->
+        </video>
+
+        <!-- Overlay de chargement -->
+        <div id="chargement" class="absolute inset-0 flex items-center justify-center bg-black z-40 hidden">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-600"></div>
+        </div>
+
+        <!-- Big Play Button (Initial) -->
+        <div id="overlay-play"
+            class="absolute inset-0 flex items-center justify-center z-30 bg-black/40 backdrop-blur-sm cursor-pointer transition-opacity duration-300">
+            <div
+                class="bg-red-600 text-white rounded-full p-6 shadow-lg shadow-red-900/50 hover:scale-110 transition-transform">
+                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Contrôles Custom (Barre du bas - Structure identique Live TV + Seekbar au dessus) -->
+        <div id="player-controls"
+            class="absolute bottom-0 left-0 w-full z-50 transition-opacity duration-500 opacity-100">
+
+            <!-- Gradient Background -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+
+            <div class="relative px-6 pb-6 pt-4 flex flex-col gap-1">
+
+                <!-- Controls Row -->
+                <div class="flex items-center gap-4">
+
+                    <!-- Play/Pause -->
+                    <button id="btn-lecture" class="text-white hover:text-red-600 transition transform hover:scale-110">
+                        <svg id="icone-play" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg id="icone-pause" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
+
+                    <!-- Volume -->
+                    <div class="flex items-center gap-2 group/vol">
+                        <button id="btn-mute" class="text-white hover:text-red-600 transition">
+                            <svg id="vol-high" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                            </svg>
+                            <svg id="vol-mute" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                            </svg>
+                        </button>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1"
+                            class="w-0 overflow-hidden group-hover/vol:w-20 transition-all duration-300 accent-red-600 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                    </div>
+
+                    <!-- Seek Bar (Moved Here - Flex Grow) -->
+                    <div class="flex-grow flex items-center gap-3 group/seek">
+                        <span id="time-current" class="text-xs text-gray-300 font-mono w-10 text-right">00:00</span>
+                        <div
+                            class="relative flex-grow h-1 bg-gray-600 rounded-full cursor-pointer hover:h-1.5 transition-all">
+                            <div class="absolute inset-0 rounded-full overflow-hidden">
+                                <div id="progress-bar" class="absolute top-0 left-0 h-full bg-red-600 w-0"></div>
+                            </div>
+                            <div id="thumb"
+                                class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow opacity-0 group-hover/seek:opacity-100 transition-opacity"
+                                style="left: 0%"></div>
+                            <input type="range" id="seek-slider" min="0" max="100" step="0.1" value="0"
+                                class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        </div>
+                        <span id="time-duration" class="text-xs text-gray-500 font-mono w-10">00:00</span>
+                    </div>
+
+                    <!-- Plein écran -->
+                    <button id="btn-plein-ecran" class="text-white hover:text-red-600 transition">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                        </svg>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HLS.js -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        const video = document.getElementById('lecteur-video');
+        const conteneurVideo = document.getElementById('conteneur-video');
+        const header = document.getElementById('player-header');
+        const controls = document.getElementById('player-controls');
+        const overlayPlay = document.getElementById('overlay-play');
+        const chargement = document.getElementById('chargement');
+
+        const btnLecture = document.getElementById('btn-lecture');
+        const iconePlay = document.getElementById('icone-play');
+        const iconePause = document.getElementById('icone-pause');
+
+        const btnMute = document.getElementById('btn-mute');
+        const volHigh = document.getElementById('vol-high');
+        const volMute = document.getElementById('vol-mute');
+        const sliderVolume = document.getElementById('volume-slider');
+
+        const btnPleinEcran = document.getElementById('btn-plein-ecran');
+
+        const seekSlider = document.getElementById('seek-slider');
+        const progressBar = document.getElementById('progress-bar');
+        const thumb = document.getElementById('thumb');
+        const timeCurrent = document.getElementById('time-current');
+        const timeDuration = document.getElementById('time-duration');
+
+        // Initialisation HLS
+        const streamUrlHls = '<?= $streamUrlHls ?>';
+        const streamUrlDirect = '<?= $streamUrlDirect ?>';
+        const streamUrlTranscode = '<?= $streamUrlTranscode ?>';
+
+        let hls;
+
+        function loadVideo() {
+            if (Hls.isSupported()) {
+                hls = new Hls();
+                hls.loadSource(streamUrlHls);
+                hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    console.log("HLS found and parsed.");
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    if (data.fatal) {
+                        console.warn("HLS Fatal, switching to TRANSCODE (Auto-Fix)...");
+                        hls.destroy();
+                        loadTranscode(); // Fallback to Transcode directly
+                    }
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Safari
+                video.src = streamUrlHls;
+                video.addEventListener('error', () => {
+                    console.warn("Safari HLS failed, switching to TRANSCODE.");
+                    loadTranscode();
+                }, { once: true });
+            } else {
+                // No HLS support -> Force Transcode
+                loadTranscode();
+            }
+        }
+
+        // Mode Direct (Backup manuel si besoin, mais on ne l'utilise plus en auto)
+        function loadDirect() {
+            console.log("Loading Direct Source:", streamUrlDirect);
+            if (hls) hls.destroy();
+            video.src = streamUrlDirect;
+            video.load();
+        }
+
+        function loadTranscode() {
+            console.log("Loading Transcoded Source (AAC):", streamUrlTranscode);
+            if (hls) hls.destroy();
+
+            // Affichage chargement
+            const chargement = document.getElementById('chargement');
+            chargement.style.display = 'flex';
+
+            video.src = streamUrlTranscode;
+            video.load();
+            video.play().then(() => {
+                chargement.style.display = 'none';
+                majIcons(true);
+            }).catch(e => console.error(e));
+        }
+
+        loadVideo();
+
+
+        // Initial Volume
+        video.volume = 1;
+
+        // UI Helpers & Inactivity Timer
+        let inactivityTimer;
+
+        function showControls() {
+            header.style.opacity = '1';
+            controls.style.opacity = '1';
+            conteneurVideo.style.cursor = 'default';
+        }
+
+        function hideControls() {
+            // Ne pas cacher si la vidéo est en pause
+            if (!video.paused) {
+                header.style.opacity = '0';
+                controls.style.opacity = '0';
+                conteneurVideo.style.cursor = 'none';
+            }
+        }
+
+        function resetInactivityTimer() {
+            showControls();
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(hideControls, 3000); // 3 secondes
+        }
+
+        // Listeners pour l'activité souris
+        conteneurVideo.addEventListener('mousemove', resetInactivityTimer);
+        conteneurVideo.addEventListener('click', resetInactivityTimer);
+
+        // Playback Logic (Click to Play -> Sound Guaranteed)
+        function startVideo() {
+            video.play().then(() => {
+                overlayPlay.style.display = 'none'; // Vire l'overlay
+                majIcons(true);
+                resetInactivityTimer(); // Start timer
+            }).catch(e => {
+                console.error("Play failed", e);
+            });
+        }
+
+        overlayPlay.addEventListener('click', (e) => {
+            e.stopPropagation();
+            startVideo();
+        });
+
+        // Toggle Play/Pause
+        function togglePlay() {
+            if (video.paused || video.ended) {
+                video.play();
+            } else {
+                video.pause();
+            }
+            resetInactivityTimer();
+        }
+
+        video.addEventListener('play', () => { majIcons(true); resetInactivityTimer(); });
+        video.addEventListener('pause', () => { majIcons(false); showControls(); }); // Toujours afficher en pause
+
+        function majIcons(isPlaying) {
+            if (isPlaying) {
+                iconePlay.classList.add('hidden');
+                iconePause.classList.remove('hidden');
+                overlayPlay.style.opacity = '0';
+                overlayPlay.style.pointerEvents = 'none';
+            } else {
+                iconePlay.classList.remove('hidden');
+                iconePause.classList.add('hidden');
+                showControls();
+            }
+        }
+
+        btnLecture.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
+        video.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
+
+        // Seek Bar Logic
+        video.addEventListener('timeupdate', () => {
+            if (video.duration && isFinite(video.duration)) {
+                const pct = (video.currentTime / video.duration) * 100;
+                progressBar.style.width = pct + '%';
+                thumb.style.left = pct + '%';
+                seekSlider.value = video.currentTime;
+                // Avoid NaN
+                timeCurrent.innerText = formatTime(video.currentTime || 0);
+            }
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+            if (isFinite(video.duration)) {
+                timeDuration.innerText = formatTime(video.duration);
+                seekSlider.max = video.duration;
+            }
+        });
+
+        seekSlider.addEventListener('input', (e) => {
+            // Pendant le seek, on reset le timer
+            resetInactivityTimer();
+            const val = e.target.value;
+            const pct = (val / video.duration) * 100;
+            progressBar.style.width = pct + '%';
+            thumb.style.left = pct + '%';
+            timeCurrent.innerText = formatTime(val);
+            video.currentTime = val;
+        });
+
+        function formatTime(s) {
+            if (!s || s < 0) s = 0;
+            const d = new Date(s * 1000);
+            const m = d.getUTCMinutes();
+            const sec = d.getUTCSeconds().toString().padStart(2, '0');
+            const h = d.getUTCHours();
+            return h ? `${h}:${m.toString().padStart(2, '0')}:${sec}` : `${m}:${sec}`;
+        }
+
+        // Volume
+        sliderVolume.addEventListener('input', (e) => { video.volume = e.target.value; });
+        btnMute.addEventListener('click', (e) => {
+            e.stopPropagation();
+            video.muted = !video.muted;
+            updateVolIcon();
+        });
+        video.addEventListener('volumechange', updateVolIcon);
+
+        function updateVolIcon() {
+            if (video.muted || video.volume === 0) {
+                volHigh.classList.add('hidden');
+                volMute.classList.remove('hidden');
+                sliderVolume.value = 0;
+            } else {
+                volHigh.classList.remove('hidden');
+                volMute.classList.add('hidden');
+                sliderVolume.value = video.volume;
+            }
+        }
+
+        // Fullscreen
+        btnPleinEcran.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!document.fullscreenElement) conteneurVideo.requestFullscreen();
+            else document.exitFullscreen();
+        });
+
+        controls.addEventListener('click', e => e.stopPropagation());
+
+    </script>
