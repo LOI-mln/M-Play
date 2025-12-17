@@ -11,29 +11,9 @@ ob_start();
             <img src="/ressources/logo.png" alt="M" class="h-16 md:h-20 object-contain drop-shadow-md">
         </div>
 
-        <!-- Droite: Infos Playlist -->
-        <div class="flex items-center gap-6 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-white/10">
-            <!-- Nom du compte -->
-            <div class="flex flex-col items-end">
-                <span
-                    class="text-gray-400 text-xs font-bold uppercase tracking-widest font-['JetBrains_Mono']">Compte</span>
-                <span
-                    class="text-white font-bold text-lg leading-none font-['JetBrains_Mono']"><?= htmlspecialchars($_SESSION['user']['username'] ?? 'Invité') ?></span>
-            </div>
-
-            <!-- Séparateur -->
-            <div class="h-8 w-px bg-white/10"></div>
-
-            <!-- Statut En Ligne -->
-            <div class="flex items-center gap-2">
-                <div class="relative flex h-3 w-3">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                </div>
-                <span class="text-green-500 font-bold text-xs uppercase tracking-widest font-['JetBrains_Mono']">En
-                    ligne</span>
-            </div>
+        <!-- Droite: Menu Global (Géré par layout.php) -->
+        <div class="flex items-center gap-6">
+            <!-- La place est laissée libre pour le menu absolute du layout -->
         </div>
     </div>
 

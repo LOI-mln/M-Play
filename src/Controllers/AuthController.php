@@ -16,6 +16,7 @@ class AuthController
         $hote = rtrim($_POST['host'] ?? '', '/');
         $utilisateur = $_POST['username'] ?? '';
         $motDePasse = $_POST['password'] ?? '';
+        $nomPlaylist = $_POST['playlist_name'] ?? 'Ma Playlist';
 
         if (!$hote || !$utilisateur || !$motDePasse) {
             $erreur = "Tous les champs sont requis.";
@@ -43,6 +44,7 @@ class AuthController
             $_SESSION['user'] = $donnees['user_info'];
             $_SESSION['server_info'] = $donnees['server_info'];
             $_SESSION['host'] = $hote;
+            $_SESSION['playlist_name'] = $nomPlaylist ?: 'Ma Playlist'; // Fallback explicite
             $_SESSION['auth_creds'] = [
                 'username' => $utilisateur,
                 'password' => $motDePasse
@@ -50,7 +52,7 @@ class AuthController
 
             // On sauvegarde en base de données
             $playlistModel = new Playlist();
-            $playlistModel->creer($hote, $utilisateur, $motDePasse);
+            $playlistModel->creer($hote, $utilisateur, $motDePasse, $nomPlaylist);
 
             header('Location: /');
             exit;

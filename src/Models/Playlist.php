@@ -11,6 +11,7 @@ class Playlist
     {
         $this->pdo = Database::getInstance()->getConnection();
         $this->createTableIfNotExists();
+        $this->ensureNameColumn();
     }
 
     private function createTableIfNotExists()
@@ -28,10 +29,21 @@ class Playlist
         $this->pdo->exec($sql);
     }
 
-    public function creer($hote, $utilisateur, $motDePasse)
+    private function ensureNameColumn()
     {
-        $stmt = $this->pdo->prepare("INSERT INTO playlists (host, username, password) VALUES (:host, :username, :password)");
+        try {
+            $this->pdo->exec("ALTER TABLE playlists ADD COLUMN name VARCHAR(255) DEFAULT 'Playlist' AFTER id");
+        } catch (\PDOException $e) {
+            // Ignorer si la colonne existe déjà (Code erreur 42S21 ou générique)
+        }
+    }
+
+    public function creer($hote, $utilisateur, $motDePasse, $nom = 'Playlist')
+    {
+        $nom = empty($nom) ? 'Playlist' : $nom;
+        $stmt = $this->pdo->prepare("INSERT INTO playlists (name, host, username, password) VALUES (:name, :host, :username, :password)");
         return $stmt->execute([
+            'name' => $nom,
             'host' => $hote,
             'username' => $utilisateur,
             'password' => $motDePasse
