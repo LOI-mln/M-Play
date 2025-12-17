@@ -42,12 +42,64 @@ ob_start();
                         <span class="text-yellow-500 flex items-center gap-1">★
                             <?= round($seriesInfo['rating_5based'], 1) ?></span>
                     <?php endif; ?>
-                    <?php if (isset($seriesInfo['releaseDate'])): ?>
-                        <span><?= $seriesInfo['releaseDate'] ?></span>
-                    <?php endif; ?>
-                    <?php if (isset($seriesInfo['genre'])): ?>
-                        <span class="text-red-500"><?= htmlspecialchars($seriesInfo['genre']) ?></span>
-                    <?php endif; ?>
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400 mb-6">
+                        <?php if (!empty($seriesInfo['year']) || !empty($seriesInfo['releaseDate'])): ?>
+                            <span><?= substr($seriesInfo['releaseDate'] ?? $seriesInfo['year'], 0, 4) ?></span>
+                            <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                        <?php endif; ?>
+                        <?php if (!empty($seriesInfo['genre'])): ?>
+                            <span><?= htmlspecialchars($seriesInfo['genre']) ?></span>
+                        <?php endif; ?>
+
+                        <!-- Language Selector -->
+                        <?php if (count($availableVersions) > 1): ?>
+                            <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                            <div class="relative group z-50">
+                                <button
+                                    class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-1 rounded text-white text-xs font-bold transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                                    </svg>
+                                    <span>LANGUE</span>
+                                    <svg class="w-3 h-3 text-gray-400 -mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <!-- Dropdown -->
+                                <div class="absolute left-0 pt-2 w-48 hidden group-hover:block">
+                                    <div class="bg-[#1a1a1a] border border-gray-800 rounded-lg shadow-xl overflow-hidden">
+                                        <?php foreach ($availableVersions as $ver): ?>
+                                            <?php
+                                            // Extract Tag (FR, EN, etc.)
+                                            $name = $ver['name'];
+                                            // USER REQUEST: Default to Anglais
+                                            $tag = 'Anglais';
+                                            if (preg_match('/\b(FR|VF|VFF|TRUEFRENCH)\b/i', $name))
+                                                $tag = 'FRançais (VF)';
+                                            elseif (preg_match('/\b(VOSTFR|VOST)\b/i', $name))
+                                                $tag = 'VOSTFR';
+                                            elseif (preg_match('/\b(EN|ENGLISH|VO)\b/i', $name))
+                                                $tag = 'English (VO)';
+                                            elseif (preg_match('/\b(MULTI)\b/i', $name))
+                                                $tag = 'Multi-Langues';
+
+                                            $isCurrent = $ver['series_id'] == $seriesId;
+                                            ?>
+                                            <a href="/series/details?id=<?= $ver['series_id'] ?>"
+                                                class="block px-4 py-2 text-xs hover:bg-gray-800 transition flex items-center justify-between <?= $isCurrent ? 'text-red-500 font-bold bg-white/5' : 'text-gray-300' ?>">
+                                                <span><?= $tag ?></span>
+                                                <?php if ($isCurrent): ?><span class="text-red-500">✓</span><?php endif; ?>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <p class="text-gray-300 leading-relaxed text-sm md:text-base line-clamp-3 md:line-clamp-none max-w-2xl">

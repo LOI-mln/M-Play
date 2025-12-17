@@ -82,45 +82,71 @@ ob_start();
                         <?php endif; ?>
                     </div>
 
-                    <!-- Language Selector (Integrated) -->
-                    <?php if (isset($availableVersions) && count($availableVersions) > 1): ?>
-                        <div class="relative group ml-auto md:ml-0">
-                            <button
-                                class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded text-sm font-medium transition text-gray-200">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-4">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
-                                </svg>
-                                <span>Langues</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-3 text-gray-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                </svg>
-                            </button>
-                            <!-- Dropdown -->
-                            <div class="absolute left-0 top-full pt-2 w-64 hidden group-hover:block z-50">
-                                <div class="bg-[#1a1a1a] rounded-lg shadow-xl border border-white/10 overflow-hidden">
-                                    <div class="p-1 max-h-64 overflow-y-auto custom-scrollbar">
-                                        <div
-                                            class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-white/5">
-                                            Choisir une version</div>
+
+                    <!-- Language Indicator / Selector -->
+                    <?php if (isset($availableVersions) && !empty($availableVersions)): ?>
+                        <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+
+                        <?php
+                        // Determine current language tag
+                        $currentName = $movieInfo['name'];
+                        // USER REQUEST: Default to "Anglais" instead of "Inconnue"
+                        $currentTag = 'Anglais';
+                        if (preg_match('/\b(FR|VF|VFF|TRUEFRENCH)\b/i', $currentName))
+                            $currentTag = 'VF';
+                        elseif (preg_match('/\b(VOSTFR|VOST)\b/i', $currentName))
+                            $currentTag = 'VOSTFR';
+                        elseif (preg_match('/\b(EN|ENGLISH|VO)\b/i', $currentName))
+                            $currentTag = 'VO';
+                        elseif (preg_match('/\b(MULTI)\b/i', $currentName))
+                            $currentTag = 'MULTI';
+                        ?>
+
+                        <?php if (count($availableVersions) > 1): ?>
+                            <div class="relative group z-50">
+                                <button
+                                    class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-1 rounded text-white text-xs font-bold transition border border-white/10 hover:border-red-500/50">
+                                    <span class="text-red-500"><?= $currentTag ?></span>
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <div class="absolute top-full left-0 pt-2 w-48 hidden group-hover:block">
+                                    <div class="bg-[#1a1a1a] border border-gray-800 rounded-lg shadow-xl overflow-hidden p-1">
                                         <?php foreach ($availableVersions as $ver): ?>
+                                            <?php
+                                            $vName = $ver['name'];
+                                            $vTag = 'Autre';
+                                            if (preg_match('/\b(FR|VF|VFF|TRUEFRENCH)\b/i', $vName))
+                                                $vTag = 'FRançais (VF)';
+                                            elseif (preg_match('/\b(VOSTFR|VOST)\b/i', $vName))
+                                                $vTag = 'VOSTFR';
+                                            elseif (preg_match('/\b(EN|ENGLISH|VO)\b/i', $vName))
+                                                $vTag = 'English (VO)';
+                                            elseif (preg_match('/\b(MULTI)\b/i', $vName))
+                                                $vTag = 'Multi-Langues';
+
+                                            $isCurrent = $ver['stream_id'] == $movieInfo['stream_id'];
+                                            ?>
                                             <a href="/movies/details?id=<?= $ver['stream_id'] ?>"
-                                                class="flex items-center px-3 py-2 text-sm hover:bg-white/10 transition gap-2 <?= ($ver['stream_id'] == $movieInfo['stream_id']) ? 'text-[#E50914] font-bold bg-[#E50914]/10' : 'text-gray-300' ?>">
-                                                <?php if ($ver['stream_id'] == $movieInfo['stream_id']): ?>
-                                                    <div class="w-1.5 h-1.5 rounded-full bg-[#E50914]"></div>
-                                                <?php else: ?>
-                                                    <div class="w-1.5 h-1.5 rounded-full bg-transparent"></div>
-                                                <?php endif; ?>
-                                                <?= htmlspecialchars($ver['name']) ?>
+                                                class="block px-3 py-2 text-xs rounded hover:bg-gray-800 transition flex items-center justify-between <?= $isCurrent ? 'text-red-500 font-bold bg-white/5' : 'text-gray-300' ?>">
+                                                <span><?= $vTag ?></span>
+                                                <?php if ($isCurrent): ?><span class="text-red-500">✓</span><?php endif; ?>
                                             </a>
                                         <?php endforeach; ?>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php else: ?>
+                            <!-- Static Badge -->
+                            <div class="px-3 py-1 rounded bg-white/5 border border-white/10 text-xs font-bold text-gray-300">
+                                <?= $currentTag ?>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
+
                 </div>
 
                 <!-- Description (Identical to Series: text-gray-300 text-sm md:text-base max-w-2xl) -->

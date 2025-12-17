@@ -1,2383 +1,0 @@
-2025-12-17 15:09:47 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMzA5NTAyLm1rdg==
-2025-12-17 15:09:47 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1309502.mkv
-[2025-12-17 15:09:47] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1309502.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1309502.mkv':
-  Metadata:
-    title           : Road Rage : Le convoi de la vengeance
-    creation_time   : 2025-10-03T13:42:19.000000Z
-    ENCODER         : Lavf60.16.100
-  Duration: 01:27:45.88, start: -0.021000, bitrate: 3529 kb/s
-  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1280x720 [SAR 4311:3200 DAR 479:200], 24 fps, 24 tbr, 1k tbn (default)
-    Metadata:
-      DURATION        : 01:27:45.834000000
-  Stream #0:1(fre): Audio: aac (LC), 48000 Hz, stereo, fltp, start -0.021000 (default)
-    Metadata:
-      title           : VFF
-      DURATION        : 01:27:45.877000000
-  Stream #0:2(vie): Audio: aac (LC), 48000 Hz, stereo, fltp, start -0.021000
-    Metadata:
-      title           : Stereo
-      DURATION        : 01:27:45.877000000
-  Stream #0:3(fre): Subtitle: ass (ssa), start -0.021000
-    Metadata:
-      title           : VFF Forced
-      DURATION        : 01:21:51.500000000
-  Stream #0:4(fre): Subtitle: ass (ssa), start -0.021000
-    Metadata:
-      title           : VFF
-      DURATION        : 01:22:13.583000000
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Road Rage : Le convoi de la vengeance
-    encoder         : Lavf62.3.100
-  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1280x720 [SAR 4311:3200 DAR 479:200], q=2-31, 24 fps, 24 tbr, 16k tbn (default)
-    Metadata:
-      DURATION        : 01:27:45.834000000
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : VFF
-      DURATION        : 01:27:45.877000000
-frame=  163 fps=0.0 q=-1.0 size=    3003KiB time=00:00:06.07 bitrate=4045.7kbits/s speed=  12x elapsed=0:00:00.50    frame=  645 fps=639 q=-1.0 size=    4449KiB time=00:00:26.77 bitrate=1361.2kbits/s speed=26.5x elapsed=0:00:01.01    frame=  732 fps=484 q=-1.0 size=   12552KiB time=00:00:30.39 bitrate=3382.4kbits/s speed=20.1x elapsed=0:00:01.51    frame= 1003 fps=497 q=-1.0 size=   16599KiB time=00:00:41.70 bitrate=3260.4kbits/s speed=20.7x elapsed=0:00:02.01    frame= 1185 fps=470 q=-1.0 size=   20575KiB time=00:00:49.27 bitrate=3420.3kbits/s speed=19.5x elapsed=0:00:02.52    frame= 1368 fps=452 q=-1.0 size=   23938KiB time=00:00:56.89 bitrate=3446.6kbits/s speed=18.8x elapsed=0:00:03.02    frame= 1500 fps=426 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=17.7x elapsed=0:00:03.52    frame= 1500 fps=372 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=15.5x elapsed=0:00:04.02    frame= 1500 fps=331 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=13.8x elapsed=0:00:04.53    frame= 1500 fps=298 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=12.4x elapsed=0:00:05.03    frame= 1500 fps=271 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=11.3x elapsed=0:00:05.53    frame= 1500 fps=248 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=10.3x elapsed=0:00:06.04    frame= 1500 fps=229 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=9.54x elapsed=0:00:06.54    frame= 1500 fps=213 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=8.85x elapsed=0:00:07.05    frame= 1500 fps=199 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=8.26x elapsed=0:00:07.55    frame= 1500 fps=186 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=7.74x elapsed=0:00:08.05    frame= 1500 fps=175 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=7.29x elapsed=0:00:08.56    frame= 1500 fps=165 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=6.88x elapsed=0:00:09.06    frame= 1500 fps=157 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=6.52x elapsed=0:00:09.57    frame= 1500 fps=149 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=6.19x elapsed=0:00:10.07    frame= 1500 fps=142 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed= 5.9x elapsed=0:00:10.58    frame= 1500 fps=135 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=5.63x elapsed=0:00:11.08    frame= 1500 fps=129 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=5.39x elapsed=0:00:11.58    frame= 1500 fps=124 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=5.17x elapsed=0:00:12.08    frame= 1500 fps=119 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=4.96x elapsed=0:00:12.59    frame= 1500 fps=115 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=4.77x elapsed=0:00:13.09    frame= 1500 fps=110 q=-1.0 size=   26047KiB time=00:01:02.42 bitrate=3418.3kbits/s speed=4.59x elapsed=0:00:13.59    [aost#0:1/aac @ 0x90acd4300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0x90b02e1c0] Error muxing a packet
-[out#0/mp4 @ 0x90b02e1c0] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0x90b02e1c0] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0x90b02e1c0] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0x90b02e1c0] Error closing file: Broken pipe
-[out#0/mp4 @ 0x90b02e1c0] video:26279KiB audio:975KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 1500 fps=108 q=-1.0 Lsize=   26303KiB time=00:01:02.42 bitrate=3451.9kbits/s speed=4.48x elapsed=0:00:13.92    
-[aac @ 0x90b096a00] Qavg: 1761.899
-Conversion failed!
-2025-12-17 15:10:01 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMzA5NTAyLm1rdg==
-2025-12-17 15:10:01 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1309502.mkv
-[2025-12-17 15:10:01] CMD: ffmpeg -ss 912 -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1309502.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1309502.mkv':
-  Metadata:
-    title           : Road Rage : Le convoi de la vengeance
-    creation_time   : 2025-10-03T13:42:19.000000Z
-    ENCODER         : Lavf60.16.100
-  Duration: 01:27:45.88, start: -0.021000, bitrate: 3529 kb/s
-  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1280x720 [SAR 4311:3200 DAR 479:200], 24 fps, 24 tbr, 1k tbn (default)
-    Metadata:
-      DURATION        : 01:27:45.834000000
-  Stream #0:1(fre): Audio: aac (LC), 48000 Hz, stereo, fltp, start -0.021000 (default)
-    Metadata:
-      title           : VFF
-      DURATION        : 01:27:45.877000000
-  Stream #0:2(vie): Audio: aac (LC), 48000 Hz, stereo, fltp, start -0.021000
-    Metadata:
-      title           : Stereo
-      DURATION        : 01:27:45.877000000
-  Stream #0:3(fre): Subtitle: ass (ssa), start -0.021000
-    Metadata:
-      title           : VFF Forced
-      DURATION        : 01:21:51.500000000
-  Stream #0:4(fre): Subtitle: ass (ssa), start -0.021000
-    Metadata:
-      title           : VFF
-      DURATION        : 01:22:13.583000000
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Road Rage : Le convoi de la vengeance
-    encoder         : Lavf62.3.100
-  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1280x720 [SAR 4311:3200 DAR 479:200], q=2-31, 24 fps, 24 tbr, 16k tbn (default)
-    Metadata:
-      DURATION        : 01:27:45.834000000
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : VFF
-      DURATION        : 01:27:45.877000000
-frame=  489 fps=0.0 q=-1.0 size=    5229KiB time=00:00:11.90 bitrate=3598.4kbits/s speed=23.7x elapsed=0:00:00.50    frame=  671 fps=666 q=-1.0 size=    6140KiB time=00:00:19.54 bitrate=2574.2kbits/s speed=19.4x elapsed=0:00:01.00    frame=  885 fps=585 q=-1.0 size=   12716KiB time=00:00:28.35 bitrate=3674.2kbits/s speed=18.7x elapsed=0:00:01.51    frame= 1171 fps=581 q=-1.0 size=   17646KiB time=00:00:40.38 bitrate=3579.5kbits/s speed=  20x elapsed=0:00:02.01    frame= 1378 fps=548 q=-1.0 size=   23741KiB time=00:00:49.00 bitrate=3968.9kbits/s speed=19.5x elapsed=0:00:02.51    frame= 1441 fps=477 q=-1.0 size=   24364KiB time=00:00:51.62 bitrate=3866.1kbits/s speed=17.1x elapsed=0:00:03.02    [aost#0:1/aac @ 0xbbc888300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0xbbc860780] Error muxing a packet
-[out#0/mp4 @ 0xbbc860780] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0xbbc860780] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0xbbc860780] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0xbbc860780] Error closing file: Broken pipe
-[out#0/mp4 @ 0xbbc860780] video:24737KiB audio:820KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 1456 fps=439 q=-1.0 Lsize=   24460KiB time=00:00:52.22 bitrate=3836.9kbits/s speed=15.8x elapsed=0:00:03.31    
-[aac @ 0xbbd406a00] Qavg: 705.554
-Conversion failed!
-2025-12-17 15:10:25 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjk0MDAxLm1rdg==
-2025-12-17 15:10:25 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv
-[2025-12-17 15:10:25] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv':
-  Metadata:
-    title           : Les Bad Guys (2022)
-    encoder         : libebml v1.4.5 + libmatroska v1.7.1
-    creation_time   : 2024-10-17T15:42:38.000000Z
-  Duration: 01:40:07.01, start: -0.005000, bitrate: 4282 kb/s
-  Chapters:
-    Chapter #0:0: start 0.000000, end 189.398000
-      Metadata:
-        title           : Chapter 1
-    Chapter #0:1: start 189.398000, end 548.715000
-      Metadata:
-        title           : Chapter 2
-    Chapter #0:2: start 548.715000, end 847.722000
-      Metadata:
-        title           : Chapter 3
-    Chapter #0:3: start 847.722000, end 1235.568000
-      Metadata:
-        title           : Chapter 4
-    Chapter #0:4: start 1235.568000, end 1644.977000
-      Metadata:
-        title           : Chapter 5
-    Chapter #0:5: start 1644.977000, end 1929.136000
-      Metadata:
-        title           : Chapter 6
-    Chapter #0:6: start 1929.136000, end 2176.383000
-      Metadata:
-        title           : Chapter 7
-    Chapter #0:7: start 2176.383000, end 2486.776000
-      Metadata:
-        title           : Chapter 8
-    Chapter #0:8: start 2486.776000, end 2750.498000
-      Metadata:
-        title           : Chapter 9
-    Chapter #0:9: start 2750.498000, end 2948.571000
-      Metadata:
-        title           : Chapter 10
-    Chapter #0:10: start 2948.571000, end 3300.881000
-      Metadata:
-        title           : Chapter 11
-    Chapter #0:11: start 3300.881000, end 3518.849000
-      Metadata:
-        title           : Chapter 12
-    Chapter #0:12: start 3518.849000, end 3941.104000
-      Metadata:
-        title           : Chapter 13
-    Chapter #0:13: start 3941.104000, end 4236.023000
-      Metadata:
-        title           : Chapter 14
-    Chapter #0:14: start 4236.023000, end 4360.565000
-      Metadata:
-        title           : Chapter 15
-    Chapter #0:15: start 4360.565000, end 4544.832000
-      Metadata:
-        title           : Chapter 16
-    Chapter #0:16: start 4544.832000, end 4825.279000
-      Metadata:
-        title           : Chapter 17
-    Chapter #0:17: start 4825.279000, end 5128.915000
-      Metadata:
-        title           : Chapter 18
-    Chapter #0:18: start 5128.915000, end 5456.326000
-      Metadata:
-        title           : Chapter 19
-    Chapter #0:19: start 5456.326000, end 6006.960000
-      Metadata:
-        title           : Chapter 20
-  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x804 [SAR 1:1 DAR 160:67], 23.98 fps, 23.98 tbr, 1k tbn (default)
-    Metadata:
-      title           : HDLight LiHDL By GANDALF (Source COMPLETE BLURAY 4FR)
-      BPS             : 2999811
-      DURATION        : 01:40:07.001000000
-      NUMBER_OF_FRAMES: 144024
-      NUMBER_OF_BYTES : 2252484124
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s, start -0.005000 (default)
-    Metadata:
-      title           : FR VFF : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:07.008000000
-      NUMBER_OF_FRAMES: 187719
-      NUMBER_OF_BYTES : 336392448
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:2(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 384 kb/s
-    Metadata:
-      title           : FR VFQ : AC3 5.1
-      BPS             : 384000
-      DURATION        : 01:40:06.272000000
-      NUMBER_OF_FRAMES: 187696
-      NUMBER_OF_BYTES : 288301056
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:3(eng): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s, start -0.005000
-    Metadata:
-      title           : ENG VO : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:06.976000000
-      NUMBER_OF_FRAMES: 187718
-      NUMBER_OF_BYTES : 336390656
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:4(fre): Subtitle: subrip (srt), start -0.005000 (default) (forced)
-    Metadata:
-      title           : FR Forced : SRT
-      BPS             : 0
-      DURATION        : 01:36:18.981000000
-      NUMBER_OF_FRAMES: 21
-      NUMBER_OF_BYTES : 506
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:5(fre): Subtitle: subrip (srt), start -0.005000
-    Metadata:
-      title           : FR Full : SRT
-      BPS             : 62
-      DURATION        : 01:39:25.418000000
-      NUMBER_OF_FRAMES: 1505
-      NUMBER_OF_BYTES : 46420
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:6(eng): Subtitle: subrip (srt), start -0.005000
-    Metadata:
-      title           : ENG Full : SRT
-      BPS             : 79
-      DURATION        : 01:34:49.184000000
-      NUMBER_OF_FRAMES: 1946
-      NUMBER_OF_BYTES : 56680
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (ac3 (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Les Bad Guys (2022)
-    encoder         : Lavf62.3.100
-  Chapters:
-    Chapter #0:0: start 0.005000, end 189.403000
-      Metadata:
-        title           : Chapter 1
-    Chapter #0:1: start 189.403000, end 548.720000
-      Metadata:
-        title           : Chapter 2
-    Chapter #0:2: start 548.720000, end 847.727000
-      Metadata:
-        title           : Chapter 3
-    Chapter #0:3: start 847.727000, end 1235.573000
-      Metadata:
-        title           : Chapter 4
-    Chapter #0:4: start 1235.573000, end 1644.982000
-      Metadata:
-        title           : Chapter 5
-    Chapter #0:5: start 1644.982000, end 1929.141000
-      Metadata:
-        title           : Chapter 6
-    Chapter #0:6: start 1929.141000, end 2176.388000
-      Metadata:
-        title           : Chapter 7
-    Chapter #0:7: start 2176.388000, end 2486.781000
-      Metadata:
-        title           : Chapter 8
-    Chapter #0:8: start 2486.781000, end 2750.503000
-      Metadata:
-        title           : Chapter 9
-    Chapter #0:9: start 2750.503000, end 2948.576000
-      Metadata:
-        title           : Chapter 10
-    Chapter #0:10: start 2948.576000, end 3300.886000
-      Metadata:
-        title           : Chapter 11
-    Chapter #0:11: start 3300.886000, end 3518.854000
-      Metadata:
-        title           : Chapter 12
-    Chapter #0:12: start 3518.854000, end 3941.109000
-      Metadata:
-        title           : Chapter 13
-    Chapter #0:13: start 3941.109000, end 4236.028000
-      Metadata:
-        title           : Chapter 14
-    Chapter #0:14: start 4236.028000, end 4360.570000
-      Metadata:
-        title           : Chapter 15
-    Chapter #0:15: start 4360.570000, end 4544.837000
-      Metadata:
-        title           : Chapter 16
-    Chapter #0:16: start 4544.837000, end 4825.284000
-      Metadata:
-        title           : Chapter 17
-    Chapter #0:17: start 4825.284000, end 5128.920000
-      Metadata:
-        title           : Chapter 18
-    Chapter #0:18: start 5128.920000, end 5456.331000
-      Metadata:
-        title           : Chapter 19
-    Chapter #0:19: start 5456.331000, end 6006.965000
-      Metadata:
-        title           : Chapter 20
-  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x804 [SAR 1:1 DAR 160:67], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
-    Metadata:
-      title           : HDLight LiHDL By GANDALF (Source COMPLETE BLURAY 4FR)
-      BPS             : 2999811
-      DURATION        : 01:40:07.001000000
-      NUMBER_OF_FRAMES: 144024
-      NUMBER_OF_BYTES : 2252484124
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : FR VFF : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:07.008000000
-      NUMBER_OF_FRAMES: 187719
-      NUMBER_OF_BYTES : 336392448
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-frame=  203 fps=0.0 q=-1.0 size=       2KiB time=00:00:08.38 bitrate=   2.2kbits/s speed=16.7x elapsed=0:00:00.50    frame=  358 fps=357 q=-1.0 size=    4120KiB time=00:00:14.85 bitrate=2272.6kbits/s speed=14.8x elapsed=0:00:01.00    frame=  452 fps=300 q=-1.0 size=    4120KiB time=00:00:18.77 bitrate=1797.9kbits/s speed=12.5x elapsed=0:00:01.50    frame=  645 fps=321 q=-1.0 size=   10047KiB time=00:00:26.82 bitrate=3068.5kbits/s speed=13.3x elapsed=0:00:02.01    frame=  964 fps=384 q=-1.0 size=   13761KiB time=00:00:40.12 bitrate=2809.4kbits/s speed=  16x elapsed=0:00:02.51    frame= 1209 fps=401 q=-1.0 size=   16334KiB time=00:00:50.34 bitrate=2657.7kbits/s speed=16.7x elapsed=0:00:03.01    frame= 1382 fps=392 q=-1.0 size=   16334KiB time=00:00:57.56 bitrate=2324.5kbits/s speed=16.3x elapsed=0:00:03.52    frame= 1637 fps=407 q=-1.0 size=   19919KiB time=00:01:08.19 bitrate=2392.7kbits/s speed=  17x elapsed=0:00:04.02    frame= 1878 fps=415 q=-1.0 size=   22610KiB time=00:01:18.24 bitrate=2367.1kbits/s speed=17.3x elapsed=0:00:04.52    frame= 2072 fps=412 q=-1.0 size=   25525KiB time=00:01:26.34 bitrate=2421.8kbits/s speed=17.2x elapsed=0:00:05.02    frame= 2160 fps=390 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=16.3x elapsed=0:00:05.53    frame= 2160 fps=358 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=14.9x elapsed=0:00:06.03    frame= 2160 fps=331 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=13.8x elapsed=0:00:06.53    frame= 2160 fps=307 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=12.8x elapsed=0:00:07.03    frame= 2160 fps=286 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=11.9x elapsed=0:00:07.54    frame= 2160 fps=269 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=11.2x elapsed=0:00:08.04    frame= 2160 fps=253 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=10.5x elapsed=0:00:08.54    frame= 2160 fps=239 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=9.94x elapsed=0:00:09.05    frame= 2160 fps=226 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=9.42x elapsed=0:00:09.55    frame= 2160 fps=215 q=-1.0 size=   25525KiB time=00:01:30.01 bitrate=2323.0kbits/s speed=8.95x elapsed=0:00:10.05    [vost#0:0/copy @ 0x9c94f0000] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0x9c902d5c0] Error muxing a packet
-[out#0/mp4 @ 0x9c902d5c0] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0x9c902d5c0] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0x9c902d5c0] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0x9c902d5c0] Error closing file: Broken pipe
-[out#0/mp4 @ 0x9c902d5c0] video:27316KiB audio:1441KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2160 fps=206 q=-1.0 Lsize=   25653KiB time=00:01:30.01 bitrate=2334.7kbits/s speed=8.56x elapsed=0:00:10.51    
-[aac @ 0x9c9473800] Qavg: 2536.521
-Conversion failed!
-2025-12-17 15:10:37 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjk0MDAxLm1rdg==
-2025-12-17 15:10:37 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv
-[2025-12-17 15:10:37] CMD: ffmpeg -ss 170 -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv':
-  Metadata:
-    title           : Les Bad Guys (2022)
-    encoder         : libebml v1.4.5 + libmatroska v1.7.1
-    creation_time   : 2024-10-17T15:42:38.000000Z
-  Duration: 01:40:07.01, start: -0.005000, bitrate: 4282 kb/s
-  Chapters:
-    Chapter #0:0: start 0.000000, end 189.398000
-      Metadata:
-        title           : Chapter 1
-    Chapter #0:1: start 189.398000, end 548.715000
-      Metadata:
-        title           : Chapter 2
-    Chapter #0:2: start 548.715000, end 847.722000
-      Metadata:
-        title           : Chapter 3
-    Chapter #0:3: start 847.722000, end 1235.568000
-      Metadata:
-        title           : Chapter 4
-    Chapter #0:4: start 1235.568000, end 1644.977000
-      Metadata:
-        title           : Chapter 5
-    Chapter #0:5: start 1644.977000, end 1929.136000
-      Metadata:
-        title           : Chapter 6
-    Chapter #0:6: start 1929.136000, end 2176.383000
-      Metadata:
-        title           : Chapter 7
-    Chapter #0:7: start 2176.383000, end 2486.776000
-      Metadata:
-        title           : Chapter 8
-    Chapter #0:8: start 2486.776000, end 2750.498000
-      Metadata:
-        title           : Chapter 9
-    Chapter #0:9: start 2750.498000, end 2948.571000
-      Metadata:
-        title           : Chapter 10
-    Chapter #0:10: start 2948.571000, end 3300.881000
-      Metadata:
-        title           : Chapter 11
-    Chapter #0:11: start 3300.881000, end 3518.849000
-      Metadata:
-        title           : Chapter 12
-    Chapter #0:12: start 3518.849000, end 3941.104000
-      Metadata:
-        title           : Chapter 13
-    Chapter #0:13: start 3941.104000, end 4236.023000
-      Metadata:
-        title           : Chapter 14
-    Chapter #0:14: start 4236.023000, end 4360.565000
-      Metadata:
-        title           : Chapter 15
-    Chapter #0:15: start 4360.565000, end 4544.832000
-      Metadata:
-        title           : Chapter 16
-    Chapter #0:16: start 4544.832000, end 4825.279000
-      Metadata:
-        title           : Chapter 17
-    Chapter #0:17: start 4825.279000, end 5128.915000
-      Metadata:
-        title           : Chapter 18
-    Chapter #0:18: start 5128.915000, end 5456.326000
-      Metadata:
-        title           : Chapter 19
-    Chapter #0:19: start 5456.326000, end 6006.960000
-      Metadata:
-        title           : Chapter 20
-  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x804 [SAR 1:1 DAR 160:67], 23.98 fps, 23.98 tbr, 1k tbn (default)
-    Metadata:
-      title           : HDLight LiHDL By GANDALF (Source COMPLETE BLURAY 4FR)
-      BPS             : 2999811
-      DURATION        : 01:40:07.001000000
-      NUMBER_OF_FRAMES: 144024
-      NUMBER_OF_BYTES : 2252484124
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s, start -0.005000 (default)
-    Metadata:
-      title           : FR VFF : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:07.008000000
-      NUMBER_OF_FRAMES: 187719
-      NUMBER_OF_BYTES : 336392448
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:2(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 384 kb/s
-    Metadata:
-      title           : FR VFQ : AC3 5.1
-      BPS             : 384000
-      DURATION        : 01:40:06.272000000
-      NUMBER_OF_FRAMES: 187696
-      NUMBER_OF_BYTES : 288301056
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:3(eng): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s, start -0.005000
-    Metadata:
-      title           : ENG VO : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:06.976000000
-      NUMBER_OF_FRAMES: 187718
-      NUMBER_OF_BYTES : 336390656
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:4(fre): Subtitle: subrip (srt), start -0.005000 (default) (forced)
-    Metadata:
-      title           : FR Forced : SRT
-      BPS             : 0
-      DURATION        : 01:36:18.981000000
-      NUMBER_OF_FRAMES: 21
-      NUMBER_OF_BYTES : 506
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:5(fre): Subtitle: subrip (srt), start -0.005000
-    Metadata:
-      title           : FR Full : SRT
-      BPS             : 62
-      DURATION        : 01:39:25.418000000
-      NUMBER_OF_FRAMES: 1505
-      NUMBER_OF_BYTES : 46420
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:6(eng): Subtitle: subrip (srt), start -0.005000
-    Metadata:
-      title           : ENG Full : SRT
-      BPS             : 79
-      DURATION        : 01:34:49.184000000
-      NUMBER_OF_FRAMES: 1946
-      NUMBER_OF_BYTES : 56680
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (ac3 (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Les Bad Guys (2022)
-    encoder         : Lavf62.3.100
-  Chapters:
-    Chapter #0:0: start 0.000000, end 19.403000
-      Metadata:
-        title           : Chapter 1
-    Chapter #0:1: start 19.403000, end 378.720000
-      Metadata:
-        title           : Chapter 2
-    Chapter #0:2: start 378.720000, end 677.727000
-      Metadata:
-        title           : Chapter 3
-    Chapter #0:3: start 677.727000, end 1065.573000
-      Metadata:
-        title           : Chapter 4
-    Chapter #0:4: start 1065.573000, end 1474.982000
-      Metadata:
-        title           : Chapter 5
-    Chapter #0:5: start 1474.982000, end 1759.141000
-      Metadata:
-        title           : Chapter 6
-    Chapter #0:6: start 1759.141000, end 2006.388000
-      Metadata:
-        title           : Chapter 7
-    Chapter #0:7: start 2006.388000, end 2316.781000
-      Metadata:
-        title           : Chapter 8
-    Chapter #0:8: start 2316.781000, end 2580.503000
-      Metadata:
-        title           : Chapter 9
-    Chapter #0:9: start 2580.503000, end 2778.576000
-      Metadata:
-        title           : Chapter 10
-    Chapter #0:10: start 2778.576000, end 3130.886000
-      Metadata:
-        title           : Chapter 11
-    Chapter #0:11: start 3130.886000, end 3348.854000
-      Metadata:
-        title           : Chapter 12
-    Chapter #0:12: start 3348.854000, end 3771.109000
-      Metadata:
-        title           : Chapter 13
-    Chapter #0:13: start 3771.109000, end 4066.028000
-      Metadata:
-        title           : Chapter 14
-    Chapter #0:14: start 4066.028000, end 4190.570000
-      Metadata:
-        title           : Chapter 15
-    Chapter #0:15: start 4190.570000, end 4374.837000
-      Metadata:
-        title           : Chapter 16
-    Chapter #0:16: start 4374.837000, end 4655.284000
-      Metadata:
-        title           : Chapter 17
-    Chapter #0:17: start 4655.284000, end 4958.920000
-      Metadata:
-        title           : Chapter 18
-    Chapter #0:18: start 4958.920000, end 5286.331000
-      Metadata:
-        title           : Chapter 19
-    Chapter #0:19: start 5286.331000, end 5836.965000
-      Metadata:
-        title           : Chapter 20
-  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x804 [SAR 1:1 DAR 160:67], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
-    Metadata:
-      title           : HDLight LiHDL By GANDALF (Source COMPLETE BLURAY 4FR)
-      BPS             : 2999811
-      DURATION        : 01:40:07.001000000
-      NUMBER_OF_FRAMES: 144024
-      NUMBER_OF_BYTES : 2252484124
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : FR VFF : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:07.008000000
-      NUMBER_OF_FRAMES: 187719
-      NUMBER_OF_BYTES : 336392448
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-frame=  305 fps=303 q=-1.0 size=    5530KiB time=00:00:02.64 bitrate=17125.0kbits/s speed=2.63x elapsed=0:00:01.00    frame=  477 fps=316 q=-1.0 size=    5530KiB time=00:00:09.89 bitrate=4579.6kbits/s speed=6.55x elapsed=0:00:01.51    frame=  709 fps=352 q=-1.0 size=   13585KiB time=00:00:19.56 bitrate=5687.0kbits/s speed=9.71x elapsed=0:00:02.01    frame=  864 fps=343 q=-1.0 size=   15100KiB time=00:00:26.03 bitrate=4751.7kbits/s speed=10.3x elapsed=0:00:02.51    frame=  987 fps=326 q=-1.0 size=   15100KiB time=00:00:31.16 bitrate=3969.3kbits/s speed=10.3x elapsed=0:00:03.02    frame= 1102 fps=313 q=-1.0 size=   20608KiB time=00:00:35.96 bitrate=4694.6kbits/s speed=10.2x elapsed=0:00:03.52    frame= 1239 fps=308 q=-1.0 size=   20608KiB time=00:00:41.67 bitrate=4050.9kbits/s speed=10.4x elapsed=0:00:04.02    [http @ 0x7b503c000] Stream ends prematurely at 116248981, should be 3215511389
-[http @ 0x7b503c000] Will reconnect at 116248981 in 0 second(s), error=Input/output error.
-frame= 1290 fps=285 q=-1.0 size=   27688KiB time=00:00:43.80 bitrate=5178.4kbits/s speed=9.67x elapsed=0:00:04.53    frame= 1419 fps=282 q=-1.0 size=   27688KiB time=00:00:49.17 bitrate=4612.6kbits/s speed=9.76x elapsed=0:00:05.03    frame= 1561 fps=282 q=-1.0 size=   34552KiB time=00:00:55.10 bitrate=5136.7kbits/s speed=9.95x elapsed=0:00:05.54    frame= 1711 fps=283 q=-1.0 size=   38294KiB time=00:01:01.36 bitrate=5112.5kbits/s speed=10.2x elapsed=0:00:06.04    frame= 1852 fps=283 q=-1.0 size=   41118KiB time=00:01:07.17 bitrate=5014.1kbits/s speed=10.3x elapsed=0:00:06.54    frame= 2016 fps=286 q=-1.0 size=   41118KiB time=00:01:14.08 bitrate=4546.9kbits/s speed=10.5x elapsed=0:00:07.04    frame= 2136 fps=283 q=-1.0 size=   45226KiB time=00:01:19.08 bitrate=4684.7kbits/s speed=10.5x elapsed=0:00:07.55    frame= 2292 fps=285 q=-1.0 size=   51216KiB time=00:01:25.59 bitrate=4901.8kbits/s speed=10.6x elapsed=0:00:08.05    frame= 2430 fps=284 q=-1.0 size=   53887KiB time=00:01:31.34 bitrate=4832.5kbits/s speed=10.7x elapsed=0:00:08.55    frame= 2570 fps=284 q=-1.0 size=   55559KiB time=00:01:37.18 bitrate=4683.1kbits/s speed=10.7x elapsed=0:00:09.06    frame= 2694 fps=282 q=-1.0 size=   58712KiB time=00:01:42.36 bitrate=4698.8kbits/s speed=10.7x elapsed=0:00:09.56    frame= 2847 fps=283 q=-1.0 size=   58712KiB time=00:01:48.74 bitrate=4423.0kbits/s speed=10.8x elapsed=0:00:10.07    frame= 3000 fps=284 q=-1.0 size=   63506KiB time=00:01:55.12 bitrate=4519.0kbits/s speed=10.9x elapsed=0:00:10.57    frame= 3126 fps=282 q=-1.0 size=   69360KiB time=00:02:00.37 bitrate=4720.1kbits/s speed=10.9x elapsed=0:00:11.08    frame= 3247 fps=280 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=10.8x elapsed=0:00:11.58    frame= 3247 fps=269 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=10.4x elapsed=0:00:12.09    frame= 3247 fps=258 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=9.97x elapsed=0:00:12.59    frame= 3247 fps=248 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=9.59x elapsed=0:00:13.09    frame= 3247 fps=239 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=9.24x elapsed=0:00:13.59    frame= 3247 fps=230 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=8.91x elapsed=0:00:14.09    frame= 3247 fps=222 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed= 8.6x elapsed=0:00:14.60    frame= 3247 fps=215 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=8.31x elapsed=0:00:15.10    frame= 3247 fps=208 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=8.04x elapsed=0:00:15.60    frame= 3247 fps=202 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=7.79x elapsed=0:00:16.11    frame= 3247 fps=195 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=7.56x elapsed=0:00:16.61    frame= 3247 fps=190 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=7.33x elapsed=0:00:17.11    frame= 3247 fps=184 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=7.12x elapsed=0:00:17.62    frame= 3247 fps=179 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=6.93x elapsed=0:00:18.12    frame= 3247 fps=174 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=6.74x elapsed=0:00:18.63    frame= 3247 fps=170 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=6.56x elapsed=0:00:19.13    frame= 3247 fps=165 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=6.39x elapsed=0:00:19.63    frame= 3247 fps=161 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=6.23x elapsed=0:00:20.14    frame= 3247 fps=157 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=6.08x elapsed=0:00:20.64    frame= 3247 fps=153 q=-1.0 size=   71698KiB time=00:02:05.54 bitrate=4678.3kbits/s speed=5.93x elapsed=0:00:21.15    [vost#0:0/copy @ 0x7b55d8000] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0x7b5454a80] Error muxing a packet
-[out#0/mp4 @ 0x7b5454a80] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0x7b5454a80] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0x7b5454a80] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0x7b5454a80] Error closing file: Broken pipe
-[out#0/mp4 @ 0x7b5454a80] video:70484KiB audio:1988KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 3247 fps=151 q=-1.0 Lsize=   72178KiB time=00:02:05.54 bitrate=4709.6kbits/s speed=5.85x elapsed=0:00:21.45    
-[aac @ 0x7b5453800] Qavg: 598.063
-Conversion failed!
-2025-12-17 15:11:07 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjk0MDAxLm1rdg==
-2025-12-17 15:11:07 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv
-[2025-12-17 15:11:07] CMD: ffmpeg -ss 724 -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1294001.mkv':
-  Metadata:
-    title           : Les Bad Guys (2022)
-    encoder         : libebml v1.4.5 + libmatroska v1.7.1
-    creation_time   : 2024-10-17T15:42:38.000000Z
-  Duration: 01:40:07.01, start: -0.005000, bitrate: 4282 kb/s
-  Chapters:
-    Chapter #0:0: start 0.000000, end 189.398000
-      Metadata:
-        title           : Chapter 1
-    Chapter #0:1: start 189.398000, end 548.715000
-      Metadata:
-        title           : Chapter 2
-    Chapter #0:2: start 548.715000, end 847.722000
-      Metadata:
-        title           : Chapter 3
-    Chapter #0:3: start 847.722000, end 1235.568000
-      Metadata:
-        title           : Chapter 4
-    Chapter #0:4: start 1235.568000, end 1644.977000
-      Metadata:
-        title           : Chapter 5
-    Chapter #0:5: start 1644.977000, end 1929.136000
-      Metadata:
-        title           : Chapter 6
-    Chapter #0:6: start 1929.136000, end 2176.383000
-      Metadata:
-        title           : Chapter 7
-    Chapter #0:7: start 2176.383000, end 2486.776000
-      Metadata:
-        title           : Chapter 8
-    Chapter #0:8: start 2486.776000, end 2750.498000
-      Metadata:
-        title           : Chapter 9
-    Chapter #0:9: start 2750.498000, end 2948.571000
-      Metadata:
-        title           : Chapter 10
-    Chapter #0:10: start 2948.571000, end 3300.881000
-      Metadata:
-        title           : Chapter 11
-    Chapter #0:11: start 3300.881000, end 3518.849000
-      Metadata:
-        title           : Chapter 12
-    Chapter #0:12: start 3518.849000, end 3941.104000
-      Metadata:
-        title           : Chapter 13
-    Chapter #0:13: start 3941.104000, end 4236.023000
-      Metadata:
-        title           : Chapter 14
-    Chapter #0:14: start 4236.023000, end 4360.565000
-      Metadata:
-        title           : Chapter 15
-    Chapter #0:15: start 4360.565000, end 4544.832000
-      Metadata:
-        title           : Chapter 16
-    Chapter #0:16: start 4544.832000, end 4825.279000
-      Metadata:
-        title           : Chapter 17
-    Chapter #0:17: start 4825.279000, end 5128.915000
-      Metadata:
-        title           : Chapter 18
-    Chapter #0:18: start 5128.915000, end 5456.326000
-      Metadata:
-        title           : Chapter 19
-    Chapter #0:19: start 5456.326000, end 6006.960000
-      Metadata:
-        title           : Chapter 20
-  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x804 [SAR 1:1 DAR 160:67], 23.98 fps, 23.98 tbr, 1k tbn (default)
-    Metadata:
-      title           : HDLight LiHDL By GANDALF (Source COMPLETE BLURAY 4FR)
-      BPS             : 2999811
-      DURATION        : 01:40:07.001000000
-      NUMBER_OF_FRAMES: 144024
-      NUMBER_OF_BYTES : 2252484124
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s, start -0.005000 (default)
-    Metadata:
-      title           : FR VFF : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:07.008000000
-      NUMBER_OF_FRAMES: 187719
-      NUMBER_OF_BYTES : 336392448
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:2(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 384 kb/s
-    Metadata:
-      title           : FR VFQ : AC3 5.1
-      BPS             : 384000
-      DURATION        : 01:40:06.272000000
-      NUMBER_OF_FRAMES: 187696
-      NUMBER_OF_BYTES : 288301056
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:3(eng): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s, start -0.005000
-    Metadata:
-      title           : ENG VO : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:06.976000000
-      NUMBER_OF_FRAMES: 187718
-      NUMBER_OF_BYTES : 336390656
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:4(fre): Subtitle: subrip (srt), start -0.005000 (default) (forced)
-    Metadata:
-      title           : FR Forced : SRT
-      BPS             : 0
-      DURATION        : 01:36:18.981000000
-      NUMBER_OF_FRAMES: 21
-      NUMBER_OF_BYTES : 506
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:5(fre): Subtitle: subrip (srt), start -0.005000
-    Metadata:
-      title           : FR Full : SRT
-      BPS             : 62
-      DURATION        : 01:39:25.418000000
-      NUMBER_OF_FRAMES: 1505
-      NUMBER_OF_BYTES : 46420
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:6(eng): Subtitle: subrip (srt), start -0.005000
-    Metadata:
-      title           : ENG Full : SRT
-      BPS             : 79
-      DURATION        : 01:34:49.184000000
-      NUMBER_OF_FRAMES: 1946
-      NUMBER_OF_BYTES : 56680
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (ac3 (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Les Bad Guys (2022)
-    encoder         : Lavf62.3.100
-  Chapters:
-    Chapter #0:0: start 0.000000, end 123.727000
-      Metadata:
-        title           : Chapter 3
-    Chapter #0:1: start 123.727000, end 511.573000
-      Metadata:
-        title           : Chapter 4
-    Chapter #0:2: start 511.573000, end 920.982000
-      Metadata:
-        title           : Chapter 5
-    Chapter #0:3: start 920.982000, end 1205.141000
-      Metadata:
-        title           : Chapter 6
-    Chapter #0:4: start 1205.141000, end 1452.388000
-      Metadata:
-        title           : Chapter 7
-    Chapter #0:5: start 1452.388000, end 1762.781000
-      Metadata:
-        title           : Chapter 8
-    Chapter #0:6: start 1762.781000, end 2026.503000
-      Metadata:
-        title           : Chapter 9
-    Chapter #0:7: start 2026.503000, end 2224.576000
-      Metadata:
-        title           : Chapter 10
-    Chapter #0:8: start 2224.576000, end 2576.886000
-      Metadata:
-        title           : Chapter 11
-    Chapter #0:9: start 2576.886000, end 2794.854000
-      Metadata:
-        title           : Chapter 12
-    Chapter #0:10: start 2794.854000, end 3217.109000
-      Metadata:
-        title           : Chapter 13
-    Chapter #0:11: start 3217.109000, end 3512.028000
-      Metadata:
-        title           : Chapter 14
-    Chapter #0:12: start 3512.028000, end 3636.570000
-      Metadata:
-        title           : Chapter 15
-    Chapter #0:13: start 3636.570000, end 3820.837000
-      Metadata:
-        title           : Chapter 16
-    Chapter #0:14: start 3820.837000, end 4101.284000
-      Metadata:
-        title           : Chapter 17
-    Chapter #0:15: start 4101.284000, end 4404.920000
-      Metadata:
-        title           : Chapter 18
-    Chapter #0:16: start 4404.920000, end 4732.331000
-      Metadata:
-        title           : Chapter 19
-    Chapter #0:17: start 4732.331000, end 5282.965000
-      Metadata:
-        title           : Chapter 20
-  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x804 [SAR 1:1 DAR 160:67], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
-    Metadata:
-      title           : HDLight LiHDL By GANDALF (Source COMPLETE BLURAY 4FR)
-      BPS             : 2999811
-      DURATION        : 01:40:07.001000000
-      NUMBER_OF_FRAMES: 144024
-      NUMBER_OF_BYTES : 2252484124
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : FR VFF : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:40:07.008000000
-      NUMBER_OF_FRAMES: 187719
-      NUMBER_OF_BYTES : 336392448
-      _STATISTICS_WRITING_APP: mkvmerge v87.0 ('Black as the Sky') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-10-17 15:42:38
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-frame=   94 fps=0.0 q=-1.0 size=     553KiB time=00:00:03.23 bitrate=1403.0kbits/s speed= 6.4x elapsed=0:00:00.50    frame=  322 fps=320 q=-1.0 size=    2530KiB time=00:00:12.74 bitrate=1626.7kbits/s speed=12.7x elapsed=0:00:01.00    frame=  672 fps=445 q=-1.0 size=    6000KiB time=00:00:27.00 bitrate=1819.9kbits/s speed=17.9x elapsed=0:00:01.51    frame=  922 fps=457 q=-1.0 size=    7492KiB time=00:00:37.76 bitrate=1625.2kbits/s speed=18.7x elapsed=0:00:02.01    frame= 1087 fps=431 q=-1.0 size=   10338KiB time=00:00:44.64 bitrate=1896.9kbits/s speed=17.7x elapsed=0:00:02.52    frame= 1346 fps=445 q=-1.0 size=   12875KiB time=00:00:55.45 bitrate=1902.2kbits/s speed=18.4x elapsed=0:00:03.02    [http @ 0xc6103c000] Stream ends prematurely at 437317532, should be 3215511389
-[http @ 0xc6103c000] Will reconnect at 437317532 in 0 second(s), error=Input/output error.
-frame= 1573 fps=446 q=-1.0 size=   18038KiB time=00:01:04.91 bitrate=2276.2kbits/s speed=18.4x elapsed=0:00:03.52    frame= 1613 fps=400 q=-1.0 size=   18038KiB time=00:01:06.58 bitrate=2219.2kbits/s speed=16.5x elapsed=0:00:04.02    frame= 1819 fps=401 q=-1.0 size=   21501KiB time=00:01:15.17 bitrate=2343.0kbits/s speed=16.6x elapsed=0:00:04.53    frame= 2097 fps=416 q=-1.0 size=   24617KiB time=00:01:26.77 bitrate=2324.0kbits/s speed=17.2x elapsed=0:00:05.03    frame= 2304 fps=416 q=-1.0 size=   26285KiB time=00:01:35.40 bitrate=2257.0kbits/s speed=17.2x elapsed=0:00:05.54    frame= 2444 fps=404 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=16.7x elapsed=0:00:06.04    frame= 2444 fps=373 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=15.5x elapsed=0:00:06.55    frame= 2444 fps=346 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=14.4x elapsed=0:00:07.05    frame= 2444 fps=323 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=13.4x elapsed=0:00:07.55    frame= 2444 fps=303 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=12.6x elapsed=0:00:08.05    frame= 2444 fps=285 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=11.8x elapsed=0:00:08.56    frame= 2444 fps=269 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=11.2x elapsed=0:00:09.06    frame= 2444 fps=255 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=10.6x elapsed=0:00:09.56    frame= 2444 fps=243 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=10.1x elapsed=0:00:10.07    frame= 2444 fps=231 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=9.58x elapsed=0:00:10.57    frame= 2444 fps=221 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=9.14x elapsed=0:00:11.07    frame= 2444 fps=211 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=8.75x elapsed=0:00:11.58    frame= 2444 fps=202 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=8.38x elapsed=0:00:12.08    frame= 2444 fps=194 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=8.05x elapsed=0:00:12.58    frame= 2444 fps=187 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=7.74x elapsed=0:00:13.09    frame= 2444 fps=180 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=7.45x elapsed=0:00:13.59    frame= 2444 fps=173 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=7.18x elapsed=0:00:14.10    frame= 2444 fps=167 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=6.93x elapsed=0:00:14.60    frame= 2444 fps=162 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed= 6.7x elapsed=0:00:15.11    frame= 2444 fps=156 q=-1.0 size=   28330KiB time=00:01:41.28 bitrate=2291.3kbits/s speed=6.49x elapsed=0:00:15.61    [vost#0:0/copy @ 0xc609dc000] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0xc60884a80] Error muxing a packet
-[out#0/mp4 @ 0xc60884a80] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0xc60884a80] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0xc60884a80] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0xc60884a80] Error closing file: Broken pipe
-[out#0/mp4 @ 0xc60884a80] video:27915KiB audio:1628KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2444 fps=154 q=-1.0 Lsize=   28906KiB time=00:01:41.28 bitrate=2337.9kbits/s speed=6.39x elapsed=0:00:15.85    
-[aac @ 0xc61407800] Qavg: 598.839
-Conversion failed!
-2025-12-17 15:12:12 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMzMxNzAxLm1rdg==
-2025-12-17 15:12:12 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1331701.mkv
-[2025-12-17 15:12:12] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1331701.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1331701.mkv':
-  Metadata:
-    title           : Joyeux Noël, Maman ! (2025)
-    encoder         : libebml v1.4.5 + libmatroska v1.7.1
-    creation_time   : 2025-12-03T11:51:42.000000Z
-  Duration: 01:47:54.59, start: 0.000000, bitrate: 16043 kb/s
-  Chapters:
-    Chapter #0:0: start 0.000000, end 98.000000
-      Metadata:
-        title           : Scene 1
-    Chapter #0:1: start 98.000000, end 132.000000
-      Metadata:
-        title           : Scene 2
-    Chapter #0:2: start 132.000000, end 181.000000
-      Metadata:
-        title           : Scene 3
-    Chapter #0:3: start 181.000000, end 268.000000
-      Metadata:
-        title           : Scene 4
-    Chapter #0:4: start 268.000000, end 417.000000
-      Metadata:
-        title           : Scene 5
-    Chapter #0:5: start 417.000000, end 466.000000
-      Metadata:
-        title           : Scene 6
-    Chapter #0:6: start 466.000000, end 472.000000
-      Metadata:
-        title           : Scene 7
-    Chapter #0:7: start 472.000000, end 588.000000
-      Metadata:
-        title           : Scene 8
-    Chapter #0:8: start 588.000000, end 602.000000
-      Metadata:
-        title           : Scene 9
-    Chapter #0:9: start 602.000000, end 665.000000
-      Metadata:
-        title           : Scene 10
-    Chapter #0:10: start 665.000000, end 677.000000
-      Metadata:
-        title           : Scene 11
-    Chapter #0:11: start 677.000000, end 727.000000
-      Metadata:
-        title           : Scene 12
-    Chapter #0:12: start 727.000000, end 817.000000
-      Metadata:
-        title           : Scene 13
-    Chapter #0:13: start 817.000000, end 855.000000
-      Metadata:
-        title           : Scene 14
-    Chapter #0:14: start 855.000000, end 890.000000
-      Metadata:
-        title           : Scene 15
-    Chapter #0:15: start 890.000000, end 897.000000
-      Metadata:
-        title           : Scene 16
-    Chapter #0:16: start 897.000000, end 898.000000
-      Metadata:
-        title           : Scene 17
-    Chapter #0:17: start 898.000000, end 906.000000
-      Metadata:
-        title           : Scene 18
-    Chapter #0:18: start 906.000000, end 938.000000
-      Metadata:
-        title           : Scene 19
-    Chapter #0:19: start 938.000000, end 1002.000000
-      Metadata:
-        title           : Scene 20
-    Chapter #0:20: start 1002.000000, end 1052.000000
-      Metadata:
-        title           : Scene 21
-    Chapter #0:21: start 1052.000000, end 1059.000000
-      Metadata:
-        title           : Scene 22
-    Chapter #0:22: start 1059.000000, end 1094.000000
-      Metadata:
-        title           : Scene 23
-    Chapter #0:23: start 1094.000000, end 1111.000000
-      Metadata:
-        title           : Scene 24
-    Chapter #0:24: start 1111.000000, end 1125.000000
-      Metadata:
-        title           : Scene 25
-    Chapter #0:25: start 1125.000000, end 1153.000000
-      Metadata:
-        title           : Scene 26
-    Chapter #0:26: start 1153.000000, end 1157.000000
-      Metadata:
-        title           : Scene 27
-    Chapter #0:27: start 1157.000000, end 1174.000000
-      Metadata:
-        title           : Scene 28
-    Chapter #0:28: start 1174.000000, end 1242.000000
-      Metadata:
-        title           : Scene 29
-    Chapter #0:29: start 1242.000000, end 1305.000000
-      Metadata:
-        title           : Scene 30
-    Chapter #0:30: start 1305.000000, end 1401.000000
-      Metadata:
-        title           : Scene 31
-    Chapter #0:31: start 1401.000000, end 1436.000000
-      Metadata:
-        title           : Scene 32
-    Chapter #0:32: start 1436.000000, end 1442.000000
-      Metadata:
-        title           : Scene 33
-    Chapter #0:33: start 1442.000000, end 1467.000000
-      Metadata:
-        title           : Scene 34
-    Chapter #0:34: start 1467.000000, end 1491.000000
-      Metadata:
-        title           : Scene 35
-    Chapter #0:35: start 1491.000000, end 1520.000000
-      Metadata:
-        title           : Scene 36
-    Chapter #0:36: start 1520.000000, end 1525.000000
-      Metadata:
-        title           : Scene 37
-    Chapter #0:37: start 1525.000000, end 1535.000000
-      Metadata:
-        title           : Scene 38
-    Chapter #0:38: start 1535.000000, end 1537.000000
-      Metadata:
-        title           : Scene 39
-    Chapter #0:39: start 1537.000000, end 1542.000000
-      Metadata:
-        title           : Scene 40
-    Chapter #0:40: start 1542.000000, end 1567.000000
-      Metadata:
-        title           : Scene 41
-    Chapter #0:41: start 1567.000000, end 1594.000000
-      Metadata:
-        title           : Scene 42
-    Chapter #0:42: start 1594.000000, end 1622.000000
-      Metadata:
-        title           : Scene 43
-    Chapter #0:43: start 1622.000000, end 1736.000000
-      Metadata:
-        title           : Scene 44
-    Chapter #0:44: start 1736.000000, end 1750.000000
-      Metadata:
-        title           : Scene 45
-    Chapter #0:45: start 1750.000000, end 1803.000000
-      Metadata:
-        title           : Scene 46
-    Chapter #0:46: start 1803.000000, end 1882.000000
-      Metadata:
-        title           : Scene 47
-    Chapter #0:47: start 1882.000000, end 1939.000000
-      Metadata:
-        title           : Scene 48
-    Chapter #0:48: start 1939.000000, end 1947.000000
-      Metadata:
-        title           : Scene 49
-    Chapter #0:49: start 1947.000000, end 1972.000000
-      Metadata:
-        title           : Scene 50
-    Chapter #0:50: start 1972.000000, end 2033.000000
-      Metadata:
-        title           : Scene 51
-    Chapter #0:51: start 2033.000000, end 2072.000000
-      Metadata:
-        title           : Scene 52
-    Chapter #0:52: start 2072.000000, end 2076.000000
-      Metadata:
-        title           : Scene 53
-    Chapter #0:53: start 2076.000000, end 2114.000000
-      Metadata:
-        title           : Scene 54
-    Chapter #0:54: start 2114.000000, end 2177.000000
-      Metadata:
-        title           : Scene 55
-    Chapter #0:55: start 2177.000000, end 2257.000000
-      Metadata:
-        title           : Scene 56
-    Chapter #0:56: start 2257.000000, end 2314.000000
-      Metadata:
-        title           : Scene 57
-    Chapter #0:57: start 2314.000000, end 2346.000000
-      Metadata:
-        title           : Scene 58
-    Chapter #0:58: start 2346.000000, end 2355.000000
-      Metadata:
-        title           : Scene 59
-    Chapter #0:59: start 2355.000000, end 2368.000000
-      Metadata:
-        title           : Scene 60
-    Chapter #0:60: start 2368.000000, end 2371.000000
-      Metadata:
-        title           : Scene 61
-    Chapter #0:61: start 2371.000000, end 2389.000000
-      Metadata:
-        title           : Scene 62
-    Chapter #0:62: start 2389.000000, end 2406.000000
-      Metadata:
-        title           : Scene 63
-    Chapter #0:63: start 2406.000000, end 2416.000000
-      Metadata:
-        title           : Scene 64
-    Chapter #0:64: start 2416.000000, end 2419.000000
-      Metadata:
-        title           : Scene 65
-    Chapter #0:65: start 2419.000000, end 2452.000000
-      Metadata:
-        title           : Scene 66
-    Chapter #0:66: start 2452.000000, end 2455.000000
-      Metadata:
-        title           : Scene 67
-    Chapter #0:67: start 2455.000000, end 2458.000000
-      Metadata:
-        title           : Scene 68
-    Chapter #0:68: start 2458.000000, end 2469.000000
-      Metadata:
-        title           : Scene 69
-    Chapter #0:69: start 2469.000000, end 2475.000000
-      Metadata:
-        title           : Scene 70
-    Chapter #0:70: start 2475.000000, end 2478.000000
-      Metadata:
-        title           : Scene 71
-    Chapter #0:71: start 2478.000000, end 2489.000000
-      Metadata:
-        title           : Scene 72
-    Chapter #0:72: start 2489.000000, end 2498.000000
-      Metadata:
-        title           : Scene 73
-    Chapter #0:73: start 2498.000000, end 2514.000000
-      Metadata:
-        title           : Scene 74
-    Chapter #0:74: start 2514.000000, end 2552.000000
-      Metadata:
-        title           : Scene 75
-    Chapter #0:75: start 2552.000000, end 2608.000000
-      Metadata:
-        title           : Scene 76
-    Chapter #0:76: start 2608.000000, end 2679.000000
-      Metadata:
-        title           : Scene 77
-    Chapter #0:77: start 2679.000000, end 2734.000000
-      Metadata:
-        title           : Scene 78
-    Chapter #0:78: start 2734.000000, end 2775.000000
-      Metadata:
-        title           : Scene 79
-    Chapter #0:79: start 2775.000000, end 2821.000000
-      Metadata:
-        title           : Scene 80
-    Chapter #0:80: start 2821.000000, end 2874.000000
-      Metadata:
-        title           : Scene 81
-    Chapter #0:81: start 2874.000000, end 2906.000000
-      Metadata:
-        title           : Scene 82
-    Chapter #0:82: start 2906.000000, end 2928.000000
-      Metadata:
-        title           : Scene 83
-    Chapter #0:83: start 2928.000000, end 2961.000000
-      Metadata:
-        title           : Scene 84
-    Chapter #0:84: start 2961.000000, end 3016.000000
-      Metadata:
-        title           : Scene 85
-    Chapter #0:85: start 3016.000000, end 3093.000000
-      Metadata:
-        title           : Scene 86
-    Chapter #0:86: start 3093.000000, end 3156.000000
-      Metadata:
-        title           : Scene 87
-    Chapter #0:87: start 3156.000000, end 3162.000000
-      Metadata:
-        title           : Scene 88
-    Chapter #0:88: start 3162.000000, end 3209.000000
-      Metadata:
-        title           : Scene 89
-    Chapter #0:89: start 3209.000000, end 3275.000000
-      Metadata:
-        title           : Scene 90
-    Chapter #0:90: start 3275.000000, end 3361.000000
-      Metadata:
-        title           : Scene 91
-    Chapter #0:91: start 3361.000000, end 3401.000000
-      Metadata:
-        title           : Scene 92
-    Chapter #0:92: start 3401.000000, end 3522.000000
-      Metadata:
-        title           : Scene 93
-    Chapter #0:93: start 3522.000000, end 3619.000000
-      Metadata:
-        title           : Scene 94
-    Chapter #0:94: start 3619.000000, end 3762.000000
-      Metadata:
-        title           : Scene 95
-    Chapter #0:95: start 3762.000000, end 3875.000000
-      Metadata:
-        title           : Scene 96
-    Chapter #0:96: start 3875.000000, end 3905.000000
-      Metadata:
-        title           : Scene 97
-    Chapter #0:97: start 3905.000000, end 3955.000000
-      Metadata:
-        title           : Scene 98
-    Chapter #0:98: start 3955.000000, end 4043.000000
-      Metadata:
-        title           : Scene 99
-    Chapter #0:99: start 4043.000000, end 4072.000000
-      Metadata:
-        title           : Scene 100
-    Chapter #0:100: start 4072.000000, end 4136.000000
-      Metadata:
-        title           : Scene 101
-    Chapter #0:101: start 4136.000000, end 4151.000000
-      Metadata:
-        title           : Scene 102
-    Chapter #0:102: start 4151.000000, end 4154.000000
-      Metadata:
-        title           : Scene 103
-    Chapter #0:103: start 4154.000000, end 4157.000000
-      Metadata:
-        title           : Scene 104
-    Chapter #0:104: start 4157.000000, end 4166.000000
-      Metadata:
-        title           : Scene 105
-    Chapter #0:105: start 4166.000000, end 4180.000000
-      Metadata:
-        title           : Scene 106
-    Chapter #0:106: start 4180.000000, end 4190.000000
-      Metadata:
-        title           : Scene 107
-    Chapter #0:107: start 4190.000000, end 4293.000000
-      Metadata:
-        title           : Scene 108
-    Chapter #0:108: start 4293.000000, end 4297.000000
-      Metadata:
-        title           : Scene 109
-    Chapter #0:109: start 4297.000000, end 4344.000000
-      Metadata:
-        title           : Scene 110
-    Chapter #0:110: start 4344.000000, end 4378.000000
-      Metadata:
-        title           : Scene 111
-    Chapter #0:111: start 4378.000000, end 4440.000000
-      Metadata:
-        title           : Scene 112
-    Chapter #0:112: start 4440.000000, end 4523.000000
-      Metadata:
-        title           : Scene 113
-    Chapter #0:113: start 4523.000000, end 4546.000000
-      Metadata:
-        title           : Scene 114
-    Chapter #0:114: start 4546.000000, end 4578.000000
-      Metadata:
-        title           : Scene 115
-    Chapter #0:115: start 4578.000000, end 4676.000000
-      Metadata:
-        title           : Scene 116
-    Chapter #0:116: start 4676.000000, end 4722.000000
-      Metadata:
-        title           : Scene 117
-    Chapter #0:117: start 4722.000000, end 4770.000000
-      Metadata:
-        title           : Scene 118
-    Chapter #0:118: start 4770.000000, end 4816.000000
-      Metadata:
-        title           : Scene 119
-    Chapter #0:119: start 4816.000000, end 4854.000000
-      Metadata:
-        title           : Scene 120
-    Chapter #0:120: start 4854.000000, end 4894.000000
-      Metadata:
-        title           : Scene 121
-    Chapter #0:121: start 4894.000000, end 4921.000000
-      Metadata:
-        title           : Scene 122
-    Chapter #0:122: start 4921.000000, end 4930.000000
-      Metadata:
-        title           : Scene 123
-    Chapter #0:123: start 4930.000000, end 5089.000000
-      Metadata:
-        title           : Scene 124
-    Chapter #0:124: start 5089.000000, end 5137.000000
-      Metadata:
-        title           : Scene 125
-    Chapter #0:125: start 5137.000000, end 5160.000000
-      Metadata:
-        title           : Scene 126
-    Chapter #0:126: start 5160.000000, end 5204.000000
-      Metadata:
-        title           : Scene 127
-    Chapter #0:127: start 5204.000000, end 5276.000000
-      Metadata:
-        title           : Scene 128
-    Chapter #0:128: start 5276.000000, end 5335.000000
-      Metadata:
-        title           : Scene 129
-    Chapter #0:129: start 5335.000000, end 5427.000000
-      Metadata:
-        title           : Scene 130
-    Chapter #0:130: start 5427.000000, end 5542.000000
-      Metadata:
-        title           : Scene 131
-    Chapter #0:131: start 5542.000000, end 5602.000000
-      Metadata:
-        title           : Scene 132
-    Chapter #0:132: start 5602.000000, end 5775.000000
-      Metadata:
-        title           : Scene 133
-    Chapter #0:133: start 5775.000000, end 5852.000000
-      Metadata:
-        title           : Scene 134
-    Chapter #0:134: start 5852.000000, end 5961.000000
-      Metadata:
-        title           : Scene 135
-    Chapter #0:135: start 5961.000000, end 6021.000000
-      Metadata:
-        title           : Scene 136
-    Chapter #0:136: start 6021.000000, end 6054.000000
-      Metadata:
-        title           : Scene 137
-    Chapter #0:137: start 6054.000000, end 6137.000000
-      Metadata:
-        title           : Scene 138
-    Chapter #0:138: start 6137.000000, end 6474.592000
-      Metadata:
-        title           : Scene 139
-  Stream #0:0: Video: hevc (Main 10), yuv420p10le(tv, bt2020nc/bt2020/smpte2084), 3840x2160 [SAR 1:1 DAR 16:9], 24 fps, 24 tbr, 1k tbn (default)
-    Metadata:
-      BPS             : 14312418
-      DURATION        : 01:47:54.584000000
-      NUMBER_OF_FRAMES: 155390
-      NUMBER_OF_BYTES : 11583369511
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: eac3, 48000 Hz, 5.1(side), fltp, 640 kb/s (default)
-    Metadata:
-      title           : French (France)
-      BPS             : 640000
-      DURATION        : 01:47:54.592000000
-      NUMBER_OF_FRAMES: 202331
-      NUMBER_OF_BYTES : 517967360
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:2(fre): Audio: eac3, 48000 Hz, 5.1(side), fltp, 640 kb/s
-    Metadata:
-      title           : French (Canadien)
-      BPS             : 640000
-      DURATION        : 01:47:54.592000000
-      NUMBER_OF_FRAMES: 202331
-      NUMBER_OF_BYTES : 517967360
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:3(eng): Audio: eac3 (Dolby Digital Plus + Dolby Atmos), 48000 Hz, 5.1(side), fltp, 448 kb/s
-    Metadata:
-      BPS             : 448000
-      DURATION        : 01:47:54.592000000
-      NUMBER_OF_FRAMES: 202331
-      NUMBER_OF_BYTES : 362577152
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:4(fre): Subtitle: subrip (srt) (default) (forced)
-    Metadata:
-      title           : French (France) Forced
-      BPS             : 1
-      DURATION        : 01:37:18.291000000
-      NUMBER_OF_FRAMES: 33
-      NUMBER_OF_BYTES : 1186
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:5(fre): Subtitle: subrip (srt)
-    Metadata:
-      title           : French (France)
-      BPS             : 64
-      DURATION        : 01:45:01.209000000
-      NUMBER_OF_FRAMES: 1623
-      NUMBER_OF_BYTES : 51095
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:6(fre): Subtitle: subrip (srt) (forced)
-    Metadata:
-      title           : French (Canadien) Forced
-      BPS             : 1
-      DURATION        : 01:37:43.625000000
-      NUMBER_OF_FRAMES: 34
-      NUMBER_OF_BYTES : 974
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:7(fre): Subtitle: subrip (srt)
-    Metadata:
-      title           : French (Canadien)
-      BPS             : 63
-      DURATION        : 01:45:01.209000000
-      NUMBER_OF_FRAMES: 1646
-      NUMBER_OF_BYTES : 50361
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:8(eng): Subtitle: subrip (srt) (original) (hearing impaired)
-    Metadata:
-      title           : SDH
-      BPS             : 100
-      DURATION        : 01:45:36.333000000
-      NUMBER_OF_FRAMES: 2215
-      NUMBER_OF_BYTES : 79592
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (eac3 (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Joyeux Noël, Maman ! (2025)
-    encoder         : Lavf62.3.100
-  Chapters:
-    Chapter #0:0: start 0.000000, end 98.000000
-      Metadata:
-        title           : Scene 1
-    Chapter #0:1: start 98.000000, end 132.000000
-      Metadata:
-        title           : Scene 2
-    Chapter #0:2: start 132.000000, end 181.000000
-      Metadata:
-        title           : Scene 3
-    Chapter #0:3: start 181.000000, end 268.000000
-      Metadata:
-        title           : Scene 4
-    Chapter #0:4: start 268.000000, end 417.000000
-      Metadata:
-        title           : Scene 5
-    Chapter #0:5: start 417.000000, end 466.000000
-      Metadata:
-        title           : Scene 6
-    Chapter #0:6: start 466.000000, end 472.000000
-      Metadata:
-        title           : Scene 7
-    Chapter #0:7: start 472.000000, end 588.000000
-      Metadata:
-        title           : Scene 8
-    Chapter #0:8: start 588.000000, end 602.000000
-      Metadata:
-        title           : Scene 9
-    Chapter #0:9: start 602.000000, end 665.000000
-      Metadata:
-        title           : Scene 10
-    Chapter #0:10: start 665.000000, end 677.000000
-      Metadata:
-        title           : Scene 11
-    Chapter #0:11: start 677.000000, end 727.000000
-      Metadata:
-        title           : Scene 12
-    Chapter #0:12: start 727.000000, end 817.000000
-      Metadata:
-        title           : Scene 13
-    Chapter #0:13: start 817.000000, end 855.000000
-      Metadata:
-        title           : Scene 14
-    Chapter #0:14: start 855.000000, end 890.000000
-      Metadata:
-        title           : Scene 15
-    Chapter #0:15: start 890.000000, end 897.000000
-      Metadata:
-        title           : Scene 16
-    Chapter #0:16: start 897.000000, end 898.000000
-      Metadata:
-        title           : Scene 17
-    Chapter #0:17: start 898.000000, end 906.000000
-      Metadata:
-        title           : Scene 18
-    Chapter #0:18: start 906.000000, end 938.000000
-      Metadata:
-        title           : Scene 19
-    Chapter #0:19: start 938.000000, end 1002.000000
-      Metadata:
-        title           : Scene 20
-    Chapter #0:20: start 1002.000000, end 1052.000000
-      Metadata:
-        title           : Scene 21
-    Chapter #0:21: start 1052.000000, end 1059.000000
-      Metadata:
-        title           : Scene 22
-    Chapter #0:22: start 1059.000000, end 1094.000000
-      Metadata:
-        title           : Scene 23
-    Chapter #0:23: start 1094.000000, end 1111.000000
-      Metadata:
-        title           : Scene 24
-    Chapter #0:24: start 1111.000000, end 1125.000000
-      Metadata:
-        title           : Scene 25
-    Chapter #0:25: start 1125.000000, end 1153.000000
-      Metadata:
-        title           : Scene 26
-    Chapter #0:26: start 1153.000000, end 1157.000000
-      Metadata:
-        title           : Scene 27
-    Chapter #0:27: start 1157.000000, end 1174.000000
-      Metadata:
-        title           : Scene 28
-    Chapter #0:28: start 1174.000000, end 1242.000000
-      Metadata:
-        title           : Scene 29
-    Chapter #0:29: start 1242.000000, end 1305.000000
-      Metadata:
-        title           : Scene 30
-    Chapter #0:30: start 1305.000000, end 1401.000000
-      Metadata:
-        title           : Scene 31
-    Chapter #0:31: start 1401.000000, end 1436.000000
-      Metadata:
-        title           : Scene 32
-    Chapter #0:32: start 1436.000000, end 1442.000000
-      Metadata:
-        title           : Scene 33
-    Chapter #0:33: start 1442.000000, end 1467.000000
-      Metadata:
-        title           : Scene 34
-    Chapter #0:34: start 1467.000000, end 1491.000000
-      Metadata:
-        title           : Scene 35
-    Chapter #0:35: start 1491.000000, end 1520.000000
-      Metadata:
-        title           : Scene 36
-    Chapter #0:36: start 1520.000000, end 1525.000000
-      Metadata:
-        title           : Scene 37
-    Chapter #0:37: start 1525.000000, end 1535.000000
-      Metadata:
-        title           : Scene 38
-    Chapter #0:38: start 1535.000000, end 1537.000000
-      Metadata:
-        title           : Scene 39
-    Chapter #0:39: start 1537.000000, end 1542.000000
-      Metadata:
-        title           : Scene 40
-    Chapter #0:40: start 1542.000000, end 1567.000000
-      Metadata:
-        title           : Scene 41
-    Chapter #0:41: start 1567.000000, end 1594.000000
-      Metadata:
-        title           : Scene 42
-    Chapter #0:42: start 1594.000000, end 1622.000000
-      Metadata:
-        title           : Scene 43
-    Chapter #0:43: start 1622.000000, end 1736.000000
-      Metadata:
-        title           : Scene 44
-    Chapter #0:44: start 1736.000000, end 1750.000000
-      Metadata:
-        title           : Scene 45
-    Chapter #0:45: start 1750.000000, end 1803.000000
-      Metadata:
-        title           : Scene 46
-    Chapter #0:46: start 1803.000000, end 1882.000000
-      Metadata:
-        title           : Scene 47
-    Chapter #0:47: start 1882.000000, end 1939.000000
-      Metadata:
-        title           : Scene 48
-    Chapter #0:48: start 1939.000000, end 1947.000000
-      Metadata:
-        title           : Scene 49
-    Chapter #0:49: start 1947.000000, end 1972.000000
-      Metadata:
-        title           : Scene 50
-    Chapter #0:50: start 1972.000000, end 2033.000000
-      Metadata:
-        title           : Scene 51
-    Chapter #0:51: start 2033.000000, end 2072.000000
-      Metadata:
-        title           : Scene 52
-    Chapter #0:52: start 2072.000000, end 2076.000000
-      Metadata:
-        title           : Scene 53
-    Chapter #0:53: start 2076.000000, end 2114.000000
-      Metadata:
-        title           : Scene 54
-    Chapter #0:54: start 2114.000000, end 2177.000000
-      Metadata:
-        title           : Scene 55
-    Chapter #0:55: start 2177.000000, end 2257.000000
-      Metadata:
-        title           : Scene 56
-    Chapter #0:56: start 2257.000000, end 2314.000000
-      Metadata:
-        title           : Scene 57
-    Chapter #0:57: start 2314.000000, end 2346.000000
-      Metadata:
-        title           : Scene 58
-    Chapter #0:58: start 2346.000000, end 2355.000000
-      Metadata:
-        title           : Scene 59
-    Chapter #0:59: start 2355.000000, end 2368.000000
-      Metadata:
-        title           : Scene 60
-    Chapter #0:60: start 2368.000000, end 2371.000000
-      Metadata:
-        title           : Scene 61
-    Chapter #0:61: start 2371.000000, end 2389.000000
-      Metadata:
-        title           : Scene 62
-    Chapter #0:62: start 2389.000000, end 2406.000000
-      Metadata:
-        title           : Scene 63
-    Chapter #0:63: start 2406.000000, end 2416.000000
-      Metadata:
-        title           : Scene 64
-    Chapter #0:64: start 2416.000000, end 2419.000000
-      Metadata:
-        title           : Scene 65
-    Chapter #0:65: start 2419.000000, end 2452.000000
-      Metadata:
-        title           : Scene 66
-    Chapter #0:66: start 2452.000000, end 2455.000000
-      Metadata:
-        title           : Scene 67
-    Chapter #0:67: start 2455.000000, end 2458.000000
-      Metadata:
-        title           : Scene 68
-    Chapter #0:68: start 2458.000000, end 2469.000000
-      Metadata:
-        title           : Scene 69
-    Chapter #0:69: start 2469.000000, end 2475.000000
-      Metadata:
-        title           : Scene 70
-    Chapter #0:70: start 2475.000000, end 2478.000000
-      Metadata:
-        title           : Scene 71
-    Chapter #0:71: start 2478.000000, end 2489.000000
-      Metadata:
-        title           : Scene 72
-    Chapter #0:72: start 2489.000000, end 2498.000000
-      Metadata:
-        title           : Scene 73
-    Chapter #0:73: start 2498.000000, end 2514.000000
-      Metadata:
-        title           : Scene 74
-    Chapter #0:74: start 2514.000000, end 2552.000000
-      Metadata:
-        title           : Scene 75
-    Chapter #0:75: start 2552.000000, end 2608.000000
-      Metadata:
-        title           : Scene 76
-    Chapter #0:76: start 2608.000000, end 2679.000000
-      Metadata:
-        title           : Scene 77
-    Chapter #0:77: start 2679.000000, end 2734.000000
-      Metadata:
-        title           : Scene 78
-    Chapter #0:78: start 2734.000000, end 2775.000000
-      Metadata:
-        title           : Scene 79
-    Chapter #0:79: start 2775.000000, end 2821.000000
-      Metadata:
-        title           : Scene 80
-    Chapter #0:80: start 2821.000000, end 2874.000000
-      Metadata:
-        title           : Scene 81
-    Chapter #0:81: start 2874.000000, end 2906.000000
-      Metadata:
-        title           : Scene 82
-    Chapter #0:82: start 2906.000000, end 2928.000000
-      Metadata:
-        title           : Scene 83
-    Chapter #0:83: start 2928.000000, end 2961.000000
-      Metadata:
-        title           : Scene 84
-    Chapter #0:84: start 2961.000000, end 3016.000000
-      Metadata:
-        title           : Scene 85
-    Chapter #0:85: start 3016.000000, end 3093.000000
-      Metadata:
-        title           : Scene 86
-    Chapter #0:86: start 3093.000000, end 3156.000000
-      Metadata:
-        title           : Scene 87
-    Chapter #0:87: start 3156.000000, end 3162.000000
-      Metadata:
-        title           : Scene 88
-    Chapter #0:88: start 3162.000000, end 3209.000000
-      Metadata:
-        title           : Scene 89
-    Chapter #0:89: start 3209.000000, end 3275.000000
-      Metadata:
-        title           : Scene 90
-    Chapter #0:90: start 3275.000000, end 3361.000000
-      Metadata:
-        title           : Scene 91
-    Chapter #0:91: start 3361.000000, end 3401.000000
-      Metadata:
-        title           : Scene 92
-    Chapter #0:92: start 3401.000000, end 3522.000000
-      Metadata:
-        title           : Scene 93
-    Chapter #0:93: start 3522.000000, end 3619.000000
-      Metadata:
-        title           : Scene 94
-    Chapter #0:94: start 3619.000000, end 3762.000000
-      Metadata:
-        title           : Scene 95
-    Chapter #0:95: start 3762.000000, end 3875.000000
-      Metadata:
-        title           : Scene 96
-    Chapter #0:96: start 3875.000000, end 3905.000000
-      Metadata:
-        title           : Scene 97
-    Chapter #0:97: start 3905.000000, end 3955.000000
-      Metadata:
-        title           : Scene 98
-    Chapter #0:98: start 3955.000000, end 4043.000000
-      Metadata:
-        title           : Scene 99
-    Chapter #0:99: start 4043.000000, end 4072.000000
-      Metadata:
-        title           : Scene 100
-    Chapter #0:100: start 4072.000000, end 4136.000000
-      Metadata:
-        title           : Scene 101
-    Chapter #0:101: start 4136.000000, end 4151.000000
-      Metadata:
-        title           : Scene 102
-    Chapter #0:102: start 4151.000000, end 4154.000000
-      Metadata:
-        title           : Scene 103
-    Chapter #0:103: start 4154.000000, end 4157.000000
-      Metadata:
-        title           : Scene 104
-    Chapter #0:104: start 4157.000000, end 4166.000000
-      Metadata:
-        title           : Scene 105
-    Chapter #0:105: start 4166.000000, end 4180.000000
-      Metadata:
-        title           : Scene 106
-    Chapter #0:106: start 4180.000000, end 4190.000000
-      Metadata:
-        title           : Scene 107
-    Chapter #0:107: start 4190.000000, end 4293.000000
-      Metadata:
-        title           : Scene 108
-    Chapter #0:108: start 4293.000000, end 4297.000000
-      Metadata:
-        title           : Scene 109
-    Chapter #0:109: start 4297.000000, end 4344.000000
-      Metadata:
-        title           : Scene 110
-    Chapter #0:110: start 4344.000000, end 4378.000000
-      Metadata:
-        title           : Scene 111
-    Chapter #0:111: start 4378.000000, end 4440.000000
-      Metadata:
-        title           : Scene 112
-    Chapter #0:112: start 4440.000000, end 4523.000000
-      Metadata:
-        title           : Scene 113
-    Chapter #0:113: start 4523.000000, end 4546.000000
-      Metadata:
-        title           : Scene 114
-    Chapter #0:114: start 4546.000000, end 4578.000000
-      Metadata:
-        title           : Scene 115
-    Chapter #0:115: start 4578.000000, end 4676.000000
-      Metadata:
-        title           : Scene 116
-    Chapter #0:116: start 4676.000000, end 4722.000000
-      Metadata:
-        title           : Scene 117
-    Chapter #0:117: start 4722.000000, end 4770.000000
-      Metadata:
-        title           : Scene 118
-    Chapter #0:118: start 4770.000000, end 4816.000000
-      Metadata:
-        title           : Scene 119
-    Chapter #0:119: start 4816.000000, end 4854.000000
-      Metadata:
-        title           : Scene 120
-    Chapter #0:120: start 4854.000000, end 4894.000000
-      Metadata:
-        title           : Scene 121
-    Chapter #0:121: start 4894.000000, end 4921.000000
-      Metadata:
-        title           : Scene 122
-    Chapter #0:122: start 4921.000000, end 4930.000000
-      Metadata:
-        title           : Scene 123
-    Chapter #0:123: start 4930.000000, end 5089.000000
-      Metadata:
-        title           : Scene 124
-    Chapter #0:124: start 5089.000000, end 5137.000000
-      Metadata:
-        title           : Scene 125
-    Chapter #0:125: start 5137.000000, end 5160.000000
-      Metadata:
-        title           : Scene 126
-    Chapter #0:126: start 5160.000000, end 5204.000000
-      Metadata:
-        title           : Scene 127
-    Chapter #0:127: start 5204.000000, end 5276.000000
-      Metadata:
-        title           : Scene 128
-    Chapter #0:128: start 5276.000000, end 5335.000000
-      Metadata:
-        title           : Scene 129
-    Chapter #0:129: start 5335.000000, end 5427.000000
-      Metadata:
-        title           : Scene 130
-    Chapter #0:130: start 5427.000000, end 5542.000000
-      Metadata:
-        title           : Scene 131
-    Chapter #0:131: start 5542.000000, end 5602.000000
-      Metadata:
-        title           : Scene 132
-    Chapter #0:132: start 5602.000000, end 5775.000000
-      Metadata:
-        title           : Scene 133
-    Chapter #0:133: start 5775.000000, end 5852.000000
-      Metadata:
-        title           : Scene 134
-    Chapter #0:134: start 5852.000000, end 5961.000000
-      Metadata:
-        title           : Scene 135
-    Chapter #0:135: start 5961.000000, end 6021.000000
-      Metadata:
-        title           : Scene 136
-    Chapter #0:136: start 6021.000000, end 6054.000000
-      Metadata:
-        title           : Scene 137
-    Chapter #0:137: start 6054.000000, end 6137.000000
-      Metadata:
-        title           : Scene 138
-    Chapter #0:138: start 6137.000000, end 6474.592000
-      Metadata:
-        title           : Scene 139
-  Stream #0:0: Video: hevc (Main 10) (hev1 / 0x31766568), yuv420p10le(tv, bt2020nc/bt2020/smpte2084), 3840x2160 [SAR 1:1 DAR 16:9], q=2-31, 24 fps, 24 tbr, 16k tbn (default)
-    Metadata:
-      BPS             : 14312418
-      DURATION        : 01:47:54.584000000
-      NUMBER_OF_FRAMES: 155390
-      NUMBER_OF_BYTES : 11583369511
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : French (France)
-      BPS             : 640000
-      DURATION        : 01:47:54.592000000
-      NUMBER_OF_FRAMES: 202331
-      NUMBER_OF_BYTES : 517967360
-      _STATISTICS_WRITING_APP: mkvmerge v96.0 ('It's My Life') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-12-03 11:51:42
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-frame=   81 fps=0.0 q=-1.0 size=    1435KiB time=00:00:03.29 bitrate=3571.6kbits/s speed=6.58x elapsed=0:00:00.50    frame=  163 fps=162 q=-1.0 size=    9308KiB time=00:00:06.70 bitrate=11367.3kbits/s speed=6.67x elapsed=0:00:01.00    frame=  246 fps=163 q=-1.0 size=   17478KiB time=00:00:10.16 bitrate=14083.9kbits/s speed=6.73x elapsed=0:00:01.51    frame=  326 fps=162 q=-1.0 size=   21288KiB time=00:00:13.49 bitrate=12918.9kbits/s speed=6.71x elapsed=0:00:02.01    frame=  393 fps=156 q=-1.0 size=   27763KiB time=00:00:16.29 bitrate=13960.8kbits/s speed=6.48x elapsed=0:00:02.51    [http @ 0xb14c68000] Stream ends prematurely at 36751423, should be 12984471705
-[http @ 0xb14c68000] Will reconnect at 36751423 in 0 second(s), error=Input/output error.
-frame=  432 fps=143 q=-1.0 size=   27763KiB time=00:00:17.91 bitrate=12694.6kbits/s speed=5.94x elapsed=0:00:03.01    [vost#0:0/copy @ 0xb154cc000] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0xb154bd140] Error muxing a packet
-[out#0/mp4 @ 0xb154bd140] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0xb154bd140] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0xb154bd140] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0xb154bd140] Error closing file: Broken pipe
-[out#0/mp4 @ 0xb154bd140] video:32112KiB audio:273KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame=  433 fps=137 q=-1.0 Lsize=   27859KiB time=00:00:17.95 bitrate=12708.7kbits/s speed=5.68x elapsed=0:00:03.16    
-[aac @ 0xb1551e680] Qavg: 4353.439
-Conversion failed!
-2025-12-17 15:15:49 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjcyODYyLm1rdg==
-2025-12-17 15:15:49 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1272862.mkv
-[2025-12-17 15:15:49] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1272862.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1272862.mkv':
-  Metadata:
-    encoder         : libebml v1.4.5 + libmatroska v1.7.1
-    creation_time   : 2025-05-29T09:17:57.000000Z
-  Duration: 02:17:38.42, start: 0.000000, bitrate: 13447 kb/s
-  Stream #0:0: Video: hevc (Main 10), yuv420p10le(tv, bt709), 3840x2160 [SAR 1:1 DAR 16:9], 23.98 fps, 23.98 tbr, 1k tbn (default)
-    Metadata:
-      BPS             : 11910359
-      DURATION        : 02:17:38.416000000
-      NUMBER_OF_FRAMES: 197897
-      NUMBER_OF_BYTES : 12295087885
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: eac3 (Dolby Digital Plus + Dolby Atmos), 48000 Hz, 5.1(side), fltp, 768 kb/s (default)
-    Metadata:
-      title           : French (France)
-      BPS             : 768000
-      DURATION        : 02:17:32.544000000
-      NUMBER_OF_FRAMES: 257892
-      NUMBER_OF_BYTES : 792244224
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:2(eng): Audio: eac3 (Dolby Digital Plus + Dolby Atmos), 48000 Hz, 5.1(side), fltp, 768 kb/s (original)
-    Metadata:
-      title           : English
-      BPS             : 768000
-      DURATION        : 02:17:32.544000000
-      NUMBER_OF_FRAMES: 257892
-      NUMBER_OF_BYTES : 792244224
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:3(fre): Subtitle: subrip (srt) (default) (forced)
-    Metadata:
-      title           : French (France) Forced
-      BPS             : 1
-      DURATION        : 02:15:42.809000000
-      NUMBER_OF_FRAMES: 52
-      NUMBER_OF_BYTES : 1656
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:4(fre): Subtitle: subrip (srt)
-    Metadata:
-      title           : French (France) Full
-      BPS             : 41
-      DURATION        : 02:16:49.708000000
-      NUMBER_OF_FRAMES: 1652
-      NUMBER_OF_BYTES : 42778
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:5(eng): Subtitle: subrip (srt) (original) (hearing impaired)
-    Metadata:
-      title           : English SDH
-      BPS             : 67
-      DURATION        : 02:17:14.943000000
-      NUMBER_OF_FRAMES: 2377
-      NUMBER_OF_BYTES : 69930
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (eac3 (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    encoder         : Lavf62.3.100
-  Stream #0:0: Video: hevc (Main 10) (hev1 / 0x31766568), yuv420p10le(tv, bt709), 3840x2160 [SAR 1:1 DAR 16:9], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
-    Metadata:
-      BPS             : 11910359
-      DURATION        : 02:17:38.416000000
-      NUMBER_OF_FRAMES: 197897
-      NUMBER_OF_BYTES : 12295087885
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : French (France)
-      BPS             : 768000
-      DURATION        : 02:17:32.544000000
-      NUMBER_OF_FRAMES: 257892
-      NUMBER_OF_BYTES : 792244224
-      _STATISTICS_WRITING_APP: mkvmerge v92.0 ('Everglow') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-05-29 09:17:57
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-frame=  163 fps=0.0 q=-1.0 size=    2523KiB time=00:00:06.63 bitrate=3117.1kbits/s speed=13.2x elapsed=0:00:00.50    frame=  298 fps=298 q=-1.0 size=   14411KiB time=00:00:12.26 bitrate=9627.7kbits/s speed=12.3x elapsed=0:00:01.00    frame=  827 fps=550 q=-1.0 size=   18570KiB time=00:00:34.32 bitrate=4432.0kbits/s speed=22.8x elapsed=0:00:01.50    frame= 1009 fps=502 q=-1.0 size=   22288KiB time=00:00:41.91 bitrate=4355.9kbits/s speed=20.9x elapsed=0:00:02.01    frame= 1126 fps=448 q=-1.0 size=   26284KiB time=00:00:46.79 bitrate=4601.3kbits/s speed=18.6x elapsed=0:00:02.51    frame= 1211 fps=401 q=-1.0 size=   31470KiB time=00:00:50.34 bitrate=5121.1kbits/s speed=16.7x elapsed=0:00:03.01    frame= 1318 fps=374 q=-1.0 size=   36870KiB time=00:00:54.80 bitrate=5511.2kbits/s speed=15.6x elapsed=0:00:03.52    [http @ 0xa0cc64000] Stream ends prematurely at 52620822, should be 13882295530
-[http @ 0xa0cc64000] Will reconnect at 52620822 in 0 second(s), error=Input/output error.
-frame= 1381 fps=343 q=-1.0 size=   41257KiB time=00:00:57.36 bitrate=5891.6kbits/s speed=14.3x elapsed=0:00:04.02    frame= 1500 fps=331 q=-1.0 size=   45005KiB time=00:01:02.39 bitrate=5908.8kbits/s speed=13.8x elapsed=0:00:04.52    frame= 1604 fps=319 q=-1.0 size=   49160KiB time=00:01:06.73 bitrate=6034.7kbits/s speed=13.3x elapsed=0:00:05.03    frame= 1710 fps=309 q=-1.0 size=   53217KiB time=00:01:11.15 bitrate=6126.9kbits/s speed=12.9x elapsed=0:00:05.53    frame= 1806 fps=299 q=-1.0 size=   57621KiB time=00:01:15.15 bitrate=6280.6kbits/s speed=12.4x elapsed=0:00:06.03    frame= 2012 fps=308 q=-1.0 size=   65999KiB time=00:01:23.75 bitrate=6455.7kbits/s speed=12.8x elapsed=0:00:06.54    frame= 2125 fps=302 q=-1.0 size=   67636KiB time=00:01:28.46 bitrate=6263.4kbits/s speed=12.6x elapsed=0:00:07.04    frame= 2168 fps=287 q=-1.0 size=   72030KiB time=00:01:30.25 bitrate=6537.8kbits/s speed=  12x elapsed=0:00:07.55    frame= 2311 fps=287 q=-1.0 size=   76641KiB time=00:01:36.22 bitrate=6525.1kbits/s speed=11.9x elapsed=0:00:08.05    frame= 2369 fps=277 q=-1.0 size=   76641KiB time=00:01:38.63 bitrate=6365.1kbits/s speed=11.5x elapsed=0:00:08.55    frame= 2379 fps=263 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=10.9x elapsed=0:00:09.05    frame= 2379 fps=249 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=10.4x elapsed=0:00:09.56    frame= 2379 fps=236 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=9.84x elapsed=0:00:10.06    frame= 2379 fps=225 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=9.38x elapsed=0:00:10.56    frame= 2379 fps=215 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=8.95x elapsed=0:00:11.06    frame= 2379 fps=206 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=8.56x elapsed=0:00:11.57    frame= 2379 fps=197 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed= 8.2x elapsed=0:00:12.07    frame= 2379 fps=189 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=7.88x elapsed=0:00:12.57    frame= 2379 fps=182 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=7.57x elapsed=0:00:13.07    frame= 2379 fps=175 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed= 7.3x elapsed=0:00:13.57    frame= 2379 fps=169 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=7.03x elapsed=0:00:14.08    frame= 2379 fps=163 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=6.79x elapsed=0:00:14.58    frame= 2379 fps=158 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=6.56x elapsed=0:00:15.09    frame= 2379 fps=153 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=6.35x elapsed=0:00:15.59    frame= 2379 fps=148 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=6.16x elapsed=0:00:16.09    frame= 2379 fps=143 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.97x elapsed=0:00:16.59    frame= 2379 fps=139 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.79x elapsed=0:00:17.09    frame= 2379 fps=135 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.63x elapsed=0:00:17.59    frame= 2379 fps=131 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.47x elapsed=0:00:18.09    frame= 2379 fps=128 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.33x elapsed=0:00:18.60    frame= 2379 fps=125 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.19x elapsed=0:00:19.10    frame= 2379 fps=121 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=5.05x elapsed=0:00:19.60    frame= 2379 fps=118 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.93x elapsed=0:00:20.10    frame= 2379 fps=115 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.81x elapsed=0:00:20.61    frame= 2379 fps=113 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.69x elapsed=0:00:21.11    frame= 2379 fps=110 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.58x elapsed=0:00:21.61    frame= 2379 fps=108 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.48x elapsed=0:00:22.12    frame= 2379 fps=105 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.38x elapsed=0:00:22.62    frame= 2379 fps=103 q=-1.0 size=   76641KiB time=00:01:39.05 bitrate=6338.2kbits/s speed=4.28x elapsed=0:00:23.12    [vost#0:0/copy @ 0xa0d41c000] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0xa0d40ca80] Error muxing a packet
-[out#0/mp4 @ 0xa0d40ca80] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0xa0d40ca80] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0xa0d40ca80] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0xa0d40ca80] Error closing file: Broken pipe
-[out#0/mp4 @ 0xa0d40ca80] video:81044KiB audio:1556KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2379 fps=103 q=-1.0 Lsize=   79297KiB time=00:01:39.05 bitrate=6557.8kbits/s speed=4.28x elapsed=0:00:23.15    
-[aac @ 0xa0d40b100] Qavg: 1900.710
-Conversion failed!
-2025-12-17 16:05:50 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMDQxMTY5Lm1rdg==
-2025-12-17 16:05:50 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1041169.mkv
-[2025-12-17 16:05:50] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1041169.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1041169.mkv':
-  Metadata:
-    creation_time   : 2024-01-23T11:35:35.000000Z
-    ENCODER         : Lavf58.12.100
-  Duration: 02:10:39.71, start: 0.000000, bitrate: 3533 kb/s
-  Stream #0:0: Video: h264 (Main), yuv420p(progressive), 1280x544 [SAR 1:1 DAR 40:17], 23.98 fps, 23.98 tbr, 1k tbn (default)
-    Metadata:
-      BPS             : 6439542
-      NUMBER_OF_FRAMES: 187965
-      NUMBER_OF_BYTES : 6310515610
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.707000000
-  Stream #0:1(fre): Audio: aac (LC), 44100 Hz, stereo, fltp (default)
-    Metadata:
-      title           : VFQ
-      BPS             : 640000
-      NUMBER_OF_FRAMES: 244992
-      NUMBER_OF_BYTES : 627179520
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.683000000
-  Stream #0:2: Subtitle: subrip (srt) (default)
-    Metadata:
-      title           : F
-      BPS             : 27
-      NUMBER_OF_FRAMES: 1
-      NUMBER_OF_BYTES : 17
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 00:01:05.000000000
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    encoder         : Lavf62.3.100
-  Stream #0:0: Video: h264 (Main) (avc1 / 0x31637661), yuv420p(progressive), 1280x544 [SAR 1:1 DAR 40:17], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
-    Metadata:
-      BPS             : 6439542
-      NUMBER_OF_FRAMES: 187965
-      NUMBER_OF_BYTES : 6310515610
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.707000000
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : VFQ
-      BPS             : 640000
-      NUMBER_OF_FRAMES: 244992
-      NUMBER_OF_BYTES : 627179520
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.683000000
-frame=  875 fps=0.0 q=-1.0 size=   14457KiB time=00:00:36.45 bitrate=3248.6kbits/s speed=72.3x elapsed=0:00:00.50    frame= 1558 fps=1551 q=-1.0 size=   26900KiB time=00:01:04.99 bitrate=3390.6kbits/s speed=64.7x elapsed=0:00:01.00    frame= 1730 fps=1146 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=47.8x elapsed=0:00:01.50    frame= 1730 fps=859 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=35.8x elapsed=0:00:02.01    frame= 1730 fps=687 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=28.7x elapsed=0:00:02.51    frame= 1730 fps=573 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=23.9x elapsed=0:00:03.01    frame= 1730 fps=491 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=20.5x elapsed=0:00:03.52    frame= 1730 fps=430 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=17.9x elapsed=0:00:04.02    frame= 1730 fps=382 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=15.9x elapsed=0:00:04.52    frame= 1730 fps=344 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=14.3x elapsed=0:00:05.03    frame= 1730 fps=312 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=  13x elapsed=0:00:05.53    frame= 1730 fps=286 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=11.9x elapsed=0:00:06.03    frame= 1730 fps=264 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=  11x elapsed=0:00:06.54    frame= 1730 fps=246 q=-1.0 size=   31424KiB time=00:01:12.16 bitrate=3567.0kbits/s speed=10.2x elapsed=0:00:07.04    [aost#0:1/aac @ 0x909458300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0x909424480] Error muxing a packet
-[out#0/mp4 @ 0x909424480] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0x909424480] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0x909424480] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0x909424480] Error closing file: Broken pipe
-[out#0/mp4 @ 0x909424480] video:30939KiB audio:1089KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 1730 fps=236 q=-1.0 Lsize=   31808KiB time=00:01:12.16 bitrate=3610.6kbits/s speed=9.86x elapsed=0:00:07.32    
-[aac @ 0x909421c00] Qavg: 4179.880
-Conversion failed!
-2025-12-17 16:05:57 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMDQxMTY5Lm1rdg==
-2025-12-17 16:05:57 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1041169.mkv
-[2025-12-17 16:05:57] CMD: ffmpeg -ss 111 -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1041169.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1041169.mkv':
-  Metadata:
-    creation_time   : 2024-01-23T11:35:35.000000Z
-    ENCODER         : Lavf58.12.100
-  Duration: 02:10:39.71, start: 0.000000, bitrate: 3533 kb/s
-  Stream #0:0: Video: h264 (Main), yuv420p(progressive), 1280x544 [SAR 1:1 DAR 40:17], 23.98 fps, 23.98 tbr, 1k tbn (default)
-    Metadata:
-      BPS             : 6439542
-      NUMBER_OF_FRAMES: 187965
-      NUMBER_OF_BYTES : 6310515610
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.707000000
-  Stream #0:1(fre): Audio: aac (LC), 44100 Hz, stereo, fltp (default)
-    Metadata:
-      title           : VFQ
-      BPS             : 640000
-      NUMBER_OF_FRAMES: 244992
-      NUMBER_OF_BYTES : 627179520
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.683000000
-  Stream #0:2: Subtitle: subrip (srt) (default)
-    Metadata:
-      title           : F
-      BPS             : 27
-      NUMBER_OF_FRAMES: 1
-      NUMBER_OF_BYTES : 17
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 00:01:05.000000000
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    encoder         : Lavf62.3.100
-  Stream #0:0: Video: h264 (Main) (avc1 / 0x31637661), yuv420p(progressive), 1280x544 [SAR 1:1 DAR 40:17], q=2-31, 23.98 fps, 23.98 tbr, 16k tbn (default)
-    Metadata:
-      BPS             : 6439542
-      NUMBER_OF_FRAMES: 187965
-      NUMBER_OF_BYTES : 6310515610
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.707000000
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 44100 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : VFQ
-      BPS             : 640000
-      NUMBER_OF_FRAMES: 244992
-      NUMBER_OF_BYTES : 627179520
-      _STATISTICS_WRITING_APP: mkvmerge v79.0 (\'Funeral Pyres\') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2024-01-23 11:35:35
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-      DURATION        : 02:10:39.683000000
-frame= 1448 fps=0.0 q=-1.0 size=   14488KiB time=00:00:59.86 bitrate=1982.7kbits/s speed= 120x elapsed=0:00:00.50    frame= 2179 fps=2166 q=-1.0 size=   30952KiB time=00:01:30.37 bitrate=2805.8kbits/s speed=89.8x elapsed=0:00:01.00    frame= 2296 fps=1523 q=-1.0 size=   33393KiB time=00:01:35.17 bitrate=2874.1kbits/s speed=63.1x elapsed=0:00:01.50    frame= 2396 fps=1191 q=-1.0 size=   35838KiB time=00:01:39.45 bitrate=2952.1kbits/s speed=49.4x elapsed=0:00:02.01    frame= 2431 fps=966 q=-1.0 size=   36777KiB time=00:01:40.91 bitrate=2985.5kbits/s speed=40.1x elapsed=0:00:02.51    frame= 2529 fps=837 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=34.8x elapsed=0:00:03.02    frame= 2529 fps=718 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=29.8x elapsed=0:00:03.52    frame= 2529 fps=628 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=26.1x elapsed=0:00:04.02    frame= 2529 fps=558 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=23.2x elapsed=0:00:04.53    frame= 2529 fps=502 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=20.9x elapsed=0:00:05.03    frame= 2529 fps=457 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=  19x elapsed=0:00:05.53    frame= 2529 fps=419 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=17.4x elapsed=0:00:06.03    frame= 2529 fps=387 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=16.1x elapsed=0:00:06.54    frame= 2529 fps=359 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=14.9x elapsed=0:00:07.04    frame= 2529 fps=335 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=13.9x elapsed=0:00:07.54    frame= 2529 fps=314 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=  13x elapsed=0:00:08.04    frame= 2529 fps=296 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=12.3x elapsed=0:00:08.55    frame= 2529 fps=279 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=11.6x elapsed=0:00:09.05    frame= 2529 fps=264 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=  11x elapsed=0:00:09.56    frame= 2529 fps=251 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=10.4x elapsed=0:00:10.06    frame= 2529 fps=239 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=9.94x elapsed=0:00:10.56    frame= 2529 fps=228 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=9.49x elapsed=0:00:11.07    frame= 2529 fps=218 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=9.08x elapsed=0:00:11.57    frame= 2529 fps=209 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed= 8.7x elapsed=0:00:12.07    frame= 2529 fps=201 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=8.35x elapsed=0:00:12.57    frame= 2529 fps=193 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=8.03x elapsed=0:00:13.07    frame= 2529 fps=186 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=7.73x elapsed=0:00:13.58    frame= 2529 fps=180 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=7.46x elapsed=0:00:14.08    frame= 2529 fps=173 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed= 7.2x elapsed=0:00:14.59    frame= 2529 fps=168 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=6.96x elapsed=0:00:15.09    frame= 2529 fps=162 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=6.73x elapsed=0:00:15.59    frame= 2529 fps=157 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=6.52x elapsed=0:00:16.09    frame= 2529 fps=152 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=6.33x elapsed=0:00:16.59    frame= 2529 fps=148 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=6.14x elapsed=0:00:17.10    frame= 2529 fps=144 q=-1.0 size=   38142KiB time=00:01:45.04 bitrate=2974.4kbits/s speed=5.97x elapsed=0:00:17.60    [aost#0:1/aac @ 0x8e8880300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0x8e902dec0] Error muxing a packet
-[out#0/mp4 @ 0x8e902dec0] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0x8e902dec0] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0x8e902dec0] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0x8e902dec0] Error closing file: Broken pipe
-[out#0/mp4 @ 0x8e902dec0] video:37424KiB audio:1260KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2529 fps=143 q=-1.0 Lsize=   38494KiB time=00:01:45.04 bitrate=3001.9kbits/s speed=5.94x elapsed=0:00:17.68    
-[aac @ 0x8e9409c00] Qavg: 16160.161
-Conversion failed!
-2025-12-17 17:08:02 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjMyNzA0Lm1rdg==
-2025-12-17 17:08:02 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1232704.mkv
-[2025-12-17 17:08:02] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1232704.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1232704.mkv':
-  Metadata:
-    title           : Woodwalkers (2024)
-    encoder         : libebml v1.4.2 + libmatroska v1.6.4
-    creation_time   : 2025-02-12T12:20:05.000000Z
-  Duration: 01:42:50.40, start: 0.000000, bitrate: 3897 kb/s
-  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x800 [SAR 1:1 DAR 12:5], 24 fps, 24 tbr, 1k tbn, start 0.005000 (default)
-    Metadata:
-      title           : WEBRip LiHDL (Source WEB SUPPLY)
-      BPS             : 2999790
-      DURATION        : 01:42:50.375000000
-      NUMBER_OF_FRAMES: 148089
-      NUMBER_OF_BYTES : 2313729385
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s (default)
-    Metadata:
-      title           : FR VFi : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:42:50.400000000
-      NUMBER_OF_FRAMES: 192825
-      NUMBER_OF_BYTES : 345542400
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:2(ger): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s
-    Metadata:
-      title           : DE VO : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:42:50.400000000
-      NUMBER_OF_FRAMES: 192825
-      NUMBER_OF_BYTES : 345542400
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:3(fre): Subtitle: subrip (srt) (default) (forced)
-    Metadata:
-      title           : FR Forced : SRT
-      BPS             : 0
-      DURATION        : 01:12:36.250000000
-      NUMBER_OF_FRAMES: 3
-      NUMBER_OF_BYTES : 107
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:4(fre): Subtitle: subrip (srt)
-    Metadata:
-      title           : FR Full : SRT
-      BPS             : 61
-      DURATION        : 01:35:36.417000000
-      NUMBER_OF_FRAMES: 1454
-      NUMBER_OF_BYTES : 44413
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (ac3 (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    title           : Woodwalkers (2024)
-    encoder         : Lavf62.3.100
-  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x800 [SAR 1:1 DAR 12:5], q=2-31, 24 fps, 24 tbr, 16k tbn (default)
-    Metadata:
-      title           : WEBRip LiHDL (Source WEB SUPPLY)
-      BPS             : 2999790
-      DURATION        : 01:42:50.375000000
-      NUMBER_OF_FRAMES: 148089
-      NUMBER_OF_BYTES : 2313729385
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      title           : FR VFi : AC3 5.1
-      BPS             : 448000
-      DURATION        : 01:42:50.400000000
-      NUMBER_OF_FRAMES: 192825
-      NUMBER_OF_BYTES : 345542400
-      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
-      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
-      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
-frame=  829 fps=0.0 q=-1.0 size=   11344KiB time=00:00:34.46 bitrate=2696.5kbits/s speed=68.2x elapsed=0:00:00.50    frame= 1596 fps=1582 q=-1.0 size=   20893KiB time=00:01:06.42 bitrate=2576.9kbits/s speed=65.9x elapsed=0:00:01.00    frame= 1596 fps=1054 q=-1.0 size=   20893KiB time=00:01:06.42 bitrate=2576.9kbits/s speed=43.9x elapsed=0:00:01.51    frame= 2193 fps=1088 q=-1.0 size=   25165KiB time=00:01:31.29 bitrate=2258.1kbits/s speed=45.3x elapsed=0:00:02.01    frame= 2193 fps=870 q=-1.0 size=   25165KiB time=00:01:31.29 bitrate=2258.1kbits/s speed=36.2x elapsed=0:00:02.52    frame= 2389 fps=790 q=-1.0 size=   25887KiB time=00:01:39.46 bitrate=2132.1kbits/s speed=32.9x elapsed=0:00:03.02    frame= 2446 fps=693 q=-1.0 size=   25887KiB time=00:01:41.83 bitrate=2082.4kbits/s speed=28.8x elapsed=0:00:03.53    frame= 2578 fps=639 q=-1.0 size=   25887KiB time=00:01:47.33 bitrate=1975.7kbits/s speed=26.6x elapsed=0:00:04.03    frame= 2578 fps=569 q=-1.0 size=   25887KiB time=00:01:47.33 bitrate=1975.7kbits/s speed=23.7x elapsed=0:00:04.53    frame= 2578 fps=512 q=-1.0 size=   25887KiB time=00:01:47.33 bitrate=1975.7kbits/s speed=21.3x elapsed=0:00:05.03    [aost#0:1/aac @ 0xc19090300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0xc19448780] Error muxing a packet
-[out#0/mp4 @ 0xc19448780] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0xc19448780] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0xc19448780] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0xc19448780] Error closing file: Broken pipe
-[out#0/mp4 @ 0xc19448780] video:30941KiB audio:1702KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2578 fps=478 q=-1.0 Lsize=   28735KiB time=00:01:47.33 bitrate=2193.0kbits/s speed=19.9x elapsed=0:00:05.39    
-[aac @ 0xc19446a00] Qavg: 759.217
-Conversion failed!
-2025-12-17 17:15:05 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjYyMjk0Lm1wNA==
-2025-12-17 17:15:05 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4
-[2025-12-17 17:15:05] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 1
-    compatible_brands: isomavc1
-    creation_time   : 2012-01-27T18:12:16.000000Z
-  Duration: 01:56:38.87, start: 0.000000, bitrate: 1836 kb/s
-  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn, start 0.083417 (default)
-    Metadata:
-      creation_time   : 2012-01-27T18:12:16.000000Z
-      vendor_id       : [0][0][0][0]
-  Stream #0:1[0x2](und): Audio: aac (HE-AAC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 64 kb/s (default)
-    Metadata:
-      creation_time   : 2012-01-27T18:15:24.000000Z
-      handler_name    : GPAC ISO Audio Handler
-      vendor_id       : [0][0][0][0]
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 1
-    compatible_brands: isomavc1
-    encoder         : Lavf62.3.100
-  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], q=2-31, 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn (default)
-    Metadata:
-      creation_time   : 2012-01-27T18:12:16.000000Z
-      vendor_id       : [0][0][0][0]
-  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      creation_time   : 2012-01-27T18:15:24.000000Z
-      handler_name    : GPAC ISO Audio Handler
-      vendor_id       : [0][0][0][0]
-frame= 1101 fps=0.0 q=-1.0 size=   14501KiB time=00:00:44.99 bitrate=2640.4kbits/s speed=89.8x elapsed=0:00:00.50    frame= 1569 fps=1559 q=-1.0 size=   15970KiB time=00:01:05.44 bitrate=1999.2kbits/s speed=  65x elapsed=0:00:01.00    frame= 1783 fps=1182 q=-1.0 size=   17125KiB time=00:01:13.53 bitrate=1907.7kbits/s speed=48.8x elapsed=0:00:01.50    frame= 1853 fps=920 q=-1.0 size=   18139KiB time=00:01:17.28 bitrate=1922.7kbits/s speed=38.4x elapsed=0:00:02.01    frame= 2252 fps=894 q=-1.0 size=   19455KiB time=00:01:33.92 bitrate=1696.8kbits/s speed=37.3x elapsed=0:00:02.51    [http @ 0xb0703c000] Stream ends prematurely at 23287835, should be 1606500292
-[http @ 0xb0703c000] Will reconnect at 23287835 in 0 second(s), error=Input/output error.
-frame= 2252 fps=745 q=-1.0 size=   19455KiB time=00:01:33.92 bitrate=1696.8kbits/s speed=31.1x elapsed=0:00:03.02    [aost#0:1/aac @ 0xb06c9c300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0xb06840300] Error muxing a packet
-[out#0/mp4 @ 0xb06840300] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0xb06840300] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0xb06840300] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0xb06840300] Error closing file: Broken pipe
-[out#0/mp4 @ 0xb06840300] video:25140KiB audio:1837KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2793 fps=795 q=-1.0 Lsize=   24242KiB time=00:01:56.28 bitrate=1707.8kbits/s speed=33.1x elapsed=0:00:03.51    
-[aac @ 0xb07401500] Qavg: 582.363
-Conversion failed!
-2025-12-17 17:15:10 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjYyMjk0Lm1wNA==
-2025-12-17 17:15:10 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4
-[2025-12-17 17:15:10] CMD: ffmpeg -ss 636 -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
-ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
-  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
-  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
-  libavutil      60.  8.100 / 60.  8.100
-  libavcodec     62. 11.100 / 62. 11.100
-  libavformat    62.  3.100 / 62.  3.100
-  libavdevice    62.  1.100 / 62.  1.100
-  libavfilter    11.  4.100 / 11.  4.100
-  libswscale      9.  1.100 /  9.  1.100
-  libswresample   6.  1.100 /  6.  1.100
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 1
-    compatible_brands: isomavc1
-    creation_time   : 2012-01-27T18:12:16.000000Z
-  Duration: 01:56:38.87, start: 0.000000, bitrate: 1836 kb/s
-  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn, start 0.083417 (default)
-    Metadata:
-      creation_time   : 2012-01-27T18:12:16.000000Z
-      vendor_id       : [0][0][0][0]
-  Stream #0:1[0x2](und): Audio: aac (HE-AAC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 64 kb/s (default)
-    Metadata:
-      creation_time   : 2012-01-27T18:15:24.000000Z
-      handler_name    : GPAC ISO Audio Handler
-      vendor_id       : [0][0][0][0]
-Stream mapping:
-  Stream #0:0 -> #0:0 (copy)
-  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
-Press [q] to stop, [?] for help
-Output #0, mp4, to 'pipe:1':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 1
-    compatible_brands: isomavc1
-    encoder         : Lavf62.3.100
-  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], q=2-31, 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn (default)
-    Metadata:
-      creation_time   : 2012-01-27T18:12:16.000000Z
-      vendor_id       : [0][0][0][0]
-  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
-    Metadata:
-      encoder         : Lavc62.11.100 aac
-      creation_time   : 2012-01-27T18:15:24.000000Z
-      handler_name    : GPAC ISO Audio Handler
-      vendor_id       : [0][0][0][0]
-frame=  329 fps=0.0 q=-1.0 size=    2017KiB time=00:00:10.51 bitrate=1571.2kbits/s speed=20.8x elapsed=0:00:00.50    frame= 1619 fps=1608 q=-1.0 size=   14455KiB time=00:01:05.20 bitrate=1816.2kbits/s speed=64.8x elapsed=0:00:01.00    frame= 1619 fps=1071 q=-1.0 size=   14455KiB time=00:01:05.20 bitrate=1816.2kbits/s speed=43.1x elapsed=0:00:01.51    frame= 1852 fps=918 q=-1.0 size=   14455KiB time=00:01:14.91 bitrate=1580.6kbits/s speed=37.1x elapsed=0:00:02.01    frame= 1852 fps=736 q=-1.0 size=   14455KiB time=00:01:14.91 bitrate=1580.6kbits/s speed=29.8x elapsed=0:00:02.51    frame= 2019 fps=669 q=-1.0 size=   18803KiB time=00:01:21.88 bitrate=1881.1kbits/s speed=27.1x elapsed=0:00:03.01    frame= 2019 fps=573 q=-1.0 size=   18803KiB time=00:01:21.88 bitrate=1881.1kbits/s speed=23.3x elapsed=0:00:03.52    frame= 2183 fps=542 q=-1.0 size=   20742KiB time=00:01:28.72 bitrate=1915.2kbits/s speed=  22x elapsed=0:00:04.02    frame= 2183 fps=482 q=-1.0 size=   20742KiB time=00:01:28.72 bitrate=1915.2kbits/s speed=19.6x elapsed=0:00:04.52    frame= 2468 fps=491 q=-1.0 size=   22701KiB time=00:01:40.61 bitrate=1848.4kbits/s speed=  20x elapsed=0:00:05.03    frame= 2468 fps=446 q=-1.0 size=   22701KiB time=00:01:40.61 bitrate=1848.4kbits/s speed=18.2x elapsed=0:00:05.53    frame= 2650 fps=439 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=17.8x elapsed=0:00:06.03    frame= 2650 fps=405 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=16.5x elapsed=0:00:06.53    frame= 2650 fps=376 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=15.3x elapsed=0:00:07.04    frame= 2650 fps=351 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=14.3x elapsed=0:00:07.54    frame= 2650 fps=329 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=13.4x elapsed=0:00:08.05    frame= 2650 fps=310 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=12.6x elapsed=0:00:08.55    frame= 2650 fps=293 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=11.9x elapsed=0:00:09.05    frame= 2650 fps=277 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=11.3x elapsed=0:00:09.55    frame= 2650 fps=263 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=10.7x elapsed=0:00:10.05    frame= 2650 fps=251 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=10.2x elapsed=0:00:10.56    frame= 2650 fps=239 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=9.73x elapsed=0:00:11.06    frame= 2650 fps=229 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=9.31x elapsed=0:00:11.56    frame= 2650 fps=220 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=8.92x elapsed=0:00:12.07    frame= 2650 fps=211 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=8.57x elapsed=0:00:12.57    frame= 2650 fps=203 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=8.24x elapsed=0:00:13.07    frame= 2650 fps=195 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.93x elapsed=0:00:13.57    frame= 2650 fps=188 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.65x elapsed=0:00:14.07    frame= 2650 fps=182 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.38x elapsed=0:00:14.58    frame= 2650 fps=176 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.14x elapsed=0:00:15.08    frame= 2650 fps=170 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=6.91x elapsed=0:00:15.58    frame= 2650 fps=165 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=6.69x elapsed=0:00:16.09    [aost#0:1/aac @ 0x7bacc0300] Error submitting a packet to the muxer: Broken pipe
-    Last message repeated 1 times
-[out#0/mp4 @ 0x7bac31080] Error muxing a packet
-[out#0/mp4 @ 0x7bac31080] Task finished with error code: -32 (Broken pipe)
-[out#0/mp4 @ 0x7bac31080] Terminating thread with return code -32 (Broken pipe)
-[out#0/mp4 @ 0x7bac31080] Error writing trailer: Broken pipe
-[out#0/mp4 @ 0x7bac31080] Error closing file: Broken pipe
-[out#0/mp4 @ 0x7bac31080] video:23196KiB audio:1698KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
-frame= 2650 fps=165 q=-1.0 Lsize=   24461KiB time=00:01:47.69 bitrate=1860.7kbits/s speed=6.69x elapsed=0:00:16.10    
-[aac @ 0x7bb401500] Qavg: 684.551
-Conversion failed!

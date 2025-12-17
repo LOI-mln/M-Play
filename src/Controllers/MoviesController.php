@@ -1,9 +1,13 @@
 <?php
 namespace App\Controllers;
 
+use App\Services\XtreamClient;
+use App\Services\FileCache;
+
 class MoviesController
 {
     private $api;
+    private $cache;
 
     public function __construct()
     {
@@ -19,12 +23,21 @@ class MoviesController
             exit;
         }
 
-        // On instancie l'API avec les crédentiels en session
-        $this->api = new \App\Services\XtreamClient(
+        // on s'assure que les variables de session existent
+        if (!isset($_SESSION['host']) || !isset($_SESSION['auth_creds'])) {
+            // Session corrompue ou incomplète -> redirection
+            session_destroy();
+            header('Location: /login');
+            exit;
+        }
+
+        $this->api = new XtreamClient(
             $_SESSION['host'],
             $_SESSION['auth_creds']['username'],
             $_SESSION['auth_creds']['password']
         );
+
+        $this->cache = new FileCache();
     }
 
     private function normalizeName($name)
@@ -42,62 +55,98 @@ class MoviesController
 
     public function index()
     {
-        // 1. Récupération des catégories VOD
-        $allCategories = $this->api->get('player_api.php', [
-            'action' => 'get_vod_categories'
-        ]);
+        // 1. Récupération des catégories VOD (Cached)
+        $cacheKeyCats = 'vod_categories_v2';
+        $allCategories = $this->cache->get($cacheKeyCats);
+
+        if ($allCategories === null) {
+            $allCategories = $this->api->get('player_api.php', [
+                'action' => 'get_vod_categories'
+            ]);
+            // Cache pour 24h (86400s) car ça bouge peu
+            if ($allCategories) {
+                $this->cache->set($cacheKeyCats, $allCategories, 86400);
+            }
+        }
 
         if (!$allCategories) {
             $allCategories = [];
         }
 
-        // 2. Filtrage et Tri (FR en premier, puis EN)
-        $fr_cats = [];
-        $en_cats = [];
+        // --- GROUPEMENT DES CATEGORIES GLOBALES ---
+        $groupedCategories = []; // Format: "Nom Normalisé" => [ 'ids' => [], 'name' => "Nom Normalisé" ]
+        $validCategoryIds = []; // Pour filtrer les films globaux
 
         foreach ($allCategories as $cat) {
-            $nom = strtoupper($cat['category_name']);
+            $originalName = strtoupper($cat['category_name']);
 
-            // Exclusion explicite (AFRICAN)
-            if (strpos($nom, 'AFRICAN') !== false) {
+            // Exclusion explicite (AFRICAN, ARAB, Arabic Script, INDIA, LATINO)
+            if (
+                strpos($originalName, 'AFRICAN') !== false ||
+                strpos($originalName, 'ARAB') !== false ||
+                strpos($originalName, 'INDIA') !== false ||
+                strpos($originalName, 'LATINO') !== false ||
+                preg_match('/\p{Arabic}/u', $cat['category_name'])
+            ) {
                 continue;
             }
 
-            // Check French
-            if (preg_match('/(FR|FRANCE)/', $nom)) {
-                // Clean Name (FR, FRANCE, VOD)
-                $cleanedName = preg_replace('/^(FR\s*[-|]?\s*|FRANCE\s*[-|]?\s*)|(\s*[-|]?\s*\bVOD\b\s*[-|]?\s*)/i', '', $cat['category_name']);
-                $cat['category_name'] = trim($cleanedName, " -|");
-                $fr_cats[] = $cat;
+            // FILTER: keep only relevant languages (FR / EN / US / UK / VOSTFR / MULTI ...)
+            // Use \b to avoid partial matches (e.g. "Documentaire" containing "EN")
+            if (!preg_match('/\b(FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|MULTISUB|TRUEFRENCH|VFF|VFQ|VFI|4K|UHD)\b/i', $originalName)) {
+                continue;
             }
-            // Check English (UK, US, EN)
-            elseif (preg_match('/(UK|US|EN\s|ENGLISH)/', $nom)) {
-                // Clean Name
-                $cleanedName = preg_replace('/^(UK\s*[-|]?\s*|US\s*[-|]?\s*|EN\s*[-|]?\s*|ENGLISH\s*[-|]?\s*)|(\s*[-|]?\s*\bVOD\b\s*[-|]?\s*)/i', '', $cat['category_name']);
-                $cat['category_name'] = trim($cleanedName, " -|");
-                $en_cats[] = $cat;
+
+            // Normalisation du nom (FR - Action -> Action)
+            // Regex améliorée pour capturer préfixes ET suffixes (ex: "Action FR", "FR - Action", "Action (FR)")
+            $name = $cat['category_name'];
+            // Extended tags to strip from display name
+            $tags = 'FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|MULTISUB|TRUEFRENCH|VFF|VFQ|VFI|4K|UHD|3D|H265|SUB';
+
+            // 2. Suppression des préfixes de langue courants (ex: "FR - ", "EN | ", "[FR] ")
+
+            // Re-enabled per user request: Clean prefixes again
+            $name = preg_replace('/^[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?\s*[-|:]?\s*/i', '', $name);
+            $name = preg_replace('/\s*[-|:]?\s*[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?$/i', '', $name);
+            // 3. Remove "VOD"
+            $name = preg_replace('/(\s*[-|]?\s*\bVOD\b\s*[-|]?\s*)/i', '', $name);
+
+            $cleanedName = trim($name, " -|()");
+
+            // Clé unique pour le regroupement
+            $key = mb_strtolower($cleanedName);
+
+            if (!isset($groupedCategories[$key])) {
+                $groupedCategories[$key] = [
+                    'name' => $cleanedName,
+                    'ids' => []
+                ];
             }
+            $groupedCategories[$key]['ids'][] = $cat['category_id'];
+            $validCategoryIds[$cat['category_id']] = true; // Map for fast lookup
         }
 
-        // Tri alphabétique interne pour chaque groupe
-        $sortFunc = function ($a, $b) {
+        // Construction de la liste finale pour la vue
+        $finalCategories = [];
+        foreach ($groupedCategories as $group) {
+            $finalCategories[] = [
+                'category_name' => $group['name'],
+                'category_id' => implode(',', $group['ids']) // Multiple IDs
+            ];
+        }
+
+        // Tri alphabétique
+        usort($finalCategories, function ($a, $b) {
             return strcmp($a['category_name'], $b['category_name']);
-        };
+        });
 
-        usort($fr_cats, $sortFunc);
-        usort($en_cats, $sortFunc);
-
-        // Fusion : FR d'abord, ensuite EN
-        $categories = array_merge($fr_cats, $en_cats);
-
-        // Extraction des IDs valides pour le filtrage global
-        $validCategoryIds = array_column($categories, 'category_id');
-
-        // Ajout de la catégorie "TOUT" au début
-        array_unshift($categories, [
+        // Ajout de la catégorie "TOUT" (qui sera "Ajoutés Récemment")
+        array_unshift($finalCategories, [
             'category_id' => 'all',
-            'category_name' => 'TOUT'
+            'category_name' => 'Ajoutés Récemment'
         ]);
+
+        $categories = $finalCategories;
 
 
         // 2. Gestion de la catégorie sélectionnée
@@ -108,35 +157,86 @@ class MoviesController
 
         // 3. Récupération des films
         if ($idCategorieSelectionnee === 'all') {
-            if ($isGlobalSearch) {
+            // CAS SPECIALE "TOUT" = "Ajoutés Récemment" (Global)
+
+            // Try Cache First
+            $cacheKeyAll = 'all_vod_streams_v2';
+            $allFilms = $this->cache->get($cacheKeyAll);
+
+            if ($allFilms === null) {
+                // Not in cache, fetch from API (Heavy operation)
                 $allFilms = $this->api->get('player_api.php', [
                     'action' => 'get_vod_streams'
                 ]);
+
                 if (!$allFilms)
                     $allFilms = [];
 
-                $validIdsMap = array_flip($validCategoryIds);
-                $rawFilms = array_filter($allFilms, function ($film) use ($validIdsMap) {
-                    return isset($validIdsMap[$film['category_id']]);
+                // Cache for 1 hour
+                $this->cache->set($cacheKeyAll, $allFilms, 3600);
+            }
+
+            // DEBUG: Check structure for TMDB/IMDB (Saved to project root)
+            if (!empty($allFilms)) {
+                $debugFile = __DIR__ . '/../../debug_movie_data.txt';
+                file_put_contents($debugFile, print_r($allFilms[0], true));
+            }
+
+            // FILTRE: On ne garde que les films appartenant aux catégories valides (FR/EN)
+            $allFilms = array_filter($allFilms, function ($film) use ($validCategoryIds) {
+                return isset($validCategoryIds[$film['category_id']]);
+            });
+
+            // Si c'est une recherche, on filtre. Sinon on trie par date.
+            if ($isGlobalSearch) {
+                // Recherche sur tout
+                $rawFilms = $allFilms; // Filtrage fait après
+            } else {
+                // "Recently Added" Logic
+                // On trie par 'added' (timestamp) décroissant
+                usort($allFilms, function ($a, $b) {
+                    $tA = isset($a['added']) ? (int) $a['added'] : 0;
+                    $tB = isset($b['added']) ? (int) $b['added'] : 0;
+                    return $tB - $tA; // Descending
+                });
+
+                $rawFilms = $allFilms;
+            }
+
+        } elseif ($idCategorieSelectionnee) {
+            // Catégorie spécifique
+            $catIds = explode(',', $idCategorieSelectionnee);
+
+            // OPTION 1: Check if we have the FULL catalog cached. If so, filter locally (FASTEST)
+            $allFilmsCached = $this->cache->get('all_vod_streams_v2');
+
+            if ($allFilmsCached !== null) {
+                // We have everything! Just filter locally.
+                $neededIds = array_flip($catIds); // ID => true
+                $rawFilms = array_filter($allFilmsCached, function ($film) use ($neededIds) {
+                    return isset($neededIds[$film['category_id']]);
                 });
             } else {
-                if (isset($categories[1])) {
-                    $firstCatId = $categories[1]['category_id'];
-                    $rawFilms = $this->api->get('player_api.php', [
-                        'action' => 'get_vod_streams',
-                        'category_id' => $firstCatId
-                    ]);
-                    if (!$rawFilms)
-                        $rawFilms = [];
+                // OPTION 2: Fetch individual categories (Cached per category)
+                foreach ($catIds as $fid) {
+                    $cacheKeyCat = 'vod_streams_' . $fid;
+                    $chunk = $this->cache->get($cacheKeyCat);
+
+                    if ($chunk === null) {
+                        $chunk = $this->api->get('player_api.php', [
+                            'action' => 'get_vod_streams',
+                            'category_id' => $fid
+                        ]);
+                        if ($chunk) {
+                            $this->cache->set($cacheKeyCat, $chunk, 3600);
+                        }
+                    }
+
+                    if ($chunk) {
+                        $rawFilms = array_merge($rawFilms, $chunk);
+                    }
                 }
             }
-        } elseif ($idCategorieSelectionnee) {
-            $rawFilms = $this->api->get('player_api.php', [
-                'action' => 'get_vod_streams',
-                'category_id' => $idCategorieSelectionnee
-            ]);
-            if (!$rawFilms)
-                $rawFilms = [];
         }
 
         // Recherche locale
@@ -147,33 +247,36 @@ class MoviesController
             });
         }
 
-        // 4. GROUPING LOGIC (New)
-        // On groupe les films par nom normalisé.
-        // On garde uniquement la version "preferée" pour l'affichage (Card), 
-        // mais on ne stocke pas les variantes ici car l'index n'en a pas besoin.
-
-        $uniqueFilms = [];
-        $seen = [];
-
+        // 4. Regroupement des films (Deduplication par TMDB ID ou Nom)
+        $groupedFilms = [];
         foreach ($rawFilms as $film) {
-            $normName = $this->normalizeName($film['name']);
-            // Clé unique basée sur le nom normalisé
-            $key = mb_strtolower($normName);
+            // Priorité absolue : TMDB ID
+            if (!empty($film['tmdb'])) {
+                $key = 'tmdb_' . $film['tmdb'];
+            } else {
+                // Fallback : Nom normalisé
+                $key = 'name_' . mb_strtolower($this->normalizeName($film['name']));
+            }
 
-            if (!isset($seen[$key])) {
-                // C'est le premier qu'on voit (donc notre "représentant" pour l'instant)
-                // Note: Idéalement on préférerait la version FR si on a le choix, 
-                // mais le tri naturel de l'API met souvent FR avant ou après selon le nom.
-                // Pour l'instant on prend le premier arrivé.
-
+            // Si on n'a pas encore ce film, on l'ajoute
+            if (!isset($groupedFilms[$key])) {
                 // On injecte le nom normalisé pour l'affichage propre
-                $film['display_name'] = $normName;
-                $uniqueFilms[] = $film;
-                $seen[$key] = true;
+                $film['display_name'] = $this->normalizeName($film['name']);
+                $groupedFilms[$key] = $film;
             }
         }
 
-        $films = $uniqueFilms;
+        $finalFilms = array_values($groupedFilms);
+
+        // MODE AJAX : On renvoie du JSON
+        if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
+            header('Content-Type: application/json');
+            echo json_encode($finalFilms);
+            exit; // Stop execution
+        }
+
+        // MODE HTML : On charge la vue avec les catégories, mais SANS les films (chargés par JS)
+        $films = []; // Vide pour l'initialisation PHP
 
         // On passe les variables à la vue
         $categorieActuelleId = $idCategorieSelectionnee;
