@@ -2150,3 +2150,234 @@ frame= 1448 fps=0.0 q=-1.0 size=   14488KiB time=00:00:59.86 bitrate=1982.7kbits
 frame= 2529 fps=143 q=-1.0 Lsize=   38494KiB time=00:01:45.04 bitrate=3001.9kbits/s speed=5.94x elapsed=0:00:17.68    
 [aac @ 0x8e9409c00] Qavg: 16160.161
 Conversion failed!
+2025-12-17 17:08:02 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjMyNzA0Lm1rdg==
+2025-12-17 17:08:02 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1232704.mkv
+[2025-12-17 17:08:02] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1232704.mkv' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60.  8.100 / 60.  8.100
+  libavcodec     62. 11.100 / 62. 11.100
+  libavformat    62.  3.100 / 62.  3.100
+  libavdevice    62.  1.100 / 62.  1.100
+  libavfilter    11.  4.100 / 11.  4.100
+  libswscale      9.  1.100 /  9.  1.100
+  libswresample   6.  1.100 /  6.  1.100
+Input #0, matroska,webm, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1232704.mkv':
+  Metadata:
+    title           : Woodwalkers (2024)
+    encoder         : libebml v1.4.2 + libmatroska v1.6.4
+    creation_time   : 2025-02-12T12:20:05.000000Z
+  Duration: 01:42:50.40, start: 0.000000, bitrate: 3897 kb/s
+  Stream #0:0: Video: h264 (High), yuv420p(tv, bt709, progressive), 1920x800 [SAR 1:1 DAR 12:5], 24 fps, 24 tbr, 1k tbn, start 0.005000 (default)
+    Metadata:
+      title           : WEBRip LiHDL (Source WEB SUPPLY)
+      BPS             : 2999790
+      DURATION        : 01:42:50.375000000
+      NUMBER_OF_FRAMES: 148089
+      NUMBER_OF_BYTES : 2313729385
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:1(fre): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s (default)
+    Metadata:
+      title           : FR VFi : AC3 5.1
+      BPS             : 448000
+      DURATION        : 01:42:50.400000000
+      NUMBER_OF_FRAMES: 192825
+      NUMBER_OF_BYTES : 345542400
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:2(ger): Audio: ac3, 48000 Hz, 5.1(side), fltp, 448 kb/s
+    Metadata:
+      title           : DE VO : AC3 5.1
+      BPS             : 448000
+      DURATION        : 01:42:50.400000000
+      NUMBER_OF_FRAMES: 192825
+      NUMBER_OF_BYTES : 345542400
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:3(fre): Subtitle: subrip (srt) (default) (forced)
+    Metadata:
+      title           : FR Forced : SRT
+      BPS             : 0
+      DURATION        : 01:12:36.250000000
+      NUMBER_OF_FRAMES: 3
+      NUMBER_OF_BYTES : 107
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:4(fre): Subtitle: subrip (srt)
+    Metadata:
+      title           : FR Full : SRT
+      BPS             : 61
+      DURATION        : 01:35:36.417000000
+      NUMBER_OF_FRAMES: 1454
+      NUMBER_OF_BYTES : 44413
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (ac3 (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to 'pipe:1':
+  Metadata:
+    title           : Woodwalkers (2024)
+    encoder         : Lavf62.3.100
+  Stream #0:0: Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1920x800 [SAR 1:1 DAR 12:5], q=2-31, 24 fps, 24 tbr, 16k tbn (default)
+    Metadata:
+      title           : WEBRip LiHDL (Source WEB SUPPLY)
+      BPS             : 2999790
+      DURATION        : 01:42:50.375000000
+      NUMBER_OF_FRAMES: 148089
+      NUMBER_OF_BYTES : 2313729385
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+  Stream #0:1(fre): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 aac
+      title           : FR VFi : AC3 5.1
+      BPS             : 448000
+      DURATION        : 01:42:50.400000000
+      NUMBER_OF_FRAMES: 192825
+      NUMBER_OF_BYTES : 345542400
+      _STATISTICS_WRITING_APP: mkvmerge v68.0.0 ('The Curtain') 64-bit
+      _STATISTICS_WRITING_DATE_UTC: 2025-02-12 12:20:05
+      _STATISTICS_TAGS: BPS DURATION NUMBER_OF_FRAMES NUMBER_OF_BYTES
+frame=  829 fps=0.0 q=-1.0 size=   11344KiB time=00:00:34.46 bitrate=2696.5kbits/s speed=68.2x elapsed=0:00:00.50    frame= 1596 fps=1582 q=-1.0 size=   20893KiB time=00:01:06.42 bitrate=2576.9kbits/s speed=65.9x elapsed=0:00:01.00    frame= 1596 fps=1054 q=-1.0 size=   20893KiB time=00:01:06.42 bitrate=2576.9kbits/s speed=43.9x elapsed=0:00:01.51    frame= 2193 fps=1088 q=-1.0 size=   25165KiB time=00:01:31.29 bitrate=2258.1kbits/s speed=45.3x elapsed=0:00:02.01    frame= 2193 fps=870 q=-1.0 size=   25165KiB time=00:01:31.29 bitrate=2258.1kbits/s speed=36.2x elapsed=0:00:02.52    frame= 2389 fps=790 q=-1.0 size=   25887KiB time=00:01:39.46 bitrate=2132.1kbits/s speed=32.9x elapsed=0:00:03.02    frame= 2446 fps=693 q=-1.0 size=   25887KiB time=00:01:41.83 bitrate=2082.4kbits/s speed=28.8x elapsed=0:00:03.53    frame= 2578 fps=639 q=-1.0 size=   25887KiB time=00:01:47.33 bitrate=1975.7kbits/s speed=26.6x elapsed=0:00:04.03    frame= 2578 fps=569 q=-1.0 size=   25887KiB time=00:01:47.33 bitrate=1975.7kbits/s speed=23.7x elapsed=0:00:04.53    frame= 2578 fps=512 q=-1.0 size=   25887KiB time=00:01:47.33 bitrate=1975.7kbits/s speed=21.3x elapsed=0:00:05.03    [aost#0:1/aac @ 0xc19090300] Error submitting a packet to the muxer: Broken pipe
+    Last message repeated 1 times
+[out#0/mp4 @ 0xc19448780] Error muxing a packet
+[out#0/mp4 @ 0xc19448780] Task finished with error code: -32 (Broken pipe)
+[out#0/mp4 @ 0xc19448780] Terminating thread with return code -32 (Broken pipe)
+[out#0/mp4 @ 0xc19448780] Error writing trailer: Broken pipe
+[out#0/mp4 @ 0xc19448780] Error closing file: Broken pipe
+[out#0/mp4 @ 0xc19448780] video:30941KiB audio:1702KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 2578 fps=478 q=-1.0 Lsize=   28735KiB time=00:01:47.33 bitrate=2193.0kbits/s speed=19.9x elapsed=0:00:05.39    
+[aac @ 0xc19446a00] Qavg: 759.217
+Conversion failed!
+2025-12-17 17:15:05 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjYyMjk0Lm1wNA==
+2025-12-17 17:15:05 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4
+[2025-12-17 17:15:05] CMD: ffmpeg  -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60.  8.100 / 60.  8.100
+  libavcodec     62. 11.100 / 62. 11.100
+  libavformat    62.  3.100 / 62.  3.100
+  libavdevice    62.  1.100 / 62.  1.100
+  libavfilter    11.  4.100 / 11.  4.100
+  libswscale      9.  1.100 /  9.  1.100
+  libswresample   6.  1.100 /  6.  1.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2012-01-27T18:12:16.000000Z
+  Duration: 01:56:38.87, start: 0.000000, bitrate: 1836 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn, start 0.083417 (default)
+    Metadata:
+      creation_time   : 2012-01-27T18:12:16.000000Z
+      vendor_id       : [0][0][0][0]
+  Stream #0:1[0x2](und): Audio: aac (HE-AAC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 64 kb/s (default)
+    Metadata:
+      creation_time   : 2012-01-27T18:15:24.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to 'pipe:1':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    encoder         : Lavf62.3.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], q=2-31, 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn (default)
+    Metadata:
+      creation_time   : 2012-01-27T18:12:16.000000Z
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 aac
+      creation_time   : 2012-01-27T18:15:24.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+frame= 1101 fps=0.0 q=-1.0 size=   14501KiB time=00:00:44.99 bitrate=2640.4kbits/s speed=89.8x elapsed=0:00:00.50    frame= 1569 fps=1559 q=-1.0 size=   15970KiB time=00:01:05.44 bitrate=1999.2kbits/s speed=  65x elapsed=0:00:01.00    frame= 1783 fps=1182 q=-1.0 size=   17125KiB time=00:01:13.53 bitrate=1907.7kbits/s speed=48.8x elapsed=0:00:01.50    frame= 1853 fps=920 q=-1.0 size=   18139KiB time=00:01:17.28 bitrate=1922.7kbits/s speed=38.4x elapsed=0:00:02.01    frame= 2252 fps=894 q=-1.0 size=   19455KiB time=00:01:33.92 bitrate=1696.8kbits/s speed=37.3x elapsed=0:00:02.51    [http @ 0xb0703c000] Stream ends prematurely at 23287835, should be 1606500292
+[http @ 0xb0703c000] Will reconnect at 23287835 in 0 second(s), error=Input/output error.
+frame= 2252 fps=745 q=-1.0 size=   19455KiB time=00:01:33.92 bitrate=1696.8kbits/s speed=31.1x elapsed=0:00:03.02    [aost#0:1/aac @ 0xb06c9c300] Error submitting a packet to the muxer: Broken pipe
+    Last message repeated 1 times
+[out#0/mp4 @ 0xb06840300] Error muxing a packet
+[out#0/mp4 @ 0xb06840300] Task finished with error code: -32 (Broken pipe)
+[out#0/mp4 @ 0xb06840300] Terminating thread with return code -32 (Broken pipe)
+[out#0/mp4 @ 0xb06840300] Error writing trailer: Broken pipe
+[out#0/mp4 @ 0xb06840300] Error closing file: Broken pipe
+[out#0/mp4 @ 0xb06840300] video:25140KiB audio:1837KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 2793 fps=795 q=-1.0 Lsize=   24242KiB time=00:01:56.28 bitrate=1707.8kbits/s speed=33.1x elapsed=0:00:03.51    
+[aac @ 0xb07401500] Qavg: 582.363
+Conversion failed!
+2025-12-17 17:15:10 - Request: aHR0cDovL2ZyMS5saW9uLXR0Lnh5ei9tb3ZpZS9WeHdmMzgxNC9LVkNyNzM3Mi8xMjYyMjk0Lm1wNA==
+2025-12-17 17:15:10 - Decoded: http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4
+[2025-12-17 17:15:10] CMD: ffmpeg -ss 636 -reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5 -user_agent "Mozilla/5.0" -i 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4' -c:v copy -c:a aac -ac 2 -f mp4 -movflags frag_keyframe+empty_moov pipe:1 2>>'/Users/milan/projects/iptv-player/src/Controllers/../../proxy_debug.txt'
+ffmpeg version 8.0.1 Copyright (c) 2000-2025 the FFmpeg developers
+  built with Apple clang version 17.0.0 (clang-1700.4.4.1)
+  configuration: --prefix=/opt/homebrew/Cellar/ffmpeg/8.0.1 --enable-shared --enable-pthreads --enable-version3 --cc=clang --host-cflags= --host-ldflags= --enable-ffplay --enable-gnutls --enable-gpl --enable-libaom --enable-libaribb24 --enable-libbluray --enable-libdav1d --enable-libharfbuzz --enable-libjxl --enable-libmp3lame --enable-libopus --enable-librav1e --enable-librist --enable-librubberband --enable-libsnappy --enable-libsrt --enable-libssh --enable-libsvtav1 --enable-libtesseract --enable-libtheora --enable-libvidstab --enable-libvmaf --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxml2 --enable-libxvid --enable-lzma --enable-libfontconfig --enable-libfreetype --enable-frei0r --enable-libass --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libopenjpeg --enable-libspeex --enable-libsoxr --enable-libzmq --enable-libzimg --disable-libjack --disable-indev=jack --enable-videotoolbox --enable-audiotoolbox --enable-neon
+  libavutil      60.  8.100 / 60.  8.100
+  libavcodec     62. 11.100 / 62. 11.100
+  libavformat    62.  3.100 / 62.  3.100
+  libavdevice    62.  1.100 / 62.  1.100
+  libavfilter    11.  4.100 / 11.  4.100
+  libswscale      9.  1.100 /  9.  1.100
+  libswresample   6.  1.100 /  6.  1.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'http://fr1.lion-tt.xyz/movie/Vxwf3814/KVCr7372/1262294.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2012-01-27T18:12:16.000000Z
+  Duration: 01:56:38.87, start: 0.000000, bitrate: 1836 kb/s
+  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn, start 0.083417 (default)
+    Metadata:
+      creation_time   : 2012-01-27T18:12:16.000000Z
+      vendor_id       : [0][0][0][0]
+  Stream #0:1[0x2](und): Audio: aac (HE-AAC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 64 kb/s (default)
+    Metadata:
+      creation_time   : 2012-01-27T18:15:24.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (aac (native) -> aac (native))
+Press [q] to stop, [?] for help
+Output #0, mp4, to 'pipe:1':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    encoder         : Lavf62.3.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1920x800 [SAR 1:1 DAR 12:5], q=2-31, 1769 kb/s, 23.98 fps, 23.98 tbr, 96k tbn (default)
+    Metadata:
+      creation_time   : 2012-01-27T18:12:16.000000Z
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 128 kb/s (default)
+    Metadata:
+      encoder         : Lavc62.11.100 aac
+      creation_time   : 2012-01-27T18:15:24.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+frame=  329 fps=0.0 q=-1.0 size=    2017KiB time=00:00:10.51 bitrate=1571.2kbits/s speed=20.8x elapsed=0:00:00.50    frame= 1619 fps=1608 q=-1.0 size=   14455KiB time=00:01:05.20 bitrate=1816.2kbits/s speed=64.8x elapsed=0:00:01.00    frame= 1619 fps=1071 q=-1.0 size=   14455KiB time=00:01:05.20 bitrate=1816.2kbits/s speed=43.1x elapsed=0:00:01.51    frame= 1852 fps=918 q=-1.0 size=   14455KiB time=00:01:14.91 bitrate=1580.6kbits/s speed=37.1x elapsed=0:00:02.01    frame= 1852 fps=736 q=-1.0 size=   14455KiB time=00:01:14.91 bitrate=1580.6kbits/s speed=29.8x elapsed=0:00:02.51    frame= 2019 fps=669 q=-1.0 size=   18803KiB time=00:01:21.88 bitrate=1881.1kbits/s speed=27.1x elapsed=0:00:03.01    frame= 2019 fps=573 q=-1.0 size=   18803KiB time=00:01:21.88 bitrate=1881.1kbits/s speed=23.3x elapsed=0:00:03.52    frame= 2183 fps=542 q=-1.0 size=   20742KiB time=00:01:28.72 bitrate=1915.2kbits/s speed=  22x elapsed=0:00:04.02    frame= 2183 fps=482 q=-1.0 size=   20742KiB time=00:01:28.72 bitrate=1915.2kbits/s speed=19.6x elapsed=0:00:04.52    frame= 2468 fps=491 q=-1.0 size=   22701KiB time=00:01:40.61 bitrate=1848.4kbits/s speed=  20x elapsed=0:00:05.03    frame= 2468 fps=446 q=-1.0 size=   22701KiB time=00:01:40.61 bitrate=1848.4kbits/s speed=18.2x elapsed=0:00:05.53    frame= 2650 fps=439 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=17.8x elapsed=0:00:06.03    frame= 2650 fps=405 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=16.5x elapsed=0:00:06.53    frame= 2650 fps=376 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=15.3x elapsed=0:00:07.04    frame= 2650 fps=351 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=14.3x elapsed=0:00:07.54    frame= 2650 fps=329 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=13.4x elapsed=0:00:08.05    frame= 2650 fps=310 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=12.6x elapsed=0:00:08.55    frame= 2650 fps=293 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=11.9x elapsed=0:00:09.05    frame= 2650 fps=277 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=11.3x elapsed=0:00:09.55    frame= 2650 fps=263 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=10.7x elapsed=0:00:10.05    frame= 2650 fps=251 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=10.2x elapsed=0:00:10.56    frame= 2650 fps=239 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=9.73x elapsed=0:00:11.06    frame= 2650 fps=229 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=9.31x elapsed=0:00:11.56    frame= 2650 fps=220 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=8.92x elapsed=0:00:12.07    frame= 2650 fps=211 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=8.57x elapsed=0:00:12.57    frame= 2650 fps=203 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=8.24x elapsed=0:00:13.07    frame= 2650 fps=195 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.93x elapsed=0:00:13.57    frame= 2650 fps=188 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.65x elapsed=0:00:14.07    frame= 2650 fps=182 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.38x elapsed=0:00:14.58    frame= 2650 fps=176 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=7.14x elapsed=0:00:15.08    frame= 2650 fps=170 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=6.91x elapsed=0:00:15.58    frame= 2650 fps=165 q=-1.0 size=   22701KiB time=00:01:47.69 bitrate=1726.8kbits/s speed=6.69x elapsed=0:00:16.09    [aost#0:1/aac @ 0x7bacc0300] Error submitting a packet to the muxer: Broken pipe
+    Last message repeated 1 times
+[out#0/mp4 @ 0x7bac31080] Error muxing a packet
+[out#0/mp4 @ 0x7bac31080] Task finished with error code: -32 (Broken pipe)
+[out#0/mp4 @ 0x7bac31080] Terminating thread with return code -32 (Broken pipe)
+[out#0/mp4 @ 0x7bac31080] Error writing trailer: Broken pipe
+[out#0/mp4 @ 0x7bac31080] Error closing file: Broken pipe
+[out#0/mp4 @ 0x7bac31080] video:23196KiB audio:1698KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown
+frame= 2650 fps=165 q=-1.0 Lsize=   24461KiB time=00:01:47.69 bitrate=1860.7kbits/s speed=6.69x elapsed=0:00:16.10    
+[aac @ 0x7bb401500] Qavg: 684.551
+Conversion failed!

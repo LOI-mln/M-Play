@@ -27,6 +27,19 @@ class MoviesController
         );
     }
 
+    private function normalizeName($name)
+    {
+        // Supprime les préfixes communs comme "FR -", "EN -", "VOSTFR -", etc.
+        // Regex explication:
+        // ^(...) : Au début
+        // \s* : Espaces optionnels
+        // (FR|EN|...) : Liste des tags
+        // \s*[-|:]?\s* : Séparateur optionnel (- ou | ou :) et espaces
+        $pattern = '/^(\s*(FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|TRUEFRENCH|VFF|VFQ|VFI)\s*[-|:]?\s*)+/i';
+        $cleaned = preg_replace($pattern, '', $name);
+        return trim($cleaned);
+    }
+
     public function index()
     {
         // 1. Récupération des catégories VOD
@@ -90,64 +103,77 @@ class MoviesController
         // 2. Gestion de la catégorie sélectionnée
         $idCategorieSelectionnee = $_GET['categorie'] ?? 'all';
 
-        $films = [];
+        $rawFilms = [];
         $isGlobalSearch = !empty($_GET['q']);
 
         // 3. Récupération des films
-        // OPTIMISATION : Si on est sur "TOUT" ('all') ET qu'on ne cherche pas, on ne charge pas tout (trop lent).
-        // On charge la première catégorie par défaut pour afficher du contenu.
-        // Si on cherche, on charge TOUT pour chercher dedans.
-
         if ($idCategorieSelectionnee === 'all') {
-
             if ($isGlobalSearch) {
-                // CAS 1 : Recherche Globale -> On doit tout charger (Lent mais nécessaire pour la search)
                 $allFilms = $this->api->get('player_api.php', [
                     'action' => 'get_vod_streams'
                 ]);
-
                 if (!$allFilms)
                     $allFilms = [];
 
-                // Filtre catégories valides
                 $validIdsMap = array_flip($validCategoryIds);
-                $films = array_filter($allFilms, function ($film) use ($validIdsMap) {
+                $rawFilms = array_filter($allFilms, function ($film) use ($validIdsMap) {
                     return isset($validIdsMap[$film['category_id']]);
                 });
             } else {
-                // CAS 2 : "TOUT" sans recherche -> On charge juste la première catégorie pour aller vite
-                // On prend la première catégorie réelle (pas 'all')
-                // Note : $categories[0] est 'all'. Donc $categories[1] est la première vraie.
                 if (isset($categories[1])) {
                     $firstCatId = $categories[1]['category_id'];
-                    $films = $this->api->get('player_api.php', [
+                    $rawFilms = $this->api->get('player_api.php', [
                         'action' => 'get_vod_streams',
                         'category_id' => $firstCatId
                     ]);
-
-                    if (!$films)
-                        $films = [];
+                    if (!$rawFilms)
+                        $rawFilms = [];
                 }
             }
-
         } elseif ($idCategorieSelectionnee) {
-            // CAS 3 : Catégorie spécifique -> Chargement normal
-            $films = $this->api->get('player_api.php', [
+            $rawFilms = $this->api->get('player_api.php', [
                 'action' => 'get_vod_streams',
                 'category_id' => $idCategorieSelectionnee
             ]);
-
-            if (!$films)
-                $films = [];
+            if (!$rawFilms)
+                $rawFilms = [];
         }
 
-        // Recherche locale (s'applique au résultat récupéré)
+        // Recherche locale
         if ($isGlobalSearch) {
             $search = mb_strtolower($_GET['q']);
-            $films = array_filter($films, function ($film) use ($search) {
+            $rawFilms = array_filter($rawFilms, function ($film) use ($search) {
                 return strpos(mb_strtolower($film['name']), $search) !== false;
             });
         }
+
+        // 4. GROUPING LOGIC (New)
+        // On groupe les films par nom normalisé.
+        // On garde uniquement la version "preferée" pour l'affichage (Card), 
+        // mais on ne stocke pas les variantes ici car l'index n'en a pas besoin.
+
+        $uniqueFilms = [];
+        $seen = [];
+
+        foreach ($rawFilms as $film) {
+            $normName = $this->normalizeName($film['name']);
+            // Clé unique basée sur le nom normalisé
+            $key = mb_strtolower($normName);
+
+            if (!isset($seen[$key])) {
+                // C'est le premier qu'on voit (donc notre "représentant" pour l'instant)
+                // Note: Idéalement on préférerait la version FR si on a le choix, 
+                // mais le tri naturel de l'API met souvent FR avant ou après selon le nom.
+                // Pour l'instant on prend le premier arrivé.
+
+                // On injecte le nom normalisé pour l'affichage propre
+                $film['display_name'] = $normName;
+                $uniqueFilms[] = $film;
+                $seen[$key] = true;
+            }
+        }
+
+        $films = $uniqueFilms;
 
         // On passe les variables à la vue
         $categorieActuelleId = $idCategorieSelectionnee;
@@ -165,7 +191,6 @@ class MoviesController
         }
 
         // Récupérer les infos du film
-        // action=get_vod_info&vod_id=X
         $info = $this->api->get('player_api.php', [
             'action' => 'get_vod_info',
             'vod_id' => $movieId
@@ -175,11 +200,62 @@ class MoviesController
             die("Film introuvable.");
         }
 
-        // Structure de réponse de get_vod_info: { "info": {...}, "movie_data": {...} }
-        // Parfois "info" contient les métadonnées principales (durée, cast, plot) et "movie_data" contient stream_id, name, etc.
-        // On fusionne tout ce dont on a besoin.
-
         $movieInfo = array_merge($info['info'], $info['movie_data']);
+
+        // --- LOGIQUE MULTI-LANGUE ---
+        // 1. Normaliser le nom du film actuel
+        $currentName = $movieInfo['name'];
+        $cleanTitle = $this->normalizeName($currentName); // Pour l'affichage
+
+        // 2. Chercher les variantes (autres langues)
+        // OPTIMISATION : Utilisation d'un cache de session pour éviter de recharger l'API à chaque fois
+        // On stocke la map "Nom Normalisé" -> "Liste de streams"
+
+        $variants = [];
+
+        // On vérifie si on a déjà un cache frais (moins de 5 min ?)
+        // Pour faire simple : on cache tant que la session est là. 
+        if (!isset($_SESSION['movies_map_cache'])) {
+            // C'est lourd : on le fait une fois
+            $allStreams = $this->api->get('player_api.php', [
+                'action' => 'get_vod_streams'
+            ]);
+
+            $map = [];
+            if ($allStreams) {
+                foreach ($allStreams as $stream) {
+                    $nName = $this->normalizeName($stream['name']);
+                    $key = mb_strtolower($nName);
+                    if (!isset($map[$key])) {
+                        $map[$key] = [];
+                    }
+                    $map[$key][] = [
+                        'stream_id' => $stream['stream_id'],
+                        'name' => $stream['name'],
+                        'container_extension' => $stream['container_extension']
+                    ];
+                }
+            }
+            $_SESSION['movies_map_cache'] = $map;
+        }
+
+        // Récupération depuis le cache
+        $searchKey = mb_strtolower($cleanTitle);
+        if (isset($_SESSION['movies_map_cache'][$searchKey])) {
+            $variants = $_SESSION['movies_map_cache'][$searchKey];
+        }
+
+        // Fallback: Si rien trouvé ou cache vide (bizarre), on se met soi-même
+        if (empty($variants)) {
+            $variants[] = [
+                'stream_id' => $movieInfo['stream_id'],
+                'name' => $movieInfo['name'],
+                'container_extension' => $movieInfo['container_extension']
+            ];
+        }
+
+        // On passe les variantes à la vue
+        $availableVersions = $variants;
 
         require __DIR__ . '/../../views/movies_details.php';
     }

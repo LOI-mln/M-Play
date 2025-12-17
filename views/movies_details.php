@@ -52,30 +52,74 @@ ob_start();
             <?php endif; ?>
 
             <div class="flex-grow max-w-4xl text-white">
-                <!-- Title (Identical to Series: text-4xl md:text-6xl) -->
+                <!-- Title (Normalized) -->
                 <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight drop-shadow-lg">
-                    <?= htmlspecialchars($movieInfo['name']) ?>
+                    <?= htmlspecialchars($cleanTitle ?? $movieInfo['name']) ?>
                 </h1>
 
-                <!-- Metadata (Identical to Series) -->
-                <div class="flex flex-wrap gap-4 text-sm font-bold text-gray-300 uppercase tracking-wider mb-6">
-                    <?php if (isset($movieInfo['rating']) && $movieInfo['rating'] > 0): ?>
-                        <span class="text-yellow-500 flex items-center gap-1">★
-                            <?= round($movieInfo['rating'], 1) ?></span>
-                    <?php endif; ?>
+                <!-- Metadata & Language Selector Row -->
+                <div class="flex flex-wrap items-center gap-6 mb-6">
+                    <!-- Standard Metadata -->
+                    <div
+                        class="flex flex-wrap gap-4 text-sm font-bold text-gray-300 uppercase tracking-wider items-center">
+                        <?php if (isset($movieInfo['rating']) && $movieInfo['rating'] > 0): ?>
+                            <span class="text-yellow-500 flex items-center gap-1">★
+                                <?= round($movieInfo['rating'], 1) ?></span>
+                        <?php endif; ?>
 
-                    <?php if (isset($movieInfo['releasedate'])): ?>
-                        <span><?= substr($movieInfo['releasedate'], 0, 4) ?></span>
-                    <?php elseif (isset($movieInfo['added'])): ?>
-                        <span><?= date('Y', $movieInfo['added']) ?></span>
-                    <?php endif; ?>
+                        <?php if (isset($movieInfo['releasedate'])): ?>
+                            <span><?= substr($movieInfo['releasedate'], 0, 4) ?></span>
+                        <?php elseif (isset($movieInfo['added'])): ?>
+                            <span><?= date('Y', $movieInfo['added']) ?></span>
+                        <?php endif; ?>
 
-                    <?php if (isset($movieInfo['duration'])): ?>
-                        <span><?= $movieInfo['duration'] ?></span>
-                    <?php endif; ?>
+                        <?php if (isset($movieInfo['duration'])): ?>
+                            <span><?= $movieInfo['duration'] ?></span>
+                        <?php endif; ?>
 
-                    <?php if (isset($movieInfo['genre'])): ?>
-                        <span class="text-red-500 line-clamp-1"><?= htmlspecialchars($movieInfo['genre']) ?></span>
+                        <?php if (isset($movieInfo['genre'])): ?>
+                            <span class="text-red-500 line-clamp-1"><?= htmlspecialchars($movieInfo['genre']) ?></span>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Language Selector (Integrated) -->
+                    <?php if (isset($availableVersions) && count($availableVersions) > 1): ?>
+                        <div class="relative group ml-auto md:ml-0">
+                            <button
+                                class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded text-sm font-medium transition text-gray-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="size-4">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                                </svg>
+                                <span>Langues</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="size-3 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </button>
+                            <!-- Dropdown -->
+                            <div class="absolute left-0 top-full pt-2 w-64 hidden group-hover:block z-50">
+                                <div class="bg-[#1a1a1a] rounded-lg shadow-xl border border-white/10 overflow-hidden">
+                                    <div class="p-1 max-h-64 overflow-y-auto custom-scrollbar">
+                                        <div
+                                            class="px-3 py-2 text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-white/5">
+                                            Choisir une version</div>
+                                        <?php foreach ($availableVersions as $ver): ?>
+                                            <a href="/movies/details?id=<?= $ver['stream_id'] ?>"
+                                                class="flex items-center px-3 py-2 text-sm hover:bg-white/10 transition gap-2 <?= ($ver['stream_id'] == $movieInfo['stream_id']) ? 'text-[#E50914] font-bold bg-[#E50914]/10' : 'text-gray-300' ?>">
+                                                <?php if ($ver['stream_id'] == $movieInfo['stream_id']): ?>
+                                                    <div class="w-1.5 h-1.5 rounded-full bg-[#E50914]"></div>
+                                                <?php else: ?>
+                                                    <div class="w-1.5 h-1.5 rounded-full bg-transparent"></div>
+                                                <?php endif; ?>
+                                                <?= htmlspecialchars($ver['name']) ?>
+                                            </a>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     <?php endif; ?>
                 </div>
 

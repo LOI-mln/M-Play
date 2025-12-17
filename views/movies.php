@@ -98,8 +98,9 @@ ob_start();
                                 <!-- Overlay Hover -->
                                 <div
                                     class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                                    <h3 class="text-white font-bold text-sm leading-tight line-clamp-2 drop-shadow-md">
-                                        <?= htmlspecialchars($film['name']) ?>
+                                    <h3
+                                        class="text-white text-sm font-medium truncate mt-2 group-hover:text-red-500 transition-colors">
+                                        <?= htmlspecialchars($film['display_name'] ?? $film['name']) ?>
                                     </h3>
                                     <?php if (isset($film['rating']) && $film['rating'] > 0): ?>
                                         <div class="flex items-center gap-1 mt-2 text-yellow-500 text-xs font-bold">

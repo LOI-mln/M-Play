@@ -13,6 +13,7 @@ spl_autoload_register(function ($class) {
 });
 
 // Routeur Basique
+ini_set('memory_limit', '1024M');
 session_start();
 
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
