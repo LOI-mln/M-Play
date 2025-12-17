@@ -3,24 +3,40 @@ namespace App\Controllers;
 
 class MoviesController
 {
-    public function index()
+    private $api;
+
+    public function __construct()
     {
         // Augmentation de la mémoire pour charger les gros catalogues VOD
         ini_set('memory_limit', '1024M');
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         if (!isset($_SESSION['user'])) {
             header('Location: /login');
             exit;
         }
 
-        $hote = $_SESSION['host'];
-        $utilisateur = $_SESSION['auth_creds']['username'];
-        $motDePasse = $_SESSION['auth_creds']['password'];
+        // On instancie l'API avec les crédentiels en session
+        $this->api = new \App\Services\XtreamClient(
+            $_SESSION['host'],
+            $_SESSION['auth_creds']['username'],
+            $_SESSION['auth_creds']['password']
+        );
+    }
 
+    public function index()
+    {
         // 1. Récupération des catégories VOD
-        $urlCategories = "$hote/player_api.php?username=$utilisateur&password=$motDePasse&action=get_vod_categories";
-        $donneesCategories = @file_get_contents($urlCategories);
-        $allCategories = json_decode($donneesCategories, true) ?? [];
+        $allCategories = $this->api->get('player_api.php', [
+            'action' => 'get_vod_categories'
+        ]);
+
+        if (!$allCategories) {
+            $allCategories = [];
+        }
 
         // 2. Filtrage et Tri (FR en premier, puis EN)
         $fr_cats = [];
@@ -86,9 +102,12 @@ class MoviesController
 
             if ($isGlobalSearch) {
                 // CAS 1 : Recherche Globale -> On doit tout charger (Lent mais nécessaire pour la search)
-                $urlFilms = "$hote/player_api.php?username=$utilisateur&password=$motDePasse&action=get_vod_streams";
-                $donneesFilms = @file_get_contents($urlFilms);
-                $allFilms = json_decode($donneesFilms, true) ?? [];
+                $allFilms = $this->api->get('player_api.php', [
+                    'action' => 'get_vod_streams'
+                ]);
+
+                if (!$allFilms)
+                    $allFilms = [];
 
                 // Filtre catégories valides
                 $validIdsMap = array_flip($validCategoryIds);
@@ -101,17 +120,25 @@ class MoviesController
                 // Note : $categories[0] est 'all'. Donc $categories[1] est la première vraie.
                 if (isset($categories[1])) {
                     $firstCatId = $categories[1]['category_id'];
-                    $urlFilms = "$hote/player_api.php?username=$utilisateur&password=$motDePasse&action=get_vod_streams&category_id=$firstCatId";
-                    $donneesFilms = @file_get_contents($urlFilms);
-                    $films = json_decode($donneesFilms, true) ?? [];
+                    $films = $this->api->get('player_api.php', [
+                        'action' => 'get_vod_streams',
+                        'category_id' => $firstCatId
+                    ]);
+
+                    if (!$films)
+                        $films = [];
                 }
             }
 
         } elseif ($idCategorieSelectionnee) {
             // CAS 3 : Catégorie spécifique -> Chargement normal
-            $urlFilms = "$hote/player_api.php?username=$utilisateur&password=$motDePasse&action=get_vod_streams&category_id=$idCategorieSelectionnee";
-            $donneesFilms = @file_get_contents($urlFilms);
-            $films = json_decode($donneesFilms, true) ?? [];
+            $films = $this->api->get('player_api.php', [
+                'action' => 'get_vod_streams',
+                'category_id' => $idCategorieSelectionnee
+            ]);
+
+            if (!$films)
+                $films = [];
         }
 
         // Recherche locale (s'applique au résultat récupéré)
@@ -129,15 +156,38 @@ class MoviesController
         require __DIR__ . '/../../views/movies.php';
     }
 
-    public function watch()
+    public function details()
     {
-        if (!isset($_SESSION['user'])) {
-            header('Location: /login');
+        $movieId = $_GET['id'] ?? null;
+        if (!$movieId) {
+            header('Location: /movies');
             exit;
         }
 
+        // Récupérer les infos du film
+        // action=get_vod_info&vod_id=X
+        $info = $this->api->get('player_api.php', [
+            'action' => 'get_vod_info',
+            'vod_id' => $movieId
+        ]);
+
+        if (!$info || empty($info['movie_data'])) {
+            die("Film introuvable.");
+        }
+
+        // Structure de réponse de get_vod_info: { "info": {...}, "movie_data": {...} }
+        // Parfois "info" contient les métadonnées principales (durée, cast, plot) et "movie_data" contient stream_id, name, etc.
+        // On fusionne tout ce dont on a besoin.
+
+        $movieInfo = array_merge($info['info'], $info['movie_data']);
+
+        require __DIR__ . '/../../views/movies_details.php';
+    }
+
+    public function watch()
+    {
         $streamId = $_GET['id'] ?? null;
-        $extension = $_GET['ext'] ?? '';
+        $extension = $_GET['ext'] ?? 'mp4';
 
         if (empty($extension)) {
             $extension = 'mp4';
@@ -156,20 +206,17 @@ class MoviesController
         // 1. On tente HLS (.m3u8) pour le son/buffer optimal.
         // 2. Si ça fail (404/NotSupported), le JS basculera sur le Direct (.ext).
 
-        $originalExt = $_GET['ext'] ?? 'mp4';
-        if (empty($originalExt))
-            $originalExt = 'mp4';
-
         $streamUrlHls = "$hote/movie/$username/$password/$streamId.m3u8";
-        $streamUrlDirect = "$hote/movie/$username/$password/$streamId.$originalExt";
+        $streamUrlDirect = "$hote/movie/$username/$password/$streamId.$extension";
 
         // Récupération de la durée via l'API (pour la barre de progression transcodée)
         // L'API movies list ne donne pas la durée précise, on fait un get_vod_info rapide.
-        $urlInfo = "$hote/player_api.php?username=$username&password=$password&action=get_vod_info&vod_id=$streamId";
-        $infoData = @file_get_contents($urlInfo);
-        $infoJson = json_decode($infoData, true);
-        $duration = $infoJson['info']['duration'] ?? ''; // Format attendu: "01:55:20" ou "115"
+        $info = $this->api->get('player_api.php', [
+            'action' => 'get_vod_info',
+            'vod_id' => $streamId
+        ]);
 
+        $duration = $info['info']['duration'] ?? ''; // Format attendu: "01:55:20" ou "115"
 
         // Transcodage (Fix Audio) par notre proxy local
         // On encode l'URL source Direct pour la passer au proxy

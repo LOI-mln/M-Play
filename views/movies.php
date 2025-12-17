@@ -55,8 +55,7 @@ ob_start();
             <?php else: ?>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
                     <?php foreach ($films as $film): ?>
-                        <a href="/movies/watch?id=<?= $film['stream_id'] ?>&ext=<?= $film['container_extension'] ?>"
-                            class="group relative cursor-pointer block">
+                        <a href="/movies/details?id=<?= $film['stream_id'] ?>" class="group relative cursor-pointer block">
                             <!-- Poster Container (Ratio 2:3 standard affiche) -->
                             <div
                                 class="aspect-[2/3] rounded-lg overflow-hidden bg-[#111] border border-gray-800 hover:border-red-600 transition-all shadow-lg hover:shadow-red-900/20">

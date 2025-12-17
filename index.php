@@ -47,6 +47,9 @@ switch ($url) {
     case '/movies':
         (new App\Controllers\MoviesController())->index();
         break;
+    case '/movies/details':
+        (new App\Controllers\MoviesController())->details();
+        break;
     case '/movies/watch':
         (new App\Controllers\MoviesController())->watch();
         break;
