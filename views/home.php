@@ -53,8 +53,7 @@ ob_start();
             </div>
 
             <!-- Items: Image (z-0) -->
-            <img src="https://images.unsplash.com/photo-1528928441742-b4ccac1bb04c?q=80&w=800&auto=format&fit=crop"
-                alt="Background Live TV"
+            <img src="/ressources/live.png" alt="Background Live TV"
                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80">
 
             <div class="absolute bottom-0 left-0 p-8 z-20">
@@ -86,7 +85,7 @@ ob_start();
             class="group relative overflow-hidden rounded-2xl border border-gray-800 hover:border-red-600 transition-all duration-300 transform hover:scale-[1.02]">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
             <div
-                class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80">
+                class="absolute inset-0 bg-[url('/ressources/series.png')] bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-60 group-hover:opacity-80">
             </div>
 
             <div class="absolute bottom-0 left-0 p-8 z-20">
