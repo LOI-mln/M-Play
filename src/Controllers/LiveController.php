@@ -96,6 +96,12 @@ class LiveController
             $urlFlux = "$hote/player_api.php?username=$utilisateur&password=$motDePasse&action=get_live_streams&category_id=$idCategorieSelectionnee";
             $donneesFlux = @file_get_contents($urlFlux);
             $tousLesFlux = json_decode($donneesFlux, true) ?? [];
+
+            // Nettoyage des noms de chaînes
+            $tousLesFlux = array_map(function ($flux) {
+                $flux['name'] = $this->normalizeChannelName($flux['name']);
+                return $flux;
+            }, $tousLesFlux);
         }
 
         // On passe tout ça à la vue
@@ -131,5 +137,27 @@ class LiveController
         $urlFluxM3u8 = "$hote/live/$utilisateur/$motDePasse/$idFlux.m3u8";
 
         require __DIR__ . '/../../views/watch.php';
+    }
+
+    private function normalizeChannelName($name)
+    {
+        // 1. Remove common prefixes 'FR :', 'FRANCE :', '[FR]', '[FRANCE]'
+        // Ex: "FR : TF1", "[FR] TF1", "FR - TF1"
+        $name = preg_replace('/^(\s*\[?\s*(?:FR|FRANCE)\s*\]?\s*[:|-]?\s*)/i', '', $name);
+
+        // 2. Remove technical suffixes/tags
+        // Ex: (FHD), [FHD], FHD, HD, HEVC, H.265, VIP, 4K, UHD, 50FPS
+        $tags = 'FHD|HD|SD|HEVC|H\.265|VIP|4K|UHD|1080P|720P|LOW|HQ|50FPS|BACKUP|F\s*HD';
+
+        // Remove [TAG] or (TAG) anywhere
+        $name = preg_replace('/[\[\(]\s*(' . $tags . ')\s*[\]\)]/i', '', $name);
+
+        // Remove standalone TAG at the end or start
+        $name = preg_replace('/\s+(' . $tags . ')\s*$/i', '', $name);
+
+        // Clean cleanup of leftovers
+        $name = trim($name, " \t\n\r\0\x0B-:");
+
+        return $name;
     }
 }
