@@ -110,7 +110,7 @@ ob_start();
                                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                  alt="${cleanTitle}"
                                  loading="lazy"
-                                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-full h-full bg-[#0f172a] flex flex-col items-center justify-center p-4 text-center\\'><svg class=\\'w-12 h-12 text-gray-500 mb-2\\' fill=\\'none\\' stroke=\\'currentColor\\' viewBox=\\'0 0 24 24\\'><path stroke-linecap=\\'round\\' stroke-linejoin=\\'round\\' stroke-width=\\'1.5\\' d=\\'M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z\\' /></svg><span class=\\'text-gray-300 font-bold text-sm leading-tight line-clamp-3\\'>${cleanTitle}</span></div>';">
+                                 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-[#0f172a] flex flex-col items-center justify-center p-4 text-center\'><svg class=\'w-12 h-12 text-gray-500 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z\' /></svg><span class=\'text-gray-300 font-bold text-sm leading-tight line-clamp-3\'>${cleanTitle}</span></div>';">
                             
                             <!-- Overlay -->
                             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">

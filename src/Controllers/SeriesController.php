@@ -311,6 +311,13 @@ class SeriesController
                     $tB = isset($b['last_modified']) ? (int) $b['last_modified'] : (isset($b['added']) ? (int) $b['added'] : 0);
                     return $tB - $tA;
                 });
+
+                // STRICT FILTER: French Only for "Recently Added"
+                $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
+                $allSeries = array_filter($allSeries, function ($s) use ($regexFrench) {
+                    return preg_match($regexFrench, $s['name']);
+                });
+
                 $rawSeries = $allSeries;
             }
 
@@ -577,24 +584,50 @@ class SeriesController
 
         if ($allSeries === null) {
             $allSeries = $this->api->get('player_api.php', ['action' => 'get_series']);
-            if (!$allSeries) $allSeries = [];
+            if (!$allSeries)
+                $allSeries = [];
             $this->cache->set($cacheKeyAll, $allSeries, 3600);
         }
 
-        if (!$allSeries) return [];
+        if (!$allSeries)
+            return [];
+
 
         $search = mb_strtolower($query);
-        $results = [];
+        $rawResults = [];
+
+        $regexLang = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI|EN|ENGLISH|US|UK|VO)\b/i';
+        $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO|TURK|TURKISH|EGYPT|PERSIAN|FARSI|PL|POLAND|NF|NETFLIX|NL|DUTCH)\b/i';
 
         foreach ($allSeries as $s) {
-            if (strpos(mb_strtolower($s['name']), $search) !== false) {
-                 if (!isset($s['display_name'])){
-                     $s['display_name'] = $this->normalizeName($s['name']);
-                 }
-                 $results[] = $s;
+            $name = $s['name'];
+
+            if (strpos(mb_strtolower($name), $search) === false) {
+                continue;
+            }
+
+            if (preg_match($regexExclude, $name)) {
+                continue;
+            }
+
+            $rawResults[] = $s;
+        }
+
+        // Deduplication Logic (Same as Index)
+        $groupedSeries = [];
+        foreach ($rawResults as $serie) {
+            if (!empty($serie['tmdb'])) {
+                $key = 'tmdb_' . $serie['tmdb'];
+            } else {
+                $key = 'name_' . mb_strtolower($this->normalizeName($serie['name']));
+            }
+
+            if (!isset($groupedSeries[$key])) {
+                $serie['display_name'] = $this->normalizeName($serie['name']);
+                $groupedSeries[$key] = $serie;
             }
         }
-        
-        return $results;
+
+        return array_values($groupedSeries);
     }
 }

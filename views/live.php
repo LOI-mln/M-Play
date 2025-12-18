@@ -84,7 +84,8 @@ ob_start();
                                     <?= htmlspecialchars($chaine['name']) ?>
                                 </h3>
                                 <p class="text-[10px] text-gray-500 mt-0.5 truncate font-mono opacity-60">ID:
-                                    <?= $chaine['stream_id'] ?></p>
+                                    <?= $chaine['stream_id'] ?>
+                                </p>
                             </div>
                         </a>
                     <?php endforeach; ?>

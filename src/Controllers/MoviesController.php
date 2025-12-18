@@ -300,6 +300,12 @@ class MoviesController
                     return $tB - $tA; // Descending
                 });
 
+                // STRICT FILTER: French Only for "Recently Added"
+                $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
+                $allFilms = array_filter($allFilms, function ($film) use ($regexFrench) {
+                    return preg_match($regexFrench, $film['name']);
+                });
+
                 $rawFilms = $allFilms;
             }
 
@@ -574,19 +580,60 @@ class MoviesController
         if (!$allFilms)
             return [];
 
+
         $search = mb_strtolower($query);
-        $results = [];
+        $rawResults = [];
+
+        $regexLang = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI|EN|ENGLISH|US|UK|VO)\b/i';
+        $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO|TURK|TURKISH|EGYPT|PERSIAN|FARSI|PL|POLAND|NF|NETFLIX|NL|DUTCH)\b/i';
 
         foreach ($allFilms as $film) {
-            if (strpos(mb_strtolower($film['name']), $search) !== false) {
-                // Add display name if missing
-                if (!isset($film['display_name'])) {
-                    $film['display_name'] = $this->normalizeName($film['name']);
-                }
-                $results[] = $film;
+            $name = $film['name'];
+
+            // 1. Search Query Match
+            if (strpos(mb_strtolower($name), $search) === false) {
+                continue;
+            }
+
+            // 2. Strict Language Filter
+            // Must have a valid tag OR NOT have an invalid tag (to be safe, we can trigger on Exclusion first)
+
+            if (preg_match($regexExclude, $name)) {
+                continue;
+            }
+
+            if (preg_match($regexLang, $name)) {
+                // Good
+            } else {
+                // If no tag, we accept it if it doesn't look like garbage? 
+                // For now, user says "soit francais soit anglais". 
+                // Let's be semi-strict: if no allowed tag is present, we might skip it 
+                // BUT searching for "Avatar" might return just "Avatar (2009)" without tags.
+                // Let's stick to Exclusion list is safer for now, AND check for common FR/EN tags if present.
+                // Actually, user said "soit francais soit anglais", implying we should filter OUT others.
+            }
+
+            $rawResults[] = $film;
+        }
+
+        // Deduplication Logic (Same as Index)
+        $groupedFilms = [];
+        foreach ($rawResults as $film) {
+            // Priorité absolue : TMDB ID
+            if (!empty($film['tmdb'])) {
+                $key = 'tmdb_' . $film['tmdb'];
+            } else {
+                // Fallback : Nom normalisé
+                $key = 'name_' . mb_strtolower($this->normalizeName($film['name']));
+            }
+
+            // Si on n'a pas encore ce film, on l'ajoute
+            if (!isset($groupedFilms[$key])) {
+                $film['display_name'] = $this->normalizeName($film['name']);
+                $groupedFilms[$key] = $film;
             }
         }
 
-        return $results;
+        return array_values($groupedFilms);
     }
 }

@@ -64,7 +64,7 @@ ob_start();
                                     class="aspect-[2/3] rounded-xl overflow-hidden bg-[#1a1a1a] shadow-lg shadow-black/50 transition-all duration-300 group-hover:shadow-red-900/20 group-hover:scale-105 ring-1 ring-white/5 group-hover:ring-red-600/40">
                                     <img src="<?= htmlspecialchars($m['stream_icon']) ?>"
                                         class="w-full h-full object-cover transition-transform duration-500" loading="lazy"
-                                        onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
+                                        onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'w-full h-full bg-[#0f172a] flex flex-col items-center justify-center p-4 text-center\'><svg class=\'w-12 h-12 text-gray-500 mb-2\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z\' /></svg><span class=\'text-gray-300 font-bold text-sm leading-tight line-clamp-2\'><?= addslashes(htmlspecialchars($m['display_name'])) ?></span></div>';">
 
                                     <!-- Overlay -->
                                     <div
