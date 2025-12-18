@@ -10,6 +10,11 @@ class ProxyController
         // Stop timeout
         set_time_limit(0);
 
+        // Close session immediately to prevent blocking concurrent requests (like save progress)
+        if (session_id()) {
+            session_write_close();
+        }
+
         $url = $_GET['url'] ?? '';
 
         if (empty($url)) {

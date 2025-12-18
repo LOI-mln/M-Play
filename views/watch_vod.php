@@ -29,7 +29,7 @@
         <!-- Header (Retour) -->
         <div id="player-header"
             class="absolute top-0 left-0 w-full p-6 bg-gradient-to-b from-black/90 to-transparent z-50 transition-opacity duration-500 opacity-100 flex justify-between items-start">
-            <a href="/movies"
+            <a href="/movies" onclick="if(history.length > 1){ history.back(); return false; }"
                 class="text-white hover:text-red-600 transition flex items-center gap-2 font-bold uppercase tracking-wider w-fit">
                 <span>&larr;</span> Retour aux films
             </a>
@@ -138,10 +138,12 @@
     <!-- Config Variables Transfer -->
     <script>
         window.VodConfig = {
-            streamUrlHls: '<?= $streamUrlHls ?>',
-            streamUrlDirect: '<?= $streamUrlDirect ?>',
-            streamUrlTranscode: '<?= $streamUrlTranscode ?>',
-            duration: '<?= $duration ?? '' ?>'
+            streamUrlHls: '<?php echo $streamUrlHls; ?>',
+            streamUrlDirect: '<?php echo $streamUrlDirect; ?>',
+            streamUrlTranscode: '<?php echo $streamUrlTranscode; ?>',
+            duration: '<?php echo $duration ?? ''; ?>',
+            resumeTime: <?php echo $resumeTime ?? 0; ?>,
+            streamId: '<?php echo $streamId; ?>'
         };
     </script>
 

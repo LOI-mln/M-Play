@@ -250,6 +250,19 @@ class MoviesController
             'category_name' => 'Ajoutés Récemment'
         ]);
 
+        // --- CONTINUE WATCHING ---
+        $user = $_SESSION['auth_creds']['username'];
+        $progressModel = new \App\Models\WatchProgress();
+        $inProgress = $progressModel->getInProgress($user, 'movie');
+
+        if (!empty($inProgress)) {
+            // On a des films en cours, on ajoute la catégorie EN PREMIER
+            array_unshift($finalCategories, [
+                'category_id' => 'continue',
+                'category_name' => 'Reprendre la lecture'
+            ]);
+        }
+
         // Sélection courante
         $idCategorieSelectionnee = $_GET['categorie'] ?? 'all';
         $searchQuery = $_GET['q'] ?? '';
@@ -307,6 +320,45 @@ class MoviesController
                 });
 
                 $rawFilms = $allFilms;
+            }
+
+        } elseif ($idCategorieSelectionnee === 'continue') {
+            // CAS SPECIAL "CONTINUE WATCHING"
+            $user = $_SESSION['auth_creds']['username'];
+            $progressModel = new \App\Models\WatchProgress();
+            $inProgressParams = $progressModel->getInProgress($user, 'movie'); // [ {stream_id, current_time...} ]
+
+            // On doit mapper ces IDs vers les objets films complets
+            // On a besoin du catalogue complet pour ça (ou cache map)
+            $cacheKeyAll = 'all_vod_streams_v2';
+            $allFilms = $this->cache->get($cacheKeyAll);
+
+            if ($allFilms === null) {
+                $allFilms = $this->api->get('player_api.php', [
+                    'action' => 'get_vod_streams'
+                ]);
+                if ($allFilms) {
+                    $this->cache->set($cacheKeyAll, $allFilms, 3600);
+                }
+            }
+
+            if ($allFilms) {
+                // Map ID -> Film
+                $mapId = [];
+                foreach ($allFilms as $f) {
+                    $mapId[$f['stream_id']] = $f;
+                }
+
+                foreach ($inProgressParams as $p) {
+                    if (isset($mapId[$p['stream_id']])) {
+                        $film = $mapId[$p['stream_id']];
+                        // On injecte le temps pour l'afficher (optionnel, ou via JS)
+                        $film['progress_time'] = $p['current_time'];
+                        $film['progress_duration'] = $p['duration'];
+                        // Check si fini ? Non filtré en SQL déjà.
+                        $rawFilms[] = $film;
+                    }
+                }
             }
 
         } elseif ($idCategorieSelectionnee) {
@@ -480,6 +532,17 @@ class MoviesController
         $username = $_SESSION['auth_creds']['username'];
         $password = $_SESSION['auth_creds']['password'];
 
+        // Retrieve info for duration
+        $info = $this->api->get('player_api.php', [
+            'action' => 'get_vod_info',
+            'vod_id' => $streamId
+        ]);
+
+        $duration = null;
+        if ($info && isset($info['info']['duration'])) {
+            $duration = $info['info']['duration'];
+        }
+
         // URL Directe (MKV/MP4/AVI)
         $sourceUrl = "$hote/movie/$username/$password/$streamId.$extension";
         $streamUrlDirect = $sourceUrl;
@@ -487,6 +550,13 @@ class MoviesController
         // URL via Proxy (Transcodage) - Pour contourner CORS ou format non supporté
         // On encode l'URL source
         $streamUrlTranscode = "/stream/transcode?url=" . urlencode(base64_encode($sourceUrl));
+
+        $streamUrlHls = ''; // Pas de HLS pour les films (MP4/MKV direct)
+
+        // Récupérer la progression
+        $progressModel = new \App\Models\WatchProgress();
+        $prog = $progressModel->getProgress($_SESSION['auth_creds']['username'], $streamId, 'movie');
+        $resumeTime = ($prog) ? $prog['current_time'] : 0;
 
         require __DIR__ . '/../../views/watch_vod.php';
     }
@@ -721,6 +791,60 @@ class MoviesController
         return $final;
     }
 
+    public function getContinueWatching($limit = 10)
+    {
+        $user = $_SESSION['auth_creds']['username'];
+        $progressModel = new \App\Models\WatchProgress();
+        $inProgressParams = $progressModel->getInProgress($user, 'movie'); // [ {stream_id, current_time...} ]
+
+        if (empty($inProgressParams)) {
+            return [];
+        }
+
+        // On a besoin du catalogue complet pour mapper les IDs
+        $cacheKeyAll = 'all_vod_streams_v2';
+        $allFilms = $this->cache->get($cacheKeyAll);
+
+        if ($allFilms === null) {
+            $allFilms = $this->api->get('player_api.php', [
+                'action' => 'get_vod_streams'
+            ]);
+            if ($allFilms) {
+                $this->cache->set($cacheKeyAll, $allFilms, 3600);
+            }
+        }
+
+        if (!$allFilms) {
+            return [];
+        }
+
+        // Map ID -> Film
+        $mapId = [];
+        foreach ($allFilms as $f) {
+            $mapId[$f['stream_id']] = $f;
+        }
+
+        $results = [];
+        foreach ($inProgressParams as $p) {
+            if (isset($mapId[$p['stream_id']])) {
+                $film = $mapId[$p['stream_id']];
+                $film['progress_time'] = $p['current_time'];
+                $film['progress_duration'] = $p['duration'];
+                // Calcul du pourcentage pour la barre de progression (si on veut l'afficher)
+                if ($p['duration'] > 0) {
+                    $film['progress_percent'] = min(100, round(($p['current_time'] / $p['duration']) * 100));
+                } else {
+                    $film['progress_percent'] = 0;
+                }
+                $results[] = $film;
+                if (count($results) >= $limit)
+                    break;
+            }
+        }
+
+        return $results;
+    }
+
     // Helper for old simple search
     public function searchInternal($query)
     {
@@ -794,5 +918,44 @@ class MoviesController
         }
 
         return array_values($groupedFilms);
+    }
+    public function saveProgress()
+    {
+        // AJAX ONLY
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit;
+        }
+
+        $rawInput = file_get_contents('php://input');
+        file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - Received: " . $rawInput . PHP_EOL, FILE_APPEND);
+
+        $input = json_decode($rawInput, true);
+        $streamId = $input['stream_id'] ?? null;
+        $currentTime = $input['time'] ?? 0;
+        $duration = $input['duration'] ?? 0;
+
+        if (!$streamId) {
+            file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - Error: No Stream ID" . PHP_EOL, FILE_APPEND);
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Missing stream_id']);
+            exit;
+        }
+
+        $user = $_SESSION['auth_creds']['username'] ?? 'unknown';
+
+        // Important: Close session to prevent locking concurrent requests (video stream)
+        session_write_close();
+
+        try {
+            $progressModel = new \App\Models\WatchProgress();
+            $progressModel->save($user, $streamId, $currentTime, $duration, 'movie');
+            file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - Saved for $user" . PHP_EOL, FILE_APPEND);
+        } catch (\Exception $e) {
+            file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - EXCEPTION: " . $e->getMessage() . PHP_EOL, FILE_APPEND);
+        }
+
+        echo json_encode(['status' => 'success']);
+        exit;
     }
 }

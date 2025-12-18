@@ -1,4 +1,10 @@
 
+console.log("Player VOD JS executing...");
+// alert("DEBUG: JS Loaded"); // Commented out to avoid annoyance if it works, but user said "nothing happens". 
+// Let's use console.log primarily, but I need to know if it runs. Use a temporary header color change as a signal.
+// alert("DEBUG: JS Loaded"); 
+// Headers red border removed.
+
 const video = document.getElementById('lecteur-video');
 const conteneurVideo = document.getElementById('conteneur-video');
 const header = document.getElementById('player-header');
@@ -24,7 +30,37 @@ const timeCurrent = document.getElementById('time-current');
 const timeDuration = document.getElementById('time-duration');
 
 // Initialisation HLS via Window Config
-const { streamUrlHls, streamUrlDirect, streamUrlTranscode, duration: rawDuration } = window.VodConfig;
+// Resume Logic
+const { streamUrlHls, streamUrlDirect, streamUrlTranscode, duration: rawDuration, resumeTime, streamId } = window.VodConfig;
+
+// ... (Existing code) ...
+
+// Auto-Resume
+if (resumeTime > 10) {
+    // Si on a déjà vu + de 10s, on demande ou on resume direct
+    // Ici on resume direct pour UX fluide (Netflix style)
+    console.log("Resuming at", resumeTime);
+    video.currentTime = resumeTime;
+}
+
+// Progress Saver
+if (streamId) {
+    setInterval(() => {
+        if (!video.paused && video.currentTime > 5) {
+            fetch('/movies/progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    stream_id: streamId,
+                    time: Math.floor(video.currentTime),
+                    duration: Math.floor(getDuration())
+                })
+            }).catch(e => console.warn("Save progress failed", e));
+        }
+    }, 10000); // Every 10s
+}
+
+// Global Error Handler
 
 // Parsing de la durée (format "hh:mm:ss" ou secondes)
 let staticDuration = 0;
@@ -40,9 +76,21 @@ if (rawDuration) {
 }
 console.log("Static Duration (PHP):", staticDuration);
 
+// SEEK & Transcode State
+let currentTranscodeOffset = 0;
+let isTranscoding = false;
+
 let hls;
 
 function loadVideo() {
+    // Si pas de HLS (ex: Film MP4/MKV), on passe direct au transcode/direct
+    // Note: Pour les MOVIES, on n'a jamais de HLS dans cette configuration, donc on force le fallback
+    if (!streamUrlHls || streamUrlHls === '') {
+        console.log("No HLS URL provided, switching to TRANSCODE/DIRECT.");
+        loadTranscode();
+        return;
+    }
+
     if (Hls.isSupported()) {
         hls = new Hls();
         hls.loadSource(streamUrlHls);
@@ -81,21 +129,7 @@ function loadDirect() {
     video.load();
 }
 
-function loadTranscode() {
-    console.log("Loading Transcoded Source (AAC):", streamUrlTranscode);
-    if (hls) hls.destroy();
-
-    // Affichage chargement
-    const chargement = document.getElementById('chargement');
-    chargement.style.display = 'flex';
-
-    video.src = streamUrlTranscode;
-    video.load();
-    video.play().then(() => {
-        chargement.style.display = 'none';
-        majIcons(true);
-    }).catch(e => console.error(e));
-}
+// Function removed (duplicate)
 
 loadVideo();
 
@@ -142,6 +176,8 @@ function startVideo() {
     });
 }
 
+overlayPlay.style.pointerEvents = 'auto'; // FORCE CLICKABLE
+
 overlayPlay.addEventListener('click', (e) => {
     e.stopPropagation();
     startVideo();
@@ -182,10 +218,10 @@ function getDuration() {
     return (video.duration && isFinite(video.duration)) ? video.duration : 0;
 }
 
-// SEEK LOGIC (Updated for Transcoding)
-let currentTranscodeOffset = 0; // Offset en secondes si on seek en mode transcode
-let isTranscoding = false; // Flag pour savoir si on est en mode transcode
+// Variables moved to top
+// Mode Transcode (Fallback & Seek)
 
+// Mode Transcode (Fallback & Seek)
 function loadTranscode(startTime = 0) {
     console.log("Loading Transcoded Source (AAC):", streamUrlTranscode, "Start:", startTime);
     if (hls) hls.destroy();
@@ -205,10 +241,19 @@ function loadTranscode(startTime = 0) {
 
     video.src = url;
     video.load();
-    video.play().then(() => {
-        chargement.style.display = 'none';
-        majIcons(true);
-    }).catch(e => console.error(e));
+
+    var promise = video.play();
+    if (promise !== undefined) {
+        promise.then(() => {
+            chargement.style.display = 'none';
+            majIcons(true);
+        }).catch(e => {
+            console.warn("Autoplay prevented or failed:", e);
+            // ESSENTIEL : On cache le spinner pour que l'utilisateur puisse cliquer sur Play
+            chargement.style.display = 'none';
+            overlayPlay.style.display = 'flex';
+        });
+    }
 }
 
 // Seek Bar Logic
@@ -333,3 +378,11 @@ btnPleinEcran.addEventListener('click', (e) => {
 });
 
 controls.addEventListener('click', e => e.stopPropagation());
+
+// Global Error Handler
+video.addEventListener('error', (e) => {
+    console.error("Link Error or Decode Error:", video.error);
+    const chargement = document.getElementById('chargement');
+    if (chargement) chargement.style.display = 'none';
+    majIcons(false);
+});

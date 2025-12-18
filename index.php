@@ -54,6 +54,9 @@ switch ($url) {
     case '/movies/watch':
         (new App\Controllers\MoviesController())->watch();
         break;
+    case '/movies/progress':
+        (new App\Controllers\MoviesController())->saveProgress();
+        break;
     case '/stream/transcode':
         (new App\Controllers\ProxyController())->transcode();
         break;
