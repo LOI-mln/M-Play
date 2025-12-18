@@ -381,4 +381,69 @@ class SeriesController
 
         require __DIR__ . '/../../views/watch_series.php';
     }
+    public function getRecent($limit = 10)
+    {
+        // 1. Check Cache
+        $cacheKey = 'series_recent_fr_' . $limit;
+        $cached = $this->cache->get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        // 2. Fetch All Series (Cached internally)
+        $cacheKeyAll = 'all_series_streams_v2';
+        $allSeries = $this->cache->get($cacheKeyAll);
+
+        if ($allSeries === null) {
+            $allSeries = $this->api->get('player_api.php', ['action' => 'get_series']);
+            if (!$allSeries)
+                $allSeries = [];
+            $this->cache->set($cacheKeyAll, $allSeries, 3600);
+        }
+
+        if (!$allSeries) {
+            return [];
+        }
+
+        // 3. Filter & Sort by Last Modified / Added
+        usort($allSeries, function ($a, $b) {
+            $tA = isset($a['last_modified']) ? (int) $a['last_modified'] : (isset($a['added']) ? (int) $a['added'] : 0);
+            $tB = isset($b['last_modified']) ? (int) $b['last_modified'] : (isset($b['added']) ? (int) $b['added'] : 0);
+            return $tB - $tA;
+        });
+
+        // 4. Slice & Normalize with STRICT LANGUAGE FILTER
+        $final = [];
+        $seen = [];
+
+        $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
+        $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i';
+
+        foreach ($allSeries as $s) {
+            $name = $s['name'];
+
+            if (!preg_match($regexFrench, $name)) {
+                continue;
+            }
+            if (preg_match($regexExclude, $name)) {
+                continue;
+            }
+
+            $norm = mb_strtolower($this->normalizeName($name));
+            if (isset($seen[$norm]))
+                continue;
+
+            $seen[$norm] = true;
+            $s['display_name'] = $this->normalizeName($name);
+            $final[] = $s;
+
+            if (count($final) >= $limit)
+                break;
+        }
+
+        // 5. Cache
+        $this->cache->set($cacheKey, $final, 300);
+
+        return $final;
+    }
 }

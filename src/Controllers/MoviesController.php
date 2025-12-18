@@ -405,4 +405,84 @@ class MoviesController
 
         require __DIR__ . '/../../views/watch_vod.php';
     }
+    public function getRecent($limit = 10)
+    {
+        // 1. Check Cache
+        $cacheKey = 'movies_recent_fr_' . $limit;
+        $cached = $this->cache->get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        // 2. Fetch All VOD Streams (Cached internally)
+        $cacheKeyAll = 'all_vod_streams_v2';
+        $allFilms = $this->cache->get($cacheKeyAll);
+
+        if ($allFilms === null) {
+            // Note: This fetches seemingly 20k+ movies, so filter loop must be efficient
+            $allFilms = $this->api->get('player_api.php', [
+                'action' => 'get_vod_streams'
+            ]);
+            if ($allFilms) {
+                $this->cache->set($cacheKeyAll, $allFilms, 3600);
+            }
+        }
+
+        if (!$allFilms) {
+            return [];
+        }
+
+        // 3. Filter & Sort by Added Date
+        usort($allFilms, function ($a, $b) {
+            $tA = isset($a['added']) ? (int) $a['added'] : 0;
+            $tB = isset($b['added']) ? (int) $b['added'] : 0;
+            return $tB - $tA; // Descending
+        });
+
+        // 4. Slice & Normalize with STRICT LANGUAGE FILTER
+        // We iterate through sorted list until we fill $limit
+        $final = [];
+        $seen = [];
+
+        // Keywords that MUST be present to be considered French
+        // "FR", "VFF", "VFQ", "TRUEFRENCH", "FRENCH", "VOSTFR"
+        // Also negative lookahead for "AR", "Arabic", etc handled if needed by positive match
+        // But simpler to just match French tags.
+        $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
+
+        // Keywords to EXCLUDE explicitly (AR, Arab, India) if they slip through
+        $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i';
+
+        foreach ($allFilms as $film) {
+            $name = $film['name'];
+
+            // CHECK 1: Must have French tag
+            // Note: Some French movies might just have the title without tags (rare in IPTV lists).
+            // Usually valid ones have tags like "Inception (2010) [FRENCH]"
+            if (!preg_match($regexFrench, $name)) {
+                continue;
+            }
+
+            // CHECK 2: Must NOT have Foreign tags (double check)
+            if (preg_match($regexExclude, $name)) {
+                continue;
+            }
+
+            $norm = mb_strtolower($this->normalizeName($name));
+            if (isset($seen[$norm]))
+                continue;
+
+            $seen[$norm] = true;
+            $film['display_name'] = $this->normalizeName($name);
+            $final[] = $film;
+
+            if (count($final) >= $limit)
+                break;
+        }
+
+        // 5. Cache Result
+        $this->cache->set($cacheKey, $final, 300);
+
+        return $final;
+    }
 }
