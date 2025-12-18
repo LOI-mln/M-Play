@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Electron Build Artifacts
+M-Play-darwin-*
+*.app
+electron_debug.txt
+proxy_debug.txt
+

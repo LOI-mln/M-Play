@@ -26,6 +26,20 @@ if (file_exists(__DIR__ . '/public' . $url) && $url !== '/') {
 // Les routes accessibles sans être connecté
 $routesPubliques = ['/login', '/auth/verify'];
 
+// AUTO-LOGIN HARDCODED (Removed Login Page)
+if (!isset($_SESSION['user'])) {
+    $auth = new App\Controllers\AuthController();
+    $success = $auth->autoLogin('http://fr1.lion-tt.xyz', 'Vxwf3814', 'KVCr7372', 'M-Play Desktop');
+
+    if (!$success) {
+        // Fallback si l'auto-login échoue
+        if (!in_array($url, $routesPubliques)) {
+            header('Location: /login');
+            exit;
+        }
+    }
+}
+
 if (!isset($_SESSION['user']) && !in_array($url, $routesPubliques)) {
     header('Location: /login');
     exit;

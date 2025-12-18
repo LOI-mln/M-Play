@@ -137,21 +137,28 @@ function loadVideo() {
 // Buffering / Loading State Handlers
 // Buffering / Loading State Handlers & Watchdog
 let stallTimeout;
+let recoveryCount = 0;
+const MAX_RECOVERIES = 3;
 
 function startStallWatchdog() {
     clearTimeout(stallTimeout);
-    // Si bloqué pendant 6 secondes, on force le reload
+    console.log("🐶 Watchdog STARTED. Timer: 8s");
+    // 8 secondes : On est très patient pour ne pas couper une connexion lente
     stallTimeout = setTimeout(() => {
         if (isTranscoding && !video.paused) {
-            console.warn("Watchdog: Stream Stalled too long -> Force Recovery");
+            console.warn("🐶❌ Watchdog TRIGGERED: Stream Stalled > 8s -> FORCING ERROR");
             // On déclenche manuellement une erreur pour activer la logique de recovery
             video.dispatchEvent(new Event('error'));
         }
-    }, 6000);
+    }, 8000);
 }
 
 function stopStallWatchdog() {
-    clearTimeout(stallTimeout);
+    if (stallTimeout) {
+        console.log("🐶 Watchdog STOPPED/CLEARED (Playback resumed or Load started)");
+        clearTimeout(stallTimeout);
+        stallTimeout = null;
+    }
 }
 
 video.addEventListener('waiting', () => {
@@ -165,12 +172,24 @@ video.addEventListener('playing', () => {
 });
 
 video.addEventListener('stalled', () => {
-    console.warn("Stream Stalled");
-    if (!video.paused) {
-        chargement.style.display = 'flex';
-        startStallWatchdog();
-    }
+    // "Stalled" veut juste dire "Téléchargement en pause". C'est NORMAL si le buffer est plein !
+    // On ne doit SURTOUT PAS déclencher le Watchdog ici, sinon ça coupe des vidéos qui marchent bien.
+    console.log("ℹ️ Event: STALLED (Network Idle - Likely Buffer Full). Ignoring.");
 });
+
+// WATCHDOG ULTIME : Vérifie que le temps avance vraiment
+let lastTimeCheck = 0;
+setInterval(() => {
+    if (isTranscoding && !video.paused && !video.ended && video.readyState > 2) {
+        if (video.currentTime === lastTimeCheck) {
+            console.warn("❄️ FREEZE DETECTED: Time has not moved in 5s (but no 'waiting' event). Force Recovery.");
+            // On peut appeler le watchdog ou error direct. 
+            // On simule une erreur qui sera catchée par notre logic de recovery
+            video.dispatchEvent(new Event('error'));
+        }
+        lastTimeCheck = video.currentTime;
+    }
+}, 5000); // Check toutes les 5s
 
 // Mode Direct (Backup manuel si besoin, mais on ne l'utilise plus en auto)
 function loadDirect() {
@@ -274,8 +293,10 @@ function getDuration() {
 
 // Mode Transcode (Fallback & Seek)
 function loadTranscode(startTime = 0) {
-    console.log("Loading Transcoded Source (AAC):", streamUrlTranscode, "Start:", startTime);
     if (hls) hls.destroy();
+
+    // SUPER IMPORTANT : On arrête le chien de garde immédiatement pour ne pas qu'il kill le chargement en cours
+    stopStallWatchdog();
 
     isTranscoding = true;
     currentTranscodeOffset = startTime;
@@ -287,23 +308,44 @@ function loadTranscode(startTime = 0) {
     overlayPlay.style.display = 'none';
 
     // On ajoute le parametre start seulement si > 0
-    let url = streamUrlTranscode;
+    // MIGRATION ELECTRON : On tape sur le serveur Node.js (Port 10000) au lieu du PHP
+    // L'URL source est déjà en base64 dans "streamUrlTranscode" (param url=...)
+    // On doit l'extraire ou la reconstruire.
+
+    // Extraction de la "vraie" URL encodée depuis la variable PHP
+    // Format PHP : /stream/transcode?url=XYZ&...
+    const urlParams = new URL("http://fake.com" + streamUrlTranscode).searchParams;
+    const base64Url = urlParams.get('url');
+
+    // Nouvelle URL cible (Node.js Streamer)
+    let url = `http://localhost:10000/stream?url=${base64Url}`;
+
     if (startTime > 0) {
         url += "&start=" + Math.floor(startTime);
     }
 
     video.autoplay = true; // Force autoplay intent
+    video.playsInline = true; // Vital pour autoplay sur Mac/iOS
     video.src = url;
     video.load();
 
     const attemptPlay = () => {
+        // TRICK: On mute pour garantir l'autoplay (les navigateurs bloquent souvent le son au démarrage auto)
+        const wasMuted = video.muted;
+        video.muted = true;
+
         var promise = video.play();
         if (promise !== undefined) {
             promise.then(() => {
+                // Succès ! On remet le son si l'utilisateur l'avait
+                if (!wasMuted) {
+                    // Petit délai pour éviter le "pop"
+                    setTimeout(() => video.muted = false, 200);
+                }
                 chargement.style.display = 'none';
                 majIcons(true);
             }).catch(e => {
-                console.warn("Autoplay prevented or failed:", e);
+                console.warn("Autoplay prevented:", e);
                 // On réessaie une fois après 500ms (souvent l'erreur est "Interrupted" à cause du chargement)
                 setTimeout(() => {
                     video.play().catch(e2 => {
@@ -319,6 +361,29 @@ function loadTranscode(startTime = 0) {
     // On attend que le navigateur soit prêt
     video.addEventListener('loadeddata', attemptPlay, { once: true });
 }
+
+video.addEventListener('error', (e) => {
+    console.error("Media Error:", video.error);
+
+    // AUTO-RECOVERY LOGIC
+    if (isTranscoding && recoveryCount < MAX_RECOVERIES) {
+        recoveryCount++;
+        const recoverTime = Math.max(0, video.currentTime + currentTranscodeOffset - 0.5);
+        console.log(`Auto-Recovering (${recoveryCount}/${MAX_RECOVERIES}) at ${recoverTime}s...`);
+
+        const chargement = document.getElementById('chargement');
+        if (chargement) chargement.style.display = 'flex';
+
+        setTimeout(() => {
+            loadTranscode(recoverTime);
+        }, 1000);
+    } else {
+        const chargement = document.getElementById('chargement');
+        if (chargement) chargement.style.display = 'none';
+        majIcons(false);
+        console.warn("Fatal Error: Max recoveries reached.");
+    }
+});
 
 // Seek Bar Logic
 video.addEventListener('timeupdate', () => {
@@ -461,45 +526,3 @@ function toggleFullScreen(elem) {
 }
 
 controls.addEventListener('click', e => e.stopPropagation());
-
-// Global Error Handler & Recovery Logic
-let recoveryCount = 0;
-const MAX_RECOVERIES = 10;
-
-video.addEventListener('error', (e) => {
-    console.error("Link Error or Decode Error:", video.error);
-
-    // AUTO-RECOVERY LOGIC
-    // Si la vidéo plante (coupure réseau), on la relance automatiquement
-    if (isTranscoding && recoveryCount < MAX_RECOVERIES) {
-        recoveryCount++;
-        // On recule très peu (0.5s) juste pour ne pas perdre la frame
-        const recoverTime = Math.max(0, video.currentTime + currentTranscodeOffset - 0.5);
-        console.log(`⚠️ Stream Cut detected! Auto-Recovering (${recoveryCount}/${MAX_RECOVERIES}) at ${recoverTime}s...`);
-
-        // Afficher chargement
-        const chargement = document.getElementById('chargement');
-        if (chargement) chargement.style.display = 'flex';
-
-        // Petit délai pour laisser le réseau souffler
-        setTimeout(() => {
-            loadTranscode(recoverTime);
-        }, 1000);
-    } else {
-        // Abandon après 10 tentatives
-        const chargement = document.getElementById('chargement');
-        if (chargement) chargement.style.display = 'none';
-        majIcons(false);
-        console.warn("Fatal Error: Max recoveries reached.");
-    }
-});
-
-// Reset recovery counter on successful play
-video.addEventListener('playing', () => {
-    if (recoveryCount > 0) {
-        setTimeout(() => {
-            recoveryCount = 0;
-            console.log("Recovery successful. Stream stable.");
-        }, 5000);
-    }
-});
