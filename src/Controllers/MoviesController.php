@@ -46,11 +46,6 @@ class MoviesController
         $name = str_ireplace('SRS', '', $name);
 
         // Supprime les préfixes communs comme "FR -", "EN -", "VOSTFR -", etc.
-        // Regex explication:
-        // ^(...) : Au début
-        // \s* : Espaces optionnels
-        // (FR|EN|...) : Liste des tags
-        // \s*[-|:]?\s* : Séparateur optionnel (- ou | ou :) et espaces
         $pattern = '/^(\s*(FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|TRUEFRENCH|VFF|VFQ|VFI)\s*[-|:]?\s*)+/i';
         $cleaned = preg_replace($pattern, '', $name);
         return trim($cleaned);
@@ -84,7 +79,6 @@ class MoviesController
             $originalName = strtoupper($cat['category_name']); // Upper for checks
 
             // EXCLUSIONS STRICTES (Adulte, Pays Etrangers non demandés)
-            // Pays exclus: Une longue liste pour nettoyer la vue
             $patternsExclusion = [
                 'ARAB',
                 'AFRIC',
@@ -155,20 +149,14 @@ class MoviesController
             if (trim($originalName) === 'SRS')
                 continue;
 
-            // FILTER: keep only relevant languages (FR / EN / US / UK / VOSTFR / MULTI ...)
-            // et si on n'a pas filtré avant.
-            // Note: On accepte un peu plus large pour les films car parfois "Thriller" n'a pas de tag FR
-            // Mais si RegexExclusion n'a pas matché, c'est bon signe.
-
             // Check implicit foreign
             if (preg_match('/\b(ENGLISH|GERMAN|SPANISH|ITALIAN|PORTUGUESE|DUTCH|TURKISH|RUSSIAN|POLISH)\b/i', $cat['category_name']))
                 continue;
 
-
             // Normalisation du nom (FR - Action -> Action)
             $name = $cat['category_name'];
 
-            // Re-enabled per user request: Clean prefixes again including SRS
+            // Allow cleaning SRS again here
             $name = str_ireplace('SRS', '', $name);
 
             $name = preg_replace('/^[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?\s*[-|:]?\s*/i', '', $name);
@@ -262,29 +250,26 @@ class MoviesController
             'category_name' => 'Ajoutés Récemment'
         ]);
 
-        $categories = $finalCategories;
-
-
-        // 2. Gestion de la catégorie sélectionnée
+        // Sélection courante
         $idCategorieSelectionnee = $_GET['categorie'] ?? 'all';
+        $searchQuery = $_GET['q'] ?? '';
+        $isGlobalSearch = !empty($searchQuery);
 
         $rawFilms = [];
-        $isGlobalSearch = !empty($_GET['q']);
 
         // 3. Récupération des films
         if ($idCategorieSelectionnee === 'all') {
-            // CAS SPECIALE "TOUT" = "Ajoutés Récemment" (Global)
+            // CAS SPECIAL "TOUT" = "Ajoutés Récemment"
 
-            // Try Cache First
+            // On utilise une méthode interne plus rapide si possible ? Non, on garde la logique de cache globale.
             $cacheKeyAll = 'all_vod_streams_v2';
             $allFilms = $this->cache->get($cacheKeyAll);
 
             if ($allFilms === null) {
-                // Not in cache, fetch from API (Heavy operation)
+                // Fetch ALL (Heavy operation ~50MB JSON sometimes)
                 $allFilms = $this->api->get('player_api.php', [
                     'action' => 'get_vod_streams'
                 ]);
-
                 if (!$allFilms)
                     $allFilms = [];
 
@@ -294,7 +279,7 @@ class MoviesController
 
             // DEBUG: Check structure for TMDB/IMDB (Saved to project root)
             if (!empty($allFilms)) {
-                $debugFile = __DIR__ . '/../../debug_movie_data.txt';
+                $debugFile = __DIR__ . '/../../debug_vod_example.txt';
                 file_put_contents($debugFile, print_r($allFilms[0], true));
             }
 
@@ -305,7 +290,6 @@ class MoviesController
 
             // Si c'est une recherche, on filtre. Sinon on trie par date.
             if ($isGlobalSearch) {
-                // Recherche sur tout
                 $rawFilms = $allFilms; // Filtrage fait après
             } else {
                 // "Recently Added" Logic
@@ -323,11 +307,10 @@ class MoviesController
             // Catégorie spécifique
             $catIds = explode(',', $idCategorieSelectionnee);
 
-            // OPTION 1: Check if we have the FULL catalog cached. If so, filter locally (FASTEST)
+            // OPTION 1: Filter from local FULL cache if avail (FASTEST)
             $allFilmsCached = $this->cache->get('all_vod_streams_v2');
 
             if ($allFilmsCached !== null) {
-                // We have everything! Just filter locally.
                 $neededIds = array_flip($catIds); // ID => true
                 $rawFilms = array_filter($allFilmsCached, function ($film) use ($neededIds) {
                     return isset($neededIds[$film['category_id']]);
@@ -357,7 +340,7 @@ class MoviesController
 
         // Recherche locale
         if ($isGlobalSearch) {
-            $search = mb_strtolower($_GET['q']);
+            $search = mb_strtolower($searchQuery);
             $rawFilms = array_filter($rawFilms, function ($film) use ($search) {
                 return strpos(mb_strtolower($film['name']), $search) !== false;
             });
@@ -376,7 +359,6 @@ class MoviesController
 
             // Si on n'a pas encore ce film, on l'ajoute
             if (!isset($groupedFilms[$key])) {
-                // On injecte le nom normalisé pour l'affichage propre
                 $film['display_name'] = $this->normalizeName($film['name']);
                 $groupedFilms[$key] = $film;
             }
@@ -384,7 +366,7 @@ class MoviesController
 
         $finalFilms = array_values($groupedFilms);
 
-        // MODE AJAX : On renvoie du JSON
+        // MODE AJAX
         if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             header('Content-Type: application/json');
             echo json_encode($finalFilms);
@@ -393,8 +375,7 @@ class MoviesController
 
         // MODE HTML : On charge la vue avec les catégories, mais SANS les films (chargés par JS)
         $films = []; // Vide pour l'initialisation PHP
-
-        // On passe les variables à la vue
+        $categories = $finalCategories;
         $categorieActuelleId = $idCategorieSelectionnee;
         $searchQuery = $_GET['q'] ?? '';
 
@@ -421,28 +402,24 @@ class MoviesController
 
         $movieInfo = array_merge($info['info'], $info['movie_data']);
 
-        // --- LOGIQUE MULTI-LANGUE ---
-        // 1. Normaliser le nom du film actuel
-        $currentName = $movieInfo['name'];
-        $cleanTitle = $this->normalizeName($currentName); // Pour l'affichage
+        // GESTION DES VARIANTES (Langues)
+        // Stratégie: Rechercher dans les films déjà chargés (cache) ceux qui ont le même ID TMDB ou le même Nom Normalisé.
+        // Cela évite de faire 10 appels API.
 
-        // 2. Chercher les variantes (autres langues)
-        // OPTIMISATION : Utilisation d'un cache de session pour éviter de recharger l'API à chaque fois
-        // On stocke la map "Nom Normalisé" -> "Liste de streams"
+        $cleanTitle = $this->normalizeName($movieInfo['name']);
+        $currentTmdb = $movieInfo['tmdb'] ?? null;
 
+        $availableVersions = [];
         $variants = [];
 
-        // On vérifie si on a déjà un cache frais (moins de 5 min ?)
-        // Pour faire simple : on cache tant que la session est là. 
+        // Essai de charger le cache MAP (construit lors du listing)
+        // Si le cache map n'existe pas, on le construit depuis le cache global
         if (!isset($_SESSION['movies_map_cache'])) {
-            // C'est lourd : on le fait une fois
-            $allStreams = $this->api->get('player_api.php', [
-                'action' => 'get_vod_streams'
-            ]);
-
-            $map = [];
-            if ($allStreams) {
-                foreach ($allStreams as $stream) {
+            $allFilms = $this->cache->get('all_vod_streams_v2');
+            if ($allFilms) {
+                // Build map: NormalizedName -> [ {id, name, tmdb}, ... ]
+                $map = [];
+                foreach ($allFilms as $stream) {
                     $nName = $this->normalizeName($stream['name']);
                     $key = mb_strtolower($nName);
                     if (!isset($map[$key])) {
@@ -451,11 +428,11 @@ class MoviesController
                     $map[$key][] = [
                         'stream_id' => $stream['stream_id'],
                         'name' => $stream['name'],
-                        'container_extension' => $stream['container_extension']
+                        'tmdb' => $stream['tmdb'] ?? null
                     ];
                 }
+                $_SESSION['movies_map_cache'] = $map;
             }
-            $_SESSION['movies_map_cache'] = $map;
         }
 
         // Récupération depuis le cache
@@ -497,26 +474,12 @@ class MoviesController
         $username = $_SESSION['auth_creds']['username'];
         $password = $_SESSION['auth_creds']['password'];
 
-        // Stratégie "Hybrid Fallback" :
-        // 1. On tente HLS (.m3u8) pour le son/buffer optimal.
-        // 2. Si ça fail (404/NotSupported), le JS basculera sur le Direct (.ext).
+        // URL Directe (MKV/MP4/AVI)
+        $sourceUrl = "$hote/movie/$username/$password/$streamId.$extension";
+        $streamUrlDirect = $sourceUrl;
 
-        $streamUrlHls = "$hote/movie/$username/$password/$streamId.m3u8";
-        $streamUrlDirect = "$hote/movie/$username/$password/$streamId.$extension";
-
-        // Récupération de la durée via l'API (pour la barre de progression transcodée)
-        // L'API movies list ne donne pas la durée précise, on fait un get_vod_info rapide.
-        $info = $this->api->get('player_api.php', [
-            'action' => 'get_vod_info',
-            'vod_id' => $streamId
-        ]);
-
-        $duration = $info['info']['duration'] ?? ''; // Format attendu: "01:55:20" ou "115"
-
-        // Transcodage (Fix Audio) par notre proxy local
-        // On encode l'URL source Direct pour la passer au proxy
-        // IMPORTANT: urlencode après base64_encode pour éviter que les '+' deviennent des espaces
-        $sourceUrl = $streamUrlDirect;
+        // URL via Proxy (Transcodage) - Pour contourner CORS ou format non supporté
+        // On encode l'URL source
         $streamUrlTranscode = "/stream/transcode?url=" . urlencode(base64_encode($sourceUrl));
 
         require __DIR__ . '/../../views/watch_vod.php';
@@ -524,7 +487,7 @@ class MoviesController
     public function getRecent($limit = 10)
     {
         // 1. Check Cache
-        $cacheKey = 'movies_recent_fr_' . $limit;
+        $cacheKey = 'vod_recent_fr_' . $limit;
         $cached = $this->cache->get($cacheKey);
         if ($cached !== null) {
             return $cached;
@@ -535,7 +498,6 @@ class MoviesController
         $allFilms = $this->cache->get($cacheKeyAll);
 
         if ($allFilms === null) {
-            // Note: This fetches seemingly 20k+ movies, so filter loop must be efficient
             $allFilms = $this->api->get('player_api.php', [
                 'action' => 'get_vod_streams'
             ]);
@@ -560,20 +522,13 @@ class MoviesController
         $final = [];
         $seen = [];
 
-        // Keywords that MUST be present to be considered French
-        // "FR", "VFF", "VFQ", "TRUEFRENCH", "FRENCH", "VOSTFR"
-        // Also negative lookahead for "AR", "Arabic", etc handled if needed by positive match
-        // But simpler to just match French tags.
         $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
-
-        // Keywords to EXCLUDE explicitly (AR, Arab, India) if they slip through
         $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i';
 
-        foreach ($allFilms as $film) {
-            $name = $film['name'];
+        foreach ($allFilms as $f) {
+            $name = $f['name'];
 
-            // CHECK 1: Must have French tag
-            // Note: Some French movies might just have the title without tags (rare in IPTV lists).
+            // CHECK 1: Must have French Indicator
             // Usually valid ones have tags like "Inception (2010) [FRENCH]"
             if (!preg_match($regexFrench, $name)) {
                 continue;
@@ -589,8 +544,8 @@ class MoviesController
                 continue;
 
             $seen[$norm] = true;
-            $film['display_name'] = $this->normalizeName($name);
-            $final[] = $film;
+            $f['display_name'] = $this->normalizeName($name);
+            $final[] = $f;
 
             if (count($final) >= $limit)
                 break;
@@ -600,5 +555,38 @@ class MoviesController
         $this->cache->set($cacheKey, $final, 300);
 
         return $final;
+    }
+
+    public function searchInternal($query)
+    {
+        $cacheKeyAll = 'all_vod_streams_v2';
+        $allFilms = $this->cache->get($cacheKeyAll);
+
+        if ($allFilms === null) {
+            $allFilms = $this->api->get('player_api.php', [
+                'action' => 'get_vod_streams'
+            ]);
+            if ($allFilms) {
+                $this->cache->set($cacheKeyAll, $allFilms, 3600);
+            }
+        }
+
+        if (!$allFilms)
+            return [];
+
+        $search = mb_strtolower($query);
+        $results = [];
+
+        foreach ($allFilms as $film) {
+            if (strpos(mb_strtolower($film['name']), $search) !== false) {
+                // Add display name if missing
+                if (!isset($film['display_name'])) {
+                    $film['display_name'] = $this->normalizeName($film['name']);
+                }
+                $results[] = $film;
+            }
+        }
+
+        return $results;
     }
 }

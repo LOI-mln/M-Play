@@ -72,6 +72,11 @@ switch ($url) {
     case '/logout':
         (new App\Controllers\AuthController())->logout();
         break;
+    case '/search':
+        require_once __DIR__ . '/src/Controllers/SearchController.php';
+        (new App\Controllers\SearchController())->index();
+        break;
+
     default:
         http_response_code(404);
         echo "404 Not Found";

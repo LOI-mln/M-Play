@@ -569,4 +569,32 @@ class SeriesController
 
         return $final;
     }
+
+    public function searchInternal($query)
+    {
+        $cacheKeyAll = 'all_series_streams_v2';
+        $allSeries = $this->cache->get($cacheKeyAll);
+
+        if ($allSeries === null) {
+            $allSeries = $this->api->get('player_api.php', ['action' => 'get_series']);
+            if (!$allSeries) $allSeries = [];
+            $this->cache->set($cacheKeyAll, $allSeries, 3600);
+        }
+
+        if (!$allSeries) return [];
+
+        $search = mb_strtolower($query);
+        $results = [];
+
+        foreach ($allSeries as $s) {
+            if (strpos(mb_strtolower($s['name']), $search) !== false) {
+                 if (!isset($s['display_name'])){
+                     $s['display_name'] = $this->normalizeName($s['name']);
+                 }
+                 $results[] = $s;
+            }
+        }
+        
+        return $results;
+    }
 }

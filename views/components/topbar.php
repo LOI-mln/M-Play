@@ -3,7 +3,7 @@
     class="sticky top-0 left-0 right-0 z-20 px-8 py-6 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent pointer-events-none mb-4">
     <!-- Search Bar (Functional) -->
     <div class="pointer-events-auto w-full max-w-lg">
-        <form action="<?= htmlspecialchars($searchAction ?? '/movies') ?>" method="GET" class="relative group">
+        <form action="/search" method="GET" class="relative group">
             <input type="text" name="q"
                 placeholder="<?= htmlspecialchars($searchPlaceholder ?? 'Search or paste link') ?>"
                 class="w-full bg-[#1a1a1a]/80 backdrop-blur border border-transparent focus:border-red-900/50 text-gray-200 text-sm rounded-full py-3 pl-12 pr-4 shadow-lg focus:outline-none focus:ring-1 focus:ring-red-900 transition-all"

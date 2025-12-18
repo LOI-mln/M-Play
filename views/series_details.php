@@ -21,9 +21,23 @@ ob_start();
         <div class="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent"></div>
 
         <!-- Back Button -->
-        <a href="/series"
+        <?php
+        $backLink = '/series';
+        $backLabel = 'Retour';
+        if (isset($_GET['from'])) {
+            if ($_GET['from'] === 'home') {
+                $backLink = '/';
+                $backLabel = 'Accueil';
+            } elseif ($_GET['from'] === 'search') {
+                $q = urlencode($_GET['q'] ?? '');
+                $backLink = "/search?q=$q";
+                $backLabel = 'Recherche';
+            }
+        }
+        ?>
+        <a href="<?= $backLink ?>"
             class="absolute top-6 left-6 z-20 text-white/80 hover:text-white flex items-center gap-2 font-bold uppercase tracking-widest transition">
-            <span>&larr;</span> Retour
+            <span>&larr;</span> <?= $backLabel ?>
         </a>
 
         <!-- Content -->
