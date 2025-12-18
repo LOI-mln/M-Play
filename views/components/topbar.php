@@ -3,9 +3,11 @@
     class="sticky top-0 left-0 right-0 z-20 px-8 py-6 flex items-center justify-between bg-gradient-to-b from-black/80 to-transparent pointer-events-none mb-4">
     <!-- Search Bar (Functional) -->
     <div class="pointer-events-auto w-full max-w-lg">
-        <form action="/movies" method="GET" class="relative group">
-            <input type="text" name="q" placeholder="Search or paste link"
-                class="w-full bg-[#1a1a1a]/80 backdrop-blur border border-transparent focus:border-red-900/50 text-gray-200 text-sm rounded-full py-3 pl-12 pr-4 shadow-lg focus:outline-none focus:ring-1 focus:ring-red-900 transition-all">
+        <form action="<?= htmlspecialchars($searchAction ?? '/movies') ?>" method="GET" class="relative group">
+            <input type="text" name="q"
+                placeholder="<?= htmlspecialchars($searchPlaceholder ?? 'Search or paste link') ?>"
+                class="w-full bg-[#1a1a1a]/80 backdrop-blur border border-transparent focus:border-red-900/50 text-gray-200 text-sm rounded-full py-3 pl-12 pr-4 shadow-lg focus:outline-none focus:ring-1 focus:ring-red-900 transition-all"
+                value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
             <svg class="w-5 h-5 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

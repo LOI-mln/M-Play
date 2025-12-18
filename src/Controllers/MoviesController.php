@@ -42,6 +42,9 @@ class MoviesController
 
     private function normalizeName($name)
     {
+        // 0. Nettoyage spécifique "SRS" demandés par l'utilisateur
+        $name = str_ireplace('SRS', '', $name);
+
         // Supprime les préfixes communs comme "FR -", "EN -", "VOSTFR -", etc.
         // Regex explication:
         // ^(...) : Au début
@@ -78,40 +81,124 @@ class MoviesController
         $validCategoryIds = []; // Pour filtrer les films globaux
 
         foreach ($allCategories as $cat) {
-            $originalName = strtoupper($cat['category_name']);
+            $originalName = strtoupper($cat['category_name']); // Upper for checks
 
-            // Exclusion explicite (AFRICAN, ARAB, Arabic Script, INDIA, LATINO)
-            if (
-                strpos($originalName, 'AFRICAN') !== false ||
-                strpos($originalName, 'ARAB') !== false ||
-                strpos($originalName, 'INDIA') !== false ||
-                strpos($originalName, 'LATINO') !== false ||
-                preg_match('/\p{Arabic}/u', $cat['category_name'])
-            ) {
+            // EXCLUSIONS STRICTES (Adulte, Pays Etrangers non demandés)
+            // Pays exclus: Une longue liste pour nettoyer la vue
+            $patternsExclusion = [
+                'ARAB',
+                'AFRIC',
+                'INDIA',
+                'LATINO',
+                'ADULT',
+                'PORN',
+                'XXX',
+                '18\+',
+                'HENTAI',
+                'ALBAN',
+                'BULGAR',
+                'ROMAN',
+                'BALKAN',
+                'EX-YU',
+                'YUGO',
+                'GREC',
+                'GREEK',
+                'GREECE',
+                'SCANDI',
+                'SWED',
+                'NORW',
+                'DANISH',
+                'FINN',
+                'DUTCH',
+                'NETHERLAND',
+                'BRAZIL',
+                'PORTUGAL',
+                'SPAIN',
+                'ITALY',
+                'GERMANY',
+                'POLAND',
+                'RUSSIA',
+                'TURKEY',
+                'UK ',
+                'US ',
+                'USA', // Avec espace pour éviter de tuer des mots
+                'DE ',
+                'IT ',
+                'ES ',
+                'PT ',
+                'NL ',
+                'TR ',
+                'RU ',
+                'PL ', // Codes pays avec espace
+                '\[AF\]',
+                '\[ALB?\]',
+                '\[BG\]',
+                '\[RO\]',
+                '\[GR\]', // Codes spécifiques brackets
+                'ASIAN',
+                'CHINA',
+                'KOREA',
+                'JAPAN',
+                'VIET',
+                'THAI'
+            ];
+
+            $regexExclusion = '/(' . implode('|', $patternsExclusion) . ')/i';
+
+            if (preg_match($regexExclusion, $cat['category_name']))
                 continue;
-            }
+
+            if (preg_match('/\p{Arabic}|\p{Han}|\p{Cyrillic}/u', $cat['category_name']))
+                continue;
+
+            // FILTRE "PAS DE SRS"
+            if (trim($originalName) === 'SRS')
+                continue;
 
             // FILTER: keep only relevant languages (FR / EN / US / UK / VOSTFR / MULTI ...)
-            // Use \b to avoid partial matches (e.g. "Documentaire" containing "EN")
-            if (!preg_match('/\b(FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|MULTISUB|TRUEFRENCH|VFF|VFQ|VFI|4K|UHD)\b/i', $originalName)) {
+            // et si on n'a pas filtré avant.
+            // Note: On accepte un peu plus large pour les films car parfois "Thriller" n'a pas de tag FR
+            // Mais si RegexExclusion n'a pas matché, c'est bon signe.
+
+            // Check implicit foreign
+            if (preg_match('/\b(ENGLISH|GERMAN|SPANISH|ITALIAN|PORTUGUESE|DUTCH|TURKISH|RUSSIAN|POLISH)\b/i', $cat['category_name']))
                 continue;
-            }
+
 
             // Normalisation du nom (FR - Action -> Action)
-            // Regex améliorée pour capturer préfixes ET suffixes (ex: "Action FR", "FR - Action", "Action (FR)")
             $name = $cat['category_name'];
-            // Extended tags to strip from display name
-            $tags = 'FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|MULTISUB|TRUEFRENCH|VFF|VFQ|VFI|4K|UHD|3D|H265|SUB';
 
-            // 2. Suppression des préfixes de langue courants (ex: "FR - ", "EN | ", "[FR] ")
+            // Re-enabled per user request: Clean prefixes again including SRS
+            $name = str_ireplace('SRS', '', $name);
 
-            // Re-enabled per user request: Clean prefixes again
             $name = preg_replace('/^[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?\s*[-|:]?\s*/i', '', $name);
             $name = preg_replace('/\s*[-|:]?\s*[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?$/i', '', $name);
             // 3. Remove "VOD"
             $name = preg_replace('/(\s*[-|]?\s*\bVOD\b\s*[-|]?\s*)/i', '', $name);
 
             $cleanedName = trim($name, " -|()");
+
+            if (mb_strlen($cleanedName) < 2)
+                continue;
+
+            // 3. REGROUPEMENT (APPLE, CANAL, ETC.)
+            $upperClean = mb_strtoupper($cleanedName);
+
+            if (strpos($upperClean, 'APPLE') !== false) {
+                $cleanedName = 'Apple TV+';
+            } elseif (strpos($upperClean, 'CANAL') !== false) {
+                $cleanedName = 'Canal+';
+            } elseif (strpos($upperClean, 'NETFLIX') !== false) {
+                $cleanedName = 'Netflix';
+            } elseif (strpos($upperClean, 'DISNEY') !== false) {
+                $cleanedName = 'Disney+';
+            } elseif (strpos($upperClean, 'AMAZON') !== false || strpos($upperClean, 'PRIME VIDEO') !== false) {
+                $cleanedName = 'Amazon Prime Video';
+            } elseif (strpos($upperClean, 'PARAMOUNT') !== false) {
+                $cleanedName = 'Paramount+';
+            } elseif (strpos($upperClean, 'OOCS') !== false) { // OCS / OOCS spelling
+                $cleanedName = 'OCS';
+            }
 
             // Clé unique pour le regroupement
             $key = mb_strtolower($cleanedName);
@@ -135,9 +222,38 @@ class MoviesController
             ];
         }
 
-        // Tri alphabétique
-        usort($finalCategories, function ($a, $b) {
-            return strcmp($a['category_name'], $b['category_name']);
+        // Tri par IMPORTANCE (Comme pour les séries)
+        $priorityOrder = [
+            'Netflix',
+            'Amazon Prime Video',
+            'Disney+',
+            'Canal+',
+            'Apple TV+',
+            'Paramount+',
+            'OCS'
+        ];
+
+        usort($finalCategories, function ($a, $b) use ($priorityOrder) {
+            $nameA = $a['category_name'];
+            $nameB = $b['category_name'];
+
+            $posA = array_search($nameA, $priorityOrder);
+            $posB = array_search($nameB, $priorityOrder);
+
+            // Si les deux sont dans la liste prioritaire
+            if ($posA !== false && $posB !== false) {
+                return $posA - $posB;
+            }
+
+            // Si A est prioritaire
+            if ($posA !== false)
+                return -1;
+            // Si B est prioritaire
+            if ($posB !== false)
+                return 1;
+
+            // Sinon alphabétique
+            return strcmp($nameA, $nameB);
         });
 
         // Ajout de la catégorie "TOUT" (qui sera "Ajoutés Récemment")

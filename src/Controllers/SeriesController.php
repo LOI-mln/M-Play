@@ -33,6 +33,9 @@ class SeriesController
     // Helper pour nettoyer et normaliser les noms de catégories ou films
     private function normalizeName($name)
     {
+        // 0. Nettoyage spécifique "SRS" demandés par l'utilisateur
+        $name = str_ireplace('SRS', '', $name);
+
         // 1. Décodage entités HTML
         $name = html_entity_decode($name, ENT_QUOTES | ENT_HTML5);
 
@@ -95,19 +98,87 @@ class SeriesController
 
         foreach ($categoriesVars as $cat) {
             $nameRaw = $cat['category_name'];
-            $upperName = mb_strtolower($nameRaw); // Use lowercase for checks
+            $upperName = mb_strtoupper($nameRaw); // Use UPPERCASE for checks
 
-            // EXCLUSIONS
-            if (preg_match('/(arab|afric|india|latino|adult|porn|xxx|18\+|hentai)/i', $nameRaw))
-                continue;
-            // Check for Arabic chars
-            if (preg_match('/\p{Arabic}/u', $nameRaw))
+            // EXCLUSIONS STRICTES (Adulte, Pays Etrangers non demandés)
+            // Pays exclus: Une longue liste pour nettoyer la vue
+            $patternsExclusion = [
+                'ARAB',
+                'AFRIC',
+                'INDIA',
+                'LATINO',
+                'ADULT',
+                'PORN',
+                'XXX',
+                '18\+',
+                'HENTAI',
+                'ALBAN',
+                'BULGAR',
+                'ROMAN',
+                'BALKAN',
+                'EX-YU',
+                'YUGO',
+                'GREC',
+                'GREEK',
+                'GREECE',
+                'SCANDI',
+                'SWED',
+                'NORW',
+                'DANISH',
+                'FINN',
+                'DUTCH',
+                'NETHERLAND',
+                'BRAZIL',
+                'PORTUGAL',
+                'SPAIN',
+                'ITALY',
+                'GERMANY',
+                'POLAND',
+                'RUSSIA',
+                'TURKEY',
+                'UK ',
+                'US ',
+                'USA', // Avec espace pour éviter de tuer des mots
+                'DE ',
+                'IT ',
+                'ES ',
+                'PT ',
+                'NL ',
+                'TR ',
+                'RU ',
+                'PL ', // Codes pays avec espace
+                '\[AF\]',
+                '\[ALB?\]',
+                '\[BG\]',
+                '\[RO\]',
+                '\[GR\]', // Codes spécifiques brackets
+                'ASIAN',
+                'CHINA',
+                'KOREA',
+                'JAPAN',
+                'VIET',
+                'THAI'
+            ];
+
+            $regexExclusion = '/(' . implode('|', $patternsExclusion) . ')/i';
+
+            if (preg_match($regexExclusion, $nameRaw))
                 continue;
 
-            // INCLUSIONS strictes (FR/EN/Intl known)
-            // On accepte si ça contient des mots clés ou pas de mots clés "étrangers"
-            // Simple check: Doit contenir au moins une lettre latine
-            if (!preg_match('/[a-z]/i', $nameRaw))
+            // Check for Arabic/Asian chars (sauf si on voulait garder...)
+            if (preg_match('/\p{Arabic}|\p{Han}|\p{Cyrillic}/u', $nameRaw))
+                continue;
+
+            // FILTRE "PAS DE SRS" (Si le nom c'est juste SRS, on vire, sinon on nettoie)
+            if (trim($upperName) === 'SRS')
+                continue;
+
+            // INCLUSIONS : Priorité FR
+            // On veut ce qui est FR, VF, VOSTFR, MULTI, QUEBEC
+            // OU ce qui est générique (Action, Comédie...) SANS tag étranger.
+
+            // Est-ce implicitement étranger ? (ex: "ENGLISH MOVIES")
+            if (preg_match('/\b(ENGLISH|GERMAN|SPANISH|ITALIAN|PORTUGUESE|DUTCH|TURKISH|RUSSIAN|POLISH)\b/i', $nameRaw))
                 continue;
 
             // Normalisation
@@ -117,6 +188,29 @@ class SeriesController
             // Si vide après nettoyage, on skip
             if (empty($cleanName))
                 continue;
+
+            // Si le nom nettoyé est trop court (genre 1 lettre), suspect
+            if (mb_strlen($cleanName) < 2)
+                continue;
+
+            // 3. REGROUPEMENT (APPLE, CANAL, ETC.)
+            $upperClean = mb_strtoupper($cleanName);
+
+            if (strpos($upperClean, 'APPLE') !== false) {
+                $cleanName = 'Apple TV+';
+            } elseif (strpos($upperClean, 'CANAL') !== false) {
+                $cleanName = 'Canal+';
+            } elseif (strpos($upperClean, 'NETFLIX') !== false) {
+                $cleanName = 'Netflix';
+            } elseif (strpos($upperClean, 'DISNEY') !== false) {
+                $cleanName = 'Disney+';
+            } elseif (strpos($upperClean, 'AMAZON') !== false || strpos($upperClean, 'PRIME VIDEO') !== false) {
+                $cleanName = 'Amazon Prime Video';
+            } elseif (strpos($upperClean, 'PARAMOUNT') !== false) {
+                $cleanName = 'Paramount+';
+            } elseif (strpos($upperClean, 'OOCS') !== false) { // OCS / OOCS spelling
+                $cleanName = 'OCS';
+            }
 
             $validCategoryIds[$cat['category_id']] = true;
 
@@ -139,9 +233,38 @@ class SeriesController
             ];
         }
 
-        // Tri alphabétique
-        usort($finalCategories, function ($a, $b) {
-            return strcmp($a['category_name'], $b['category_name']);
+        // Tri par IMPORTANCE (Demandé par user)
+        $priorityOrder = [
+            'Netflix',
+            'Amazon Prime Video',
+            'Disney+',
+            'Canal+',
+            'Apple TV+',
+            'Paramount+',
+            'OCS'
+        ];
+
+        usort($finalCategories, function ($a, $b) use ($priorityOrder) {
+            $nameA = $a['category_name'];
+            $nameB = $b['category_name'];
+
+            $posA = array_search($nameA, $priorityOrder);
+            $posB = array_search($nameB, $priorityOrder);
+
+            // Si les deux sont dans la liste prioritaire
+            if ($posA !== false && $posB !== false) {
+                return $posA - $posB;
+            }
+
+            // Si A est prioritaire
+            if ($posA !== false)
+                return -1;
+            // Si B est prioritaire
+            if ($posB !== false)
+                return 1;
+
+            // Sinon alphabétique
+            return strcmp($nameA, $nameB);
         });
 
         // Catégorie "TOUT" (Recently Added)

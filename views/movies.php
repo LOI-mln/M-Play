@@ -1,55 +1,50 @@
 <?php
 $title = "Films - M-Play";
 $modePleinEcran = true; // Layout pleine page
+// Define search context for topbar
+$searchAction = '/movies';
+$searchPlaceholder = 'Rechercher un film...';
+
 ob_start();
 ?>
 
-<div class="h-full flex flex-col">
-    <!-- Header -->
-    <div
-        class="p-6 border-b border-gray-900 bg-black/50 backdrop-blur sticky top-0 z-30 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
-        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-            <a href="/" class="text-gray-500 hover:text-white transition">&larr;</a>
-            <span class="text-red-600">FILMS</span> VOD
-        </h2>
+<div class="flex h-screen overflow-hidden bg-[#0b0b0b]">
+    <!-- Sidebar -->
+    <?php require __DIR__ . '/components/sidebar.php'; ?>
 
-        <!-- Search Bar -->
-        <form action="/movies" method="GET" class="relative">
-            <input type="hidden" name="categorie" value="<?= htmlspecialchars($categorieActuelleId ?? 'all') ?>">
-            <input type="text" name="q" value="<?= htmlspecialchars($searchQuery ?? '') ?>"
-                placeholder="Rechercher un film..."
-                class="bg-gray-900 text-sm text-gray-200 rounded-full px-4 py-2 pl-10 border border-gray-800 focus:border-red-600 focus:outline-none focus:ring-1 focus:ring-red-600 w-64 transition-all"
-                autocomplete="off">
-            <svg class="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-        </form>
-    </div>
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col relative overflow-hidden">
 
-    <!-- Layout Container -->
-    <div class="flex flex-grow overflow-hidden">
+        <?php require __DIR__ . '/components/topbar.php'; ?>
 
-        <!-- Sidebar Categories -->
-        <aside class="w-64 bg-[#0a0a0a] border-r border-gray-900 overflow-y-auto hidden md:block shrink-0">
-            <div class="p-4">
-                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 px-2">Genres</h3>
-                <nav class="space-y-1">
-                    <?php if (!empty($categories)): ?>
+        <!-- Scrollable Content -->
+        <div
+            class="flex-1 overflow-y-auto overflow-x-hidden pb-10 px-8 lg:px-12 scrollbar-thin scrollbar-thumb-red-900 scrollbar-track-transparent">
+
+            <!-- Title & Categories Header -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <span class="text-red-600">FILMS</span> VOD
+                </h2>
+            </div>
+
+            <!-- Categories Horizontal List -->
+            <?php if (!empty($categories)): ?>
+                <div class="mb-8">
+                    <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide snap-x">
+                        <a href="/movies"
+                            class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all snap-start <?= !isset($_GET['categorie']) ? 'bg-red-600 text-white shadow-lg shadow-red-900/40' : 'bg-[#1a1a1a] text-gray-400 hover:bg-[#252525] hover:text-white border border-white/5' ?>">
+                            Tous
+                        </a>
                         <?php foreach ($categories as $cat): ?>
                             <a href="/movies?categorie=<?= $cat['category_id'] ?>"
-                                class="block px-3 py-2 rounded text-sm transition-colors <?= ($categorieActuelleId ?? 'all') == $cat['category_id'] ? 'bg-red-900/20 text-red-500 font-bold border-l-2 border-red-500' : 'text-gray-400 hover:bg-gray-900 hover:text-gray-200' ?>">
+                                class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all snap-start <?= (isset($_GET['categorie']) && $_GET['categorie'] == $cat['category_id']) ? 'bg-red-600 text-white shadow-lg shadow-red-900/40' : 'bg-[#1a1a1a] text-gray-400 hover:bg-[#252525] hover:text-white border border-white/5' ?>">
                                 <?= htmlspecialchars($cat['category_name']) ?>
                             </a>
                         <?php endforeach; ?>
-                    <?php endif; ?>
-                </nav>
-            </div>
-        </aside>
-
-        <!-- Grid -->
-        <div class="flex-grow overflow-y-auto p-6 bg-black">
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <!-- Loading Spinner -->
             <div id="loading-spinner" class="col-span-full flex flex-col items-center justify-center py-20">
@@ -102,11 +97,11 @@ ob_start();
                         const cleanTitle = title.replace(/"/g, '&quot;');
                         const streamId = film.stream_id;
                         const poster = film.stream_icon;
-                    const year = film.year || '';
-                    const rating = film.rating ? parseFloat(film.rating) : 0;
-                    const ratingHtml = rating > 0 ? `<div class="flex items-center gap-1 text-yellow-500 text-xs font-bold"><span>★</span> ${rating}</div>` : '';
+                        const year = film.year || '';
+                        const rating = film.rating ? parseFloat(film.rating) : 0;
+                        const ratingHtml = rating > 0 ? `<div class="flex items-center gap-1 text-yellow-500 text-xs font-bold"><span>★</span> ${rating}</div>` : '';
 
-                    html += `
+                        html += `
                     <a href="/movies/details?id=${streamId}" class="group relative cursor-pointer block">
                         <div class="aspect-[2/3] rounded-lg overflow-hidden bg-[#111] border border-gray-800 hover:border-red-600 transition-all shadow-lg hover:shadow-red-900/20 relative">
                             <img src="${poster}" 
