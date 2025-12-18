@@ -19,6 +19,11 @@
             font-family: 'Outfit', sans-serif;
             background-color: #000;
         }
+        /* Fullscreen Fixes */
+        :fullscreen, ::backdrop { background-color: black; width: 100%; height: 100%; }
+        :-webkit-full-screen { background-color: black; width: 100%; height: 100%; }
+        #conteneur-video:fullscreen { width: 100vw; height: 100vh; }
+        #conteneur-video:-webkit-full-screen { width: 100vw; height: 100vh; }
     </style>
 </head>
 
@@ -148,7 +153,7 @@
     </script>
 
     <!-- Player Logic -->
-    <script src="/public/js/player_vod.js"></script>
+    <script src="/public/js/player_vod.js?v=<?php echo time(); ?>"></script>
 </body>
 
 </html>

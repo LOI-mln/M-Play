@@ -24,6 +24,7 @@ const sliderVolume = document.getElementById('volume-slider');
 const btnPleinEcran = document.getElementById('btn-plein-ecran');
 
 const seekSlider = document.getElementById('seek-slider');
+let isDragging = false; // Flag pour éviter le conflit Drag vs TimeUpdate
 const progressBar = document.getElementById('progress-bar');
 const thumb = document.getElementById('thumb');
 const timeCurrent = document.getElementById('time-current');
@@ -103,9 +104,21 @@ function loadVideo() {
 
         hls.on(Hls.Events.ERROR, function (event, data) {
             if (data.fatal) {
-                console.warn("HLS Fatal, switching to TRANSCODE (Auto-Fix)...");
-                hls.destroy();
-                loadTranscode(); // Fallback to Transcode directly
+                switch (data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        console.log("fatal network error encountered, try to recover");
+                        hls.startLoad();
+                        break;
+                    case Hls.ErrorTypes.MEDIA_ERROR:
+                        console.log("fatal media error encountered, try to recover");
+                        hls.recoverMediaError();
+                        break;
+                    default:
+                        console.warn("HLS Fatal, switching to TRANSCODE (Auto-Fix)...");
+                        hls.destroy();
+                        loadTranscode(); // Fallback to Transcode directly
+                        break;
+                }
             }
         });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
@@ -120,6 +133,44 @@ function loadVideo() {
         loadTranscode();
     }
 }
+
+// Buffering / Loading State Handlers
+// Buffering / Loading State Handlers & Watchdog
+let stallTimeout;
+
+function startStallWatchdog() {
+    clearTimeout(stallTimeout);
+    // Si bloqué pendant 6 secondes, on force le reload
+    stallTimeout = setTimeout(() => {
+        if (isTranscoding && !video.paused) {
+            console.warn("Watchdog: Stream Stalled too long -> Force Recovery");
+            // On déclenche manuellement une erreur pour activer la logique de recovery
+            video.dispatchEvent(new Event('error'));
+        }
+    }, 6000);
+}
+
+function stopStallWatchdog() {
+    clearTimeout(stallTimeout);
+}
+
+video.addEventListener('waiting', () => {
+    chargement.style.display = 'flex';
+    startStallWatchdog();
+});
+
+video.addEventListener('playing', () => {
+    chargement.style.display = 'none';
+    stopStallWatchdog();
+});
+
+video.addEventListener('stalled', () => {
+    console.warn("Stream Stalled");
+    if (!video.paused) {
+        chargement.style.display = 'flex';
+        startStallWatchdog();
+    }
+});
 
 // Mode Direct (Backup manuel si besoin, mais on ne l'utilise plus en auto)
 function loadDirect() {
@@ -232,6 +283,8 @@ function loadTranscode(startTime = 0) {
     // Affichage chargement
     const chargement = document.getElementById('chargement');
     chargement.style.display = 'flex';
+    // On cache l'overlay play pendant le chargement pour éviter la confusion
+    overlayPlay.style.display = 'none';
 
     // On ajoute le parametre start seulement si > 0
     let url = streamUrlTranscode;
@@ -239,21 +292,32 @@ function loadTranscode(startTime = 0) {
         url += "&start=" + Math.floor(startTime);
     }
 
+    video.autoplay = true; // Force autoplay intent
     video.src = url;
     video.load();
 
-    var promise = video.play();
-    if (promise !== undefined) {
-        promise.then(() => {
-            chargement.style.display = 'none';
-            majIcons(true);
-        }).catch(e => {
-            console.warn("Autoplay prevented or failed:", e);
-            // ESSENTIEL : On cache le spinner pour que l'utilisateur puisse cliquer sur Play
-            chargement.style.display = 'none';
-            overlayPlay.style.display = 'flex';
-        });
-    }
+    const attemptPlay = () => {
+        var promise = video.play();
+        if (promise !== undefined) {
+            promise.then(() => {
+                chargement.style.display = 'none';
+                majIcons(true);
+            }).catch(e => {
+                console.warn("Autoplay prevented or failed:", e);
+                // On réessaie une fois après 500ms (souvent l'erreur est "Interrupted" à cause du chargement)
+                setTimeout(() => {
+                    video.play().catch(e2 => {
+                        console.error("Retry Play failed:", e2);
+                        chargement.style.display = 'none';
+                        overlayPlay.style.display = 'flex'; // On rend la main au user seulement si échec total
+                    });
+                }, 500);
+            });
+        }
+    };
+
+    // On attend que le navigateur soit prêt
+    video.addEventListener('loadeddata', attemptPlay, { once: true });
 }
 
 // Seek Bar Logic
@@ -264,12 +328,15 @@ video.addEventListener('timeupdate', () => {
         const realCurrentTime = isTranscoding ? (video.currentTime + currentTranscodeOffset) : video.currentTime;
 
         const pct = (realCurrentTime / d) * 100;
-        progressBar.style.width = pct + '%';
-        thumb.style.left = pct + '%';
-        seekSlider.value = realCurrentTime;
-        seekSlider.max = d;
 
-        timeCurrent.innerText = formatTime(realCurrentTime || 0);
+        // On met à jour la barre ET le temps seulement si on ne drag pas (sinon ça le user perd ce qu'il vise)
+        if (!isDragging) {
+            progressBar.style.width = pct + '%';
+            thumb.style.left = pct + '%';
+            seekSlider.value = realCurrentTime;
+            timeCurrent.innerText = formatTime(realCurrentTime || 0);
+        }
+        seekSlider.max = d;
         timeDuration.innerText = formatTime(d);
     }
 });
@@ -298,7 +365,12 @@ seekSlider.addEventListener('change', (e) => {
         }
     }
     resetInactivityTimer();
+    resetInactivityTimer();
+    isDragging = false; // Fin du drag
 });
+
+seekSlider.addEventListener('mousedown', () => isDragging = true);
+seekSlider.addEventListener('touchstart', () => isDragging = true);
 
 seekSlider.addEventListener('input', (e) => {
     // Just visual update during drag
@@ -313,32 +385,7 @@ seekSlider.addEventListener('input', (e) => {
 });
 
 // TOOLTIP HOVER
-const seekContainer = document.getElementById('seek-container');
-const timeTooltip = document.getElementById('time-tooltip');
-
-if (seekContainer && timeTooltip) {
-    seekContainer.addEventListener('mousemove', (e) => {
-        const rect = seekContainer.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const width = rect.width;
-
-        // Calcul du temps survolé
-        const d = getDuration();
-        if (d > 0) {
-            const pct = Math.max(0, Math.min(1, x / width));
-            const time = pct * d;
-
-            // Positionnement
-            timeTooltip.style.left = (pct * 100) + '%';
-            timeTooltip.innerText = formatTime(time);
-            timeTooltip.style.opacity = '1';
-        }
-    });
-
-    seekContainer.addEventListener('mouseleave', () => {
-        timeTooltip.style.opacity = '0';
-    });
-}
+// TOOLTIP HOVER REMOVED BY USER REQUEST
 
 function formatTime(s) {
     if (!s || s < 0) s = 0;
@@ -373,16 +420,86 @@ function updateVolIcon() {
 // Fullscreen
 btnPleinEcran.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (!document.fullscreenElement) conteneurVideo.requestFullscreen();
-    else document.exitFullscreen();
+    toggleFullScreen(conteneurVideo);
 });
+
+function toggleFullScreen(elem) {
+    console.log("Toggle Fullscreen called for:", elem);
+    try {
+        if (!document.fullscreenElement && !document.mozFullScreenElement &&
+            !document.webkitFullscreenElement && !document.msFullscreenElement) {
+
+            console.log("Requesting Fullscreen...");
+            // CHROME FIX: Prioritize WebKit prefix which is often more robust on macOS
+            if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => {
+                    console.warn("Fullscreen container failed, trying video:", err);
+                    if (video.requestFullscreen) video.requestFullscreen();
+                });
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                elem.mozRequestFullScreen();
+            }
+        } else {
+            console.log("Exiting Fullscreen...");
+            if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+    } catch (e) {
+        console.error("Fullscreen Error:", e);
+    }
+}
 
 controls.addEventListener('click', e => e.stopPropagation());
 
-// Global Error Handler
+// Global Error Handler & Recovery Logic
+let recoveryCount = 0;
+const MAX_RECOVERIES = 10;
+
 video.addEventListener('error', (e) => {
     console.error("Link Error or Decode Error:", video.error);
-    const chargement = document.getElementById('chargement');
-    if (chargement) chargement.style.display = 'none';
-    majIcons(false);
+
+    // AUTO-RECOVERY LOGIC
+    // Si la vidéo plante (coupure réseau), on la relance automatiquement
+    if (isTranscoding && recoveryCount < MAX_RECOVERIES) {
+        recoveryCount++;
+        // On recule très peu (0.5s) juste pour ne pas perdre la frame
+        const recoverTime = Math.max(0, video.currentTime + currentTranscodeOffset - 0.5);
+        console.log(`⚠️ Stream Cut detected! Auto-Recovering (${recoveryCount}/${MAX_RECOVERIES}) at ${recoverTime}s...`);
+
+        // Afficher chargement
+        const chargement = document.getElementById('chargement');
+        if (chargement) chargement.style.display = 'flex';
+
+        // Petit délai pour laisser le réseau souffler
+        setTimeout(() => {
+            loadTranscode(recoverTime);
+        }, 1000);
+    } else {
+        // Abandon après 10 tentatives
+        const chargement = document.getElementById('chargement');
+        if (chargement) chargement.style.display = 'none';
+        majIcons(false);
+        console.warn("Fatal Error: Max recoveries reached.");
+    }
+});
+
+// Reset recovery counter on successful play
+video.addEventListener('playing', () => {
+    if (recoveryCount > 0) {
+        setTimeout(() => {
+            recoveryCount = 0;
+            console.log("Recovery successful. Stream stable.");
+        }, 5000);
+    }
 });
