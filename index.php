@@ -27,9 +27,20 @@ if (file_exists(__DIR__ . '/public' . $url) && $url !== '/') {
 $routesPubliques = ['/login', '/auth/verify'];
 
 // AUTO-LOGIN HARDCODED (Removed Login Page)
+// AUTO-LOGIN HARDCODED (Removed Login Page)
 if (!isset($_SESSION['user'])) {
+    // Chargement de la config locale si elle existe
+    if (file_exists(__DIR__ . '/config.php')) {
+        require_once __DIR__ . '/config.php';
+    }
+
+    $host = defined('XTREAM_HOST') ? XTREAM_HOST : '';
+    $user = defined('XTREAM_USER') ? XTREAM_USER : '';
+    $pass = defined('XTREAM_PASS') ? XTREAM_PASS : '';
+    $playlist = defined('PLAYLIST_NAME') ? PLAYLIST_NAME : 'M-Play Desktop';
+
     $auth = new App\Controllers\AuthController();
-    $success = $auth->autoLogin('http://fr1.lion-tt.xyz', 'Vxwf3814', 'KVCr7372', 'M-Play Desktop');
+    $success = $auth->autoLogin($host, $user, $pass, $playlist);
 
     if (!$success) {
         // Fallback si l'auto-login échoue

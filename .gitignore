@@ -28,4 +28,5 @@ M-Play-darwin-*
 *.app
 electron_debug.txt
 proxy_debug.txt
+config.php
 
