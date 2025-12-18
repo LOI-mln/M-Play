@@ -45,8 +45,8 @@ class MoviesController
         // 0. Nettoyage spécifique "SRS" demandés par l'utilisateur
         $name = str_ireplace('SRS', '', $name);
 
-        // Supprime les préfixes communs comme "FR -", "EN -", "VOSTFR -", etc.
-        $pattern = '/^(\s*(FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|TRUEFRENCH|VFF|VFQ|VFI)\s*[-|:]?\s*)+/i';
+        // Supprime les préfixes communs comme "FR -", "EN -", "VOSTFR -", "NF -", etc.
+        $pattern = '/^(\s*(FR|FRANCE|EN|ENGLISH|US|UK|VOSTFR|MULTI|TRUEFRENCH|VFF|VFQ|VFI|NF|NETFLIX|PL|NL|DE|IT|ES|PT)\s*[-|:]?\s*)+/i';
         $cleaned = preg_replace($pattern, '', $name);
         return trim($cleaned);
     }
@@ -492,14 +492,15 @@ class MoviesController
     }
     public function getRecent($limit = 10)
     {
-        // 1. Check Cache
-        $cacheKey = 'vod_recent_fr_' . $limit;
+        // 1. Check Cache GLOBAL
+        $cacheKey = 'vod_popular_fr_tmdb_v3_' . $limit;
         $cached = $this->cache->get($cacheKey);
         if ($cached !== null) {
             return $cached;
         }
 
         // 2. Fetch All VOD Streams (Cached internally)
+        // On a besoin du catalogue pour matcher
         $cacheKeyAll = 'all_vod_streams_v2';
         $allFilms = $this->cache->get($cacheKeyAll);
 
@@ -516,34 +517,193 @@ class MoviesController
             return [];
         }
 
-        // 3. Filter & Sort by Added Date
-        usort($allFilms, function ($a, $b) {
-            $tA = isset($a['added']) ? (int) $a['added'] : 0;
-            $tB = isset($b['added']) ? (int) $b['added'] : 0;
-            return $tB - $tA; // Descending
-        });
+        // 3. RECUPERATION TRENDING TMDB
+        // On remplace le tri par date par un tri par Popularité réelle
+        $tmdbClient = new \App\Services\TmdbClient('d818b3a8af9971ce313537ac5f56d10f');
+        $trending = $tmdbClient->getTrendingMovies('week'); // Top 20
 
-        // 4. Slice & Normalize with STRICT LANGUAGE FILTER
-        // We iterate through sorted list until we fill $limit
+        // Si TMDB fail, on fallback sur la méthode date
+        if (empty($trending)) {
+            // Fallback: Date logic
+            usort($allFilms, function ($a, $b) {
+                $tA = isset($a['added']) ? (int) $a['added'] : 0;
+                $tB = isset($b['added']) ? (int) $b['added'] : 0;
+                return $tB - $tA; // Descending
+            });
+        } else {
+            // Mapping Trending -> Local
+            // On construit une Map des films locaux pour fast lookup
+            // Key = TMDB ID (si présent) ET Key = Nom Normalisé
+            $mapTmdb = [];
+            $mapName = [];
+
+            foreach ($allFilms as $f) {
+                if (!empty($f['tmdb'])) {
+                    $mapTmdb[$f['tmdb']][] = $f;
+                }
+                $norm = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($f['name'])));
+                $mapName[$norm][] = $f;
+            }
+
+            $popularLocal = [];
+            $inPopular = []; // stream_ids
+
+            // DEDUPLICATION TRACKERS
+            $seenTmdb = [];
+            $seenNormNames = [];
+
+            foreach ($trending as $t) {
+                $found = [];
+                // Chercher par TMDB ID
+                if (isset($mapTmdb[$t['id']])) {
+                    $found = $mapTmdb[$t['id']];
+                } else {
+                    $tName = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($t['title'])));
+                    if (isset($mapName[$tName])) {
+                        $found = $mapName[$tName];
+                    } else {
+                        if (isset($t['original_title'])) {
+                            $tOrig = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($t['original_title'])));
+                            if (isset($mapName[$tOrig])) {
+                                $found = $mapName[$tOrig];
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($found)) {
+                    // Trier par priorité de langue : TRUEFRENCH > VFF > VF > MULTI > VOSTFR
+                    usort($found, function ($a, $b) {
+                        $scoreA = 0;
+                        $scoreB = 0;
+                        $nameA = mb_strtolower($a['name']);
+                        $nameB = mb_strtolower($b['name']);
+
+                        if (preg_match('/\b(truefrench|vff|vfq)\b/', $nameA))
+                            $scoreA = 5;
+                        elseif (preg_match('/\b(vf|frennch|fr)\b/', $nameA))
+                            $scoreA = 4;
+                        elseif (preg_match('/\b(multi)\b/', $nameA))
+                            $scoreA = 3;
+                        elseif (preg_match('/\b(vostfr|vost)\b/', $nameA))
+                            $scoreA = 2;
+
+                        if (preg_match('/\b(truefrench|vff|vfq)\b/', $nameB))
+                            $scoreB = 5;
+                        elseif (preg_match('/\b(vf|frennch|fr)\b/', $nameB))
+                            $scoreB = 4;
+                        elseif (preg_match('/\b(multi)\b/', $nameB))
+                            $scoreB = 3;
+                        elseif (preg_match('/\b(vostfr|vost)\b/', $nameB))
+                            $scoreB = 2;
+
+                        return $scoreB - $scoreA;
+                    });
+
+                    foreach ($found as $cand) {
+                        // Strict FR check
+                        if (
+                            preg_match('/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i', $cand['name']) &&
+                            !preg_match('/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i', $cand['name'])
+                        ) {
+
+                            // CHECK STRICT DEDUPLICATION
+                            $cTmdb = $cand['tmdb'] ?? null;
+                            $cNorm = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($cand['name'])));
+
+                            // Si déjà vu par TMDB
+                            if ($cTmdb && isset($seenTmdb[$cTmdb]))
+                                continue;
+                            // Si déjà vu par NOM
+                            if (isset($seenNormNames[$cNorm]))
+                                continue;
+
+                            $id = $cand['stream_id'];
+                            if (!isset($inPopular[$id])) {
+                                $inPopular[$id] = true;
+                                if ($cTmdb)
+                                    $seenTmdb[$cTmdb] = true;
+                                $seenNormNames[$cNorm] = true;
+
+                                $cand['display_name'] = $this->normalizeName($cand['name']);
+                                $popularLocal[] = $cand;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Comblage
+            if (count($popularLocal) < $limit) {
+                usort($allFilms, function ($a, $b) {
+                    $tA = isset($a['added']) ? (int) $a['added'] : 0;
+                    $tB = isset($b['added']) ? (int) $b['added'] : 0;
+                    return $tB - $tA;
+                });
+
+                $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
+                $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i';
+
+                foreach ($allFilms as $f) {
+                    $id = $f['stream_id'];
+                    if (isset($inPopular[$id]))
+                        continue;
+
+                    if (!preg_match($regexFrench, $f['name']))
+                        continue;
+                    if (preg_match($regexExclude, $f['name']))
+                        continue;
+
+                    // CHECK STRICT DEDUPLICATION
+                    $cTmdb = $f['tmdb'] ?? null;
+                    $cNorm = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($f['name'])));
+
+                    if ($cTmdb && isset($seenTmdb[$cTmdb]))
+                        continue;
+                    if (isset($seenNormNames[$cNorm]))
+                        continue;
+
+                    $f['display_name'] = $this->normalizeName($f['name']);
+                    $popularLocal[] = $f;
+
+                    $inPopular[$id] = true;
+                    if ($cTmdb)
+                        $seenTmdb[$cTmdb] = true;
+                    $seenNormNames[$cNorm] = true;
+
+                    if (count($popularLocal) >= $limit)
+                        break;
+                }
+            }
+
+            $final = array_slice($popularLocal, 0, $limit);
+            // Cache
+            $this->cache->set($cacheKey, $final, 3600); // 1h
+            return $final;
+        }
+
+        // ... Old Fallback Logic if TMDB Failed ...
+
+        // 3. Filter & Sort by Added Date (Fallback Code keep match vars)
+        // ... (reuse existing logic if we fall here, but simpler to just put it in the else/if above)
+
+        // Let's rewrite the fallback logic cleanly inside the block above to avoid duplication complexity in replacement.
+        // Actually, I can just put the old logic in the first if(empty($trending)) block but I need to copy paste it.
+        // I will just perform the normal filtering on $allFilms
+
         $final = [];
         $seen = [];
-
         $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
         $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i';
 
         foreach ($allFilms as $f) {
             $name = $f['name'];
 
-            // CHECK 1: Must have French Indicator
-            // Usually valid ones have tags like "Inception (2010) [FRENCH]"
-            if (!preg_match($regexFrench, $name)) {
+            if (!preg_match($regexFrench, $name))
                 continue;
-            }
-
-            // CHECK 2: Must NOT have Foreign tags (double check)
-            if (preg_match($regexExclude, $name)) {
+            if (preg_match($regexExclude, $name))
                 continue;
-            }
 
             $norm = mb_strtolower($this->normalizeName($name));
             if (isset($seen[$norm]))
@@ -557,12 +717,11 @@ class MoviesController
                 break;
         }
 
-        // 5. Cache Result
         $this->cache->set($cacheKey, $final, 300);
-
         return $final;
     }
 
+    // Helper for old simple search
     public function searchInternal($query)
     {
         $cacheKeyAll = 'all_vod_streams_v2';

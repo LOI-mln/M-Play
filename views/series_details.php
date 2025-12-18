@@ -52,9 +52,10 @@ ob_start();
                     <?= htmlspecialchars($seriesInfo['name']) ?>
                 </h1>
 
-                <div class="flex flex-wrap gap-4 text-sm font-bold text-gray-300 uppercase tracking-wider mb-6">
+                <div
+                    class="flex flex-wrap items-center gap-4 text-sm font-bold text-gray-300 uppercase tracking-wider mb-6">
                     <?php if (isset($seriesInfo['rating_5based'])): ?>
-                        <span class="text-yellow-500 flex items-center gap-1">★
+                        <span class="text-yellow-500 flex items-center gap-1 bg-white/10 px-2 py-1 rounded">★
                             <?= round($seriesInfo['rating_5based'], 1) ?></span>
                     <?php endif; ?>
                     <div class="flex flex-wrap items-center gap-4 text-sm text-gray-400 mb-6">

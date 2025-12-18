@@ -124,7 +124,7 @@ ob_start();
                         <p class="text-gray-500 text-sm">Aucune série récente trouvée.</p>
                     <?php else: ?>
                         <?php foreach ($recentSeries as $s): ?>
-                            <a href="/series/details?id=<?= $s['series_id'] ?>"
+                            <a href="/series/details?id=<?= $s['series_id'] ?>&from=home"
                                 class="group relative block w-32 md:w-40 lg:w-48 flex-shrink-0 snap-start">
                                 <div
                                     class="aspect-[2/3] rounded-xl overflow-hidden bg-[#1a1a1a] shadow-lg shadow-black/50 transition-all duration-300 group-hover:shadow-red-900/20 group-hover:scale-105 ring-1 ring-white/5 group-hover:ring-red-600/40">

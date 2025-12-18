@@ -47,12 +47,12 @@ class SeriesController
         // [\]\)]? : optionnel crochet/parenthèse fermante
         // \s*[-|:]?\s* : séparateur (espace, tiret, pipe, deux-points)
         // ET aussi suffixes à la fin
-        $regexLang = '/\b(FR|EN|VO|VF|VFF|VOSTFR|MULTI|TRUEFRENCH|FRENCH|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b/i';
+        $regexLang = '/\b(FR|EN|VO|VF|VFF|VOSTFR|MULTI|TRUEFRENCH|FRENCH|ENGLISH|US|UK|NL|DE|IT|ES|PT|NF|NETFLIX|PL)\b/i';
 
         // On enlève d'abord les tags "clairs"
         // Ex: "Action [FR]", "FR - Action"
-        $name = preg_replace('/^[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?\s*[-|:]?\s*/i', '', $name);
-        $name = preg_replace('/\s*[-|:]?\s*[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT)\b[\]\)]?$/i', '', $name);
+        $name = preg_replace('/^[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT|NF|NETFLIX|PL)\b[\]\)]?\s*[-|:]?\s*/i', '', $name);
+        $name = preg_replace('/\s*[-|:]?\s*[\[\(]?\b(FR|FRANCE|VF|VFF|VO|VOSTFR|MULTI|TRUEFRENCH|FRENCH|EN|ENGLISH|US|UK|NL|DE|IT|ES|PT|NF|NETFLIX|PL)\b[\]\)]?$/i', '', $name);
 
         // 3. Suppression des tags techniques ou années entre parenthèses / crochets
         // Ex: (2023), [4K], [HEVC]
@@ -513,8 +513,8 @@ class SeriesController
     }
     public function getRecent($limit = 10)
     {
-        // 1. Check Cache
-        $cacheKey = 'series_recent_fr_' . $limit;
+        // 1. Check Cache GLOBAL
+        $cacheKey = 'series_popular_fr_tmdb_v3_' . $limit;
         $cached = $this->cache->get($cacheKey);
         if ($cached !== null) {
             return $cached;
@@ -535,14 +535,163 @@ class SeriesController
             return [];
         }
 
-        // 3. Filter & Sort by Last Modified / Added
-        usort($allSeries, function ($a, $b) {
-            $tA = isset($a['last_modified']) ? (int) $a['last_modified'] : (isset($a['added']) ? (int) $a['added'] : 0);
-            $tB = isset($b['last_modified']) ? (int) $b['last_modified'] : (isset($b['added']) ? (int) $b['added'] : 0);
-            return $tB - $tA;
-        });
+        // 3. RECUPERATION TRENDING TMDB
+        $tmdbClient = new \App\Services\TmdbClient('d818b3a8af9971ce313537ac5f56d10f');
+        $trending = $tmdbClient->getTrendingSeries('week');
 
-        // 4. Slice & Normalize with STRICT LANGUAGE FILTER
+        if (empty($trending)) {
+            // Fallback: Date logic
+            usort($allSeries, function ($a, $b) {
+                $tA = isset($a['last_modified']) ? (int) $a['last_modified'] : (isset($a['added']) ? (int) $a['added'] : 0);
+                $tB = isset($b['last_modified']) ? (int) $b['last_modified'] : (isset($b['added']) ? (int) $b['added'] : 0);
+                return $tB - $tA;
+            });
+        } else {
+            // Mapping Trending -> Local
+            $mapTmdb = [];
+            $mapName = [];
+
+            foreach ($allSeries as $s) {
+                if (!empty($s['tmdb'])) {
+                    // Sometimes series don't have tmdb field in list, check fields
+                    $mapTmdb[$s['tmdb']][] = $s;
+                }
+                $norm = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($s['name'])));
+                $mapName[$norm][] = $s;
+            }
+
+            $popularLocal = [];
+            $inPopular = [];
+            $seenTmdb = [];
+            $seenNormNames = [];
+
+            foreach ($trending as $t) {
+                $found = [];
+                if (isset($mapTmdb[$t['id']])) {
+                    $found = $mapTmdb[$t['id']];
+                } else {
+                    $tName = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($t['name'])));
+                    if (isset($mapName[$tName])) {
+                        $found = $mapName[$tName];
+                    } else {
+                        if (isset($t['original_name'])) {
+                            $tOrig = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($t['original_name'])));
+                            if (isset($mapName[$tOrig])) {
+                                $found = $mapName[$tOrig];
+                            }
+                        }
+                    }
+                }
+
+                if (!empty($found)) {
+                    // Trier par priorité de langue : TRUEFRENCH > VFF > VF > MULTI > VOSTFR
+                    usort($found, function ($a, $b) {
+                        $scoreA = 0;
+                        $scoreB = 0;
+                        $nameA = mb_strtolower($a['name']);
+                        $nameB = mb_strtolower($b['name']);
+
+                        if (preg_match('/\b(truefrench|vff|vfq)\b/', $nameA))
+                            $scoreA = 5;
+                        elseif (preg_match('/\b(vf|frennch|fr)\b/', $nameA))
+                            $scoreA = 4;
+                        elseif (preg_match('/\b(multi)\b/', $nameA))
+                            $scoreA = 3;
+                        elseif (preg_match('/\b(vostfr|vost)\b/', $nameA))
+                            $scoreA = 2;
+
+                        if (preg_match('/\b(truefrench|vff|vfq)\b/', $nameB))
+                            $scoreB = 5;
+                        elseif (preg_match('/\b(vf|frennch|fr)\b/', $nameB))
+                            $scoreB = 4;
+                        elseif (preg_match('/\b(multi)\b/', $nameB))
+                            $scoreB = 3;
+                        elseif (preg_match('/\b(vostfr|vost)\b/', $nameB))
+                            $scoreB = 2;
+
+                        return $scoreB - $scoreA;
+                    });
+
+                    foreach ($found as $cand) {
+                        // Strict FR check
+                        if (
+                            preg_match('/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i', $cand['name']) &&
+                            !preg_match('/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i', $cand['name'])
+                        ) {
+
+                            // CHECK STRICT DEDUPLICATION
+                            $cTmdb = $cand['tmdb'] ?? null;
+                            $cNorm = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($cand['name'])));
+
+                            if ($cTmdb && isset($seenTmdb[$cTmdb]))
+                                continue;
+                            if (isset($seenNormNames[$cNorm]))
+                                continue;
+
+                            $id = $cand['series_id'];
+                            if (!isset($inPopular[$id])) {
+                                $inPopular[$id] = true;
+                                if ($cTmdb)
+                                    $seenTmdb[$cTmdb] = true;
+                                $seenNormNames[$cNorm] = true;
+
+                                $cand['display_name'] = $this->normalizeName($cand['name']);
+                                $popularLocal[] = $cand;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Comblage si pas assez
+            if (count($popularLocal) < $limit) {
+                usort($allSeries, function ($a, $b) {
+                    $tA = isset($a['last_modified']) ? (int) $a['last_modified'] : (isset($a['added']) ? (int) $a['added'] : 0);
+                    $tB = isset($b['last_modified']) ? (int) $b['last_modified'] : (isset($b['added']) ? (int) $b['added'] : 0);
+                    return $tB - $tA;
+                });
+
+                $regexFrench = '/\b(FR|VFF|VF|VFQ|TRUEFRENCH|FRENCH|VOSTFR|MULTI)\b/i';
+                $regexExclude = '/\b(AR|ARAB|ARABIC|INDIA|HINDI|LATINO)\b/i';
+
+                foreach ($allSeries as $s) {
+                    $id = $s['series_id'];
+                    if (isset($inPopular[$id]))
+                        continue;
+
+                    if (!preg_match($regexFrench, $s['name']))
+                        continue;
+                    if (preg_match($regexExclude, $s['name']))
+                        continue;
+
+                    // CHECK STRICT DEDUPLICATION
+                    $cTmdb = $s['tmdb'] ?? null;
+                    $cNorm = preg_replace('/[^a-z0-9]/', '', mb_strtolower($this->normalizeName($s['name'])));
+
+                    if ($cTmdb && isset($seenTmdb[$cTmdb]))
+                        continue;
+                    if (isset($seenNormNames[$cNorm]))
+                        continue;
+
+                    $s['display_name'] = $this->normalizeName($s['name']);
+                    $popularLocal[] = $s;
+
+                    $inPopular[$id] = true;
+                    if ($cTmdb)
+                        $seenTmdb[$cTmdb] = true;
+                    $seenNormNames[$cNorm] = true;
+
+                    if (count($popularLocal) >= $limit)
+                        break;
+                }
+            }
+            $final = array_slice($popularLocal, 0, $limit);
+            $this->cache->set($cacheKey, $final, 3600);
+            return $final;
+        }
+
+        // Fallback Logic Re-implementation
         $final = [];
         $seen = [];
 
@@ -552,12 +701,10 @@ class SeriesController
         foreach ($allSeries as $s) {
             $name = $s['name'];
 
-            if (!preg_match($regexFrench, $name)) {
+            if (!preg_match($regexFrench, $name))
                 continue;
-            }
-            if (preg_match($regexExclude, $name)) {
+            if (preg_match($regexExclude, $name))
                 continue;
-            }
 
             $norm = mb_strtolower($this->normalizeName($name));
             if (isset($seen[$norm]))
