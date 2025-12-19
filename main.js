@@ -53,7 +53,13 @@ async function startPhpServer() {
 }
 
 // 2. DÉMARRAGE DU STREAMER NODE.JS (MOTEUR VIDÉO)
-function startStreamServer() {
+async function startStreamServer() {
+    const inUse = await tcpPortUsed.check(STREAM_PORT, '127.0.0.1');
+    if (inUse) {
+        console.log(`⚠️ Port ${STREAM_PORT} already in use. Assuming previous instance is active.`);
+        return; // On ne lance pas le serveur pour éviter le crash
+    }
+
     const server = express();
 
     // Endpoint de Streaming
@@ -88,6 +94,25 @@ function startStreamServer() {
             'Access-Control-Allow-Origin': '*'
         });
 
+        // LOAD CONFIG
+        let streamConfig = {
+            videoBitrate: '3000k',
+            audioBitrate: '128k',
+            cpuUsed: '8',
+            quality: 'realtime'
+        };
+
+        try {
+            const configPath = path.join(__dirname, 'stream-config.json');
+            if (fs.existsSync(configPath)) {
+                const fileData = fs.readFileSync(configPath, 'utf8');
+                Object.assign(streamConfig, JSON.parse(fileData));
+                console.log("Loaded custom stream config:", streamConfig);
+            }
+        } catch (e) {
+            console.warn("Could not load stream-config.json, using defaults.", e);
+        }
+
         // FFMPEG NATIVE (Pas de proxy PHP instable !)
         const ffmpegCmd = ffmpeg(decodedUrl)
             .inputOptions([
@@ -99,12 +124,12 @@ function startStreamServer() {
                 (start > 0) ? `-ss ${start}` : null
             ].filter(Boolean)) // Enlever les nulls
             .videoCodec('libvpx')
-            .videoBitrate('3000k') // Safe HD
+            .videoBitrate(streamConfig.videoBitrate)
             .audioCodec('libvorbis')
-            .audioBitrate('128k')
+            .audioBitrate(streamConfig.audioBitrate)
             .outputOptions([
-                '-quality', 'realtime',
-                '-cpu-used', '8',
+                `-quality ${streamConfig.quality}`,
+                `-cpu-used ${streamConfig.cpuUsed}`,
                 '-f', 'webm', // WebM est le plus robuste pour le streaming
                 '-deadline', 'realtime',
                 '-ac', '2'
@@ -138,6 +163,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 720,
+        title: 'M-Play',
+        icon: path.join(__dirname, 'ressources/logo.png'),
         backgroundColor: '#000', // Noir pour le cinéma
         webPreferences: {
             nodeIntegration: false, // Sécurité
