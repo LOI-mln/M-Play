@@ -484,10 +484,34 @@ class SeriesController
             die("Épisode introuvable.");
         }
 
-        // Récupérer les infos de l'épisode pour le titre (facultatif mais mieux)
-        // Note: L'API series_info donne tout, c'est lourd juste pour un titre.
-        // On peut passer le titre en GET ou faire sans.
-        // On va faire simple : lecture directe.
+        // METADATA (Passed from View)
+        // Format of name: "S01 E05 - Title" or just Title. 
+        // We will receive specific params: s=1, e=5, name=Breaking Bad
+        // Goal stored name: "Breaking Bad - S01 E05"
+        $sNum = $_GET['s'] ?? '';
+        $eNum = $_GET['e'] ?? '';
+        $sName = $_GET['name'] ?? 'Série'; // Series Name
+        $cover = $_GET['cover'] ?? '';
+
+        $fullName = $sName;
+        if ($sNum !== '' && $eNum !== '') {
+            $fullName .= " - S" . str_pad($sNum, 2, '0', STR_PAD_LEFT) . " E" . str_pad($eNum, 2, '0', STR_PAD_LEFT);
+        }
+
+        // Resume Time
+        $user = $_SESSION['auth_creds']['username'];
+        $progressModel = new \App\Models\WatchProgress();
+        $prog = $progressModel->getProgress($user, $streamId, 'series');
+        $resumeTime = $prog ? $prog['current_time'] : 0;
+
+        // Meta object for JS
+        $metaData = [
+            'name' => $fullName,
+            'cover' => $cover,
+            'ext' => $extension,
+            'series_id' => $_GET['series_id'] ?? 0 // To go back optionally
+        ];
+
 
         // Construction des URLs (similaire à MoviesController)
         $hote = $_SESSION['host'];
@@ -498,18 +522,18 @@ class SeriesController
         $streamUrlDirect = "$hote/series/$username/$password/$streamId.$extension";
 
         // URL HLS (On suppose que le serveur supporte le HLS pour les séries aussi, souvent via /series/...)
-        // En général Xtream Codes gère le HLS pour les vod/series de la même façon.
-        // Parfois c'est /series/$u/$p/$id.m3u8 ou juste /movie/...
-        // TEST: Pour les séries, souvent l'URL de base est /series/ mais le stream réel est traité comme une VOD.
-        // On tente le format standard HLS VOD.
         $streamUrlHls = "$hote/series/$username/$password/$streamId.m3u8";
 
         // URL Transcodage (via notre Proxy)
         // On encode l'URL source directe en base64 pour la passer au proxy
-        $sourceUrlEncoded = urlencode(base64_encode($streamUrlDirect));
+        $sourceBase64 = base64_encode($streamUrlDirect);
+        $sourceUrlEncoded = urlencode($sourceBase64); // Gardé pour rétro-compatibilité streamUrlTranscode
         $streamUrlTranscode = "/stream/transcode?url=$sourceUrlEncoded";
 
-        require __DIR__ . '/../../views/watch_series.php';
+        // DEBUG LOG
+        file_put_contents(__DIR__ . '/../../debug_series_url.txt', date('H:i:s') . " - URL Direct: $streamUrlDirect\nEncoded: $sourceUrlEncoded\nBase64: $sourceBase64\n", FILE_APPEND);
+
+        require __DIR__ . '/../../views/watch_series.php'; // Updated to use require properly
     }
     public function getRecent($limit = 10)
     {

@@ -45,20 +45,63 @@ if (resumeTime > 10) {
 }
 
 // Progress Saver
-if (streamId) {
-    setInterval(() => {
-        if (!video.paused && video.currentTime > 5) {
-            fetch('/movies/progress', {
+// Progress Saver
+async function saveProgress() {
+    if (streamId && video.currentTime > 5) {
+        try {
+            // Check config for type/extra
+            const type = window.VodConfig?.type || 'movie';
+            const extra = window.VodConfig?.meta || {};
+
+            await fetch('/movies/progress', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     stream_id: streamId,
-                    time: Math.floor(video.currentTime),
-                    duration: Math.floor(getDuration())
+                    time: Math.floor(isTranscoding ? (video.currentTime + currentTranscodeOffset) : video.currentTime),
+                    duration: Math.floor(getDuration()),
+                    type: type,
+                    extra: extra
                 })
-            }).catch(e => console.warn("Save progress failed", e));
+            });
+            console.log("Progress saved.");
+        } catch (e) {
+            console.warn("Save progress failed", e);
+        }
+    }
+}
+
+if (streamId) {
+    setInterval(() => {
+        if (!video.paused) {
+            saveProgress();
         }
     }, 10000); // Every 10s
+}
+
+// Back Button Logic
+const btnBack = document.getElementById('btn-back');
+if (btnBack) {
+    btnBack.addEventListener('click', async (e) => {
+        e.preventDefault();
+        video.pause();
+        await saveProgress();
+
+        // Si série, on retourne à la fiche série
+        if (window.VodConfig?.type === 'series' && window.VodConfig?.meta?.series_id) {
+            window.location.href = '/series/details?id=' + window.VodConfig.meta.series_id;
+            return;
+        }
+
+        // Sinon comportement par défaut (retour historique ou films)
+        if (document.referrer && document.referrer.includes(window.location.host)) {
+            // history.back(); // Parfois buggé avec les SPA/Proxies, on préfère explicite si possible
+            // Mais pour l'instant history.back c'est ok si on vient de 'détails'
+            history.back();
+        } else {
+            window.location.href = '/movies';
+        }
+    });
 }
 
 // Global Error Handler
@@ -84,30 +127,61 @@ let isTranscoding = false;
 let hls;
 
 function loadVideo() {
+    // USER REQUEST: Force transcode for series to avoid infinite loading
+    if (window.VodConfig?.type === 'series') {
+        console.log("Series detected: Forcing TRANSCODE mode as requested.");
+        const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+        loadTranscode(start);
+        return;
+    }
+
     // Si pas de HLS (ex: Film MP4/MKV), on passe direct au transcode/direct
     // Note: Pour les MOVIES, on n'a jamais de HLS dans cette configuration, donc on force le fallback
     if (!streamUrlHls || streamUrlHls === '') {
         console.log("No HLS URL provided, switching to TRANSCODE/DIRECT.");
-        loadTranscode();
+        // FIX: Pass resumeTime if set (Auto-Resume)
+        const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+        loadTranscode(start);
         return;
     }
 
+    let hlsRetryCount = 0;
+
     if (Hls.isSupported()) {
         hls = new Hls();
+
+        // TIMEOUT FAILSAFE: Si HLS ne démarre pas après 5 secondes, on force le switch
+        const hlsTimeout = setTimeout(() => {
+            console.warn("HLS Manifest Load Timeout (>5s). Switching to Transcode.");
+            if (hls) hls.destroy();
+            const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+            loadTranscode(start);
+        }, 5000);
+
         hls.loadSource(streamUrlHls);
         hls.attachMedia(video);
 
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            clearTimeout(hlsTimeout); // C'est bon, on a le manifest
             console.log("HLS found and parsed.");
-            // HLS a souvent la bonne durée, mais on garde staticDuration en backup
         });
 
         hls.on(Hls.Events.ERROR, function (event, data) {
+            // Note: On ne clear pas le timeout ici car une erreur peut survenir avant le manifest parsed
             if (data.fatal) {
+                clearTimeout(hlsTimeout); // On gère l'erreur nous-même
                 switch (data.type) {
                     case Hls.ErrorTypes.NETWORK_ERROR:
                         console.log("fatal network error encountered, try to recover");
-                        hls.startLoad();
+                        hlsRetryCount++;
+                        if (hlsRetryCount >= 2) {
+                            console.warn("HLS Network retry failed, switching to TRANSCODE.");
+                            hls.destroy();
+                            const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+                            loadTranscode(start);
+                        } else {
+                            hls.startLoad();
+                        }
                         break;
                     case Hls.ErrorTypes.MEDIA_ERROR:
                         console.log("fatal media error encountered, try to recover");
@@ -116,21 +190,40 @@ function loadVideo() {
                     default:
                         console.warn("HLS Fatal, switching to TRANSCODE (Auto-Fix)...");
                         hls.destroy();
-                        loadTranscode(); // Fallback to Transcode directly
+                        // FIX: Pass resumeTime if set
+                        const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+                        loadTranscode(start); // Fallback to Transcode directly
                         break;
                 }
             }
         });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
         // Safari
+
+        // FAILSAFE Timeout for Safari too
+        const nativeTimeout = setTimeout(() => {
+            console.warn("Native HLS Timeout (>5s). Switching to Transcode.");
+            video.removeAttribute('src'); // Stop loading
+            const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+            loadTranscode(start);
+        }, 5000);
+
         video.src = streamUrlHls;
+
+        // On success -> clear timeout
+        video.addEventListener('loadedmetadata', () => clearTimeout(nativeTimeout), { once: true });
+
         video.addEventListener('error', () => {
+            clearTimeout(nativeTimeout);
             console.warn("Safari HLS failed, switching to TRANSCODE.");
-            loadTranscode();
+            const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+            loadTranscode(start);
         }, { once: true });
     } else {
         // No HLS support -> Force Transcode
-        loadTranscode();
+        console.log("No HLS support detected. Switching to Transcode immediately.");
+        const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
+        loadTranscode(start);
     }
 }
 
@@ -309,16 +402,40 @@ function loadTranscode(startTime = 0) {
 
     // On ajoute le parametre start seulement si > 0
     // MIGRATION ELECTRON : On tape sur le serveur Node.js (Port 10000) au lieu du PHP
-    // L'URL source est déjà en base64 dans "streamUrlTranscode" (param url=...)
-    // On doit l'extraire ou la reconstruire.
 
-    // Extraction de la "vraie" URL encodée depuis la variable PHP
-    // Format PHP : /stream/transcode?url=XYZ&...
-    const urlParams = new URL("http://fake.com" + streamUrlTranscode).searchParams;
-    const base64Url = urlParams.get('url');
+    let base64Url = '';
+
+    // METHODE 1 (Robust): Utiliser variable explicite (Raw Base64)
+    if (window.VodConfig?.sourceBase64) {
+        base64Url = window.VodConfig.sourceBase64;
+        console.log("DEBUG: Using explicit sourceBase64", base64Url);
+    }
+    // Fallback: Check for URL encoded version (Old fix)
+    else if (window.VodConfig?.sourceUrlEncoded) {
+        base64Url = decodeURIComponent(window.VodConfig.sourceUrlEncoded);
+        console.log("DEBUG: Using decoded sourceUrlEncoded", base64Url);
+    }
+    // METHODE 2 (Legacy): Extraction depuis l'URL PHP
+    else if (typeof streamUrlTranscode !== 'undefined' && streamUrlTranscode) {
+        try {
+            // Hack: URL constructor needs a base
+            const urlParams = new URL("http://fake.com" + streamUrlTranscode).searchParams;
+            base64Url = urlParams.get('url');
+            console.log("DEBUG: Extracted base64Url from params", base64Url);
+        } catch (e) {
+            console.warn("Failed to parse streamUrlTranscode", e);
+        }
+    }
+
+    if (!base64Url) {
+        console.error("FATAL: No source URL found for transcoding. VodConfig:", window.VodConfig);
+    } else {
+        // ENCODE COMPONENT to ensure special chars (+, /, =) are preserved in query param
+        console.log("DEBUG: Final Transcode URL Target (Raw Base64):", base64Url);
+    }
 
     // Nouvelle URL cible (Node.js Streamer)
-    let url = `http://localhost:10000/stream?url=${base64Url}`;
+    let url = `http://localhost:10000/stream?url=${encodeURIComponent(base64Url)}`;
 
     if (startTime > 0) {
         url += "&start=" + Math.floor(startTime);
@@ -327,6 +444,17 @@ function loadTranscode(startTime = 0) {
     video.autoplay = true; // Force autoplay intent
     video.playsInline = true; // Vital pour autoplay sur Mac/iOS
     video.src = url;
+
+    // VISUAL FEEDBACK: On met la barre là où on veut aller
+    const d = getDuration();
+    if (d > 0) {
+        const pct = (startTime / d) * 100;
+        progressBar.style.width = pct + '%';
+        thumb.style.left = pct + '%';
+        timeCurrent.innerText = formatTime(startTime);
+        seekSlider.value = startTime;
+    }
+
     video.load();
 
     const attemptPlay = () => {
@@ -390,9 +518,15 @@ video.addEventListener('timeupdate', () => {
     const d = getDuration();
     if (d > 0) {
         // En mode transcode, le temps affiché = temps du buffer + offset du seek
-        const realCurrentTime = isTranscoding ? (video.currentTime + currentTranscodeOffset) : video.currentTime;
+        let realCurrentTime = isTranscoding ? (video.currentTime + currentTranscodeOffset) : video.currentTime;
 
-        const pct = (realCurrentTime / d) * 100;
+        // CLAMP: On ne dépasse jamais la durée totale (évite le 2h11 / 1h59)
+        if (realCurrentTime > d) realCurrentTime = d;
+        if (realCurrentTime < 0) realCurrentTime = 0;
+
+        let pct = (realCurrentTime / d) * 100;
+        if (pct > 100) pct = 100;
+        if (pct < 0) pct = 0;
 
         // On met à jour la barre ET le temps seulement si on ne drag pas (sinon ça le user perd ce qu'il vise)
         if (!isDragging) {

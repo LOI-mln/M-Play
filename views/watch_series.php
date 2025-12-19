@@ -138,15 +138,20 @@
     <!-- Config Variables Transfer -->
     <script>
         window.VodConfig = {
-            streamUrlHls: '<?= $streamUrlHls ?>',
-            streamUrlDirect: '<?= $streamUrlDirect ?>',
-            streamUrlTranscode: '<?= $streamUrlTranscode ?>',
-            duration: '<?= $duration ?? '' ?>'
+            streamId: <?= json_encode($streamId) ?>,
+            streamUrlDirect: <?= json_encode($streamUrlDirect) ?>,
+            streamUrlHls: <?= json_encode($streamUrlHls) ?>,
+            streamUrlTranscode: <?= json_encode($streamUrlTranscode) ?>,
+            sourceBase64: <?= json_encode($sourceBase64 ?? '') ?>,
+            resumeTime: <?= json_encode($resumeTime ?? 0) ?>,
+            duration: <?= json_encode($duration ?? '') ?>,
+            type: 'series',
+        meta: <?= json_encode($metaData ?? []) ?>
         };
     </script>
 
     <!-- Player Logic (Reused from Movies/VOD) -->
-    <script src="/public/js/player_vod.js"></script>
+    <script src="/public/js/player_vod.js?v=<?= time() ?>"></script>
 </body>
 
 </html>

@@ -795,55 +795,73 @@ class MoviesController
     {
         $user = $_SESSION['auth_creds']['username'];
         $progressModel = new \App\Models\WatchProgress();
-        $inProgressParams = $progressModel->getInProgress($user, 'movie'); // [ {stream_id, current_time...} ]
+        $inProgressParams = $progressModel->getInProgress($user); // [ {stream_id, current_time...} ]
 
         if (empty($inProgressParams)) {
             return [];
         }
 
-        // On a besoin du catalogue complet pour mapper les IDs
-        $cacheKeyAll = 'all_vod_streams_v2';
-        $allFilms = $this->cache->get($cacheKeyAll);
-
+        // 1. Fetch Movies (if needed)
+        $cacheKeyMovies = 'all_vod_streams_v2';
+        $allFilms = $this->cache->get($cacheKeyMovies);
         if ($allFilms === null) {
-            $allFilms = $this->api->get('player_api.php', [
-                'action' => 'get_vod_streams'
-            ]);
-            if ($allFilms) {
-                $this->cache->set($cacheKeyAll, $allFilms, 3600);
-            }
+            $allFilms = $this->api->get('player_api.php', ['action' => 'get_vod_streams']);
+            if ($allFilms)
+                $this->cache->set($cacheKeyMovies, $allFilms, 3600);
         }
 
-        if (!$allFilms) {
-            return [];
+        // 2. Map Movies
+        $mapMovies = [];
+        if ($allFilms) {
+            foreach ($allFilms as $f)
+                $mapMovies[$f['stream_id']] = $f;
         }
 
-        // Map ID -> Film
-        $mapId = [];
-        foreach ($allFilms as $f) {
-            $mapId[$f['stream_id']] = $f;
-        }
-
-        $results = [];
+        // 3. Process Results
+        $final = [];
         foreach ($inProgressParams as $p) {
-            if (isset($mapId[$p['stream_id']])) {
-                $film = $mapId[$p['stream_id']];
-                $film['progress_time'] = $p['current_time'];
-                $film['progress_duration'] = $p['duration'];
-                // Calcul du pourcentage pour la barre de progression (si on veut l'afficher)
-                if ($p['duration'] > 0) {
-                    $film['progress_percent'] = min(100, round(($p['current_time'] / $p['duration']) * 100));
-                } else {
-                    $film['progress_percent'] = 0;
+            $type = $p['type'] ?? 'movie';
+            $item = null;
+
+            if ($type === 'movie') {
+                if (isset($mapMovies[$p['stream_id']])) {
+                    $item = $mapMovies[$p['stream_id']];
                 }
-                $results[] = $film;
-                if (count($results) >= $limit)
+            } elseif ($type === 'series') {
+                // For series, much simpler: ALL info is (or should be) in extra_data
+                // Because mapping series stream_id (episode ID) back to series info is hard without API calls.
+                // We rely on what we saved.
+                $extra = json_decode($p['extra_data'] ?? '{}', true);
+                if (!empty($extra)) {
+                    $item = [
+                        'stream_id' => $p['stream_id'], // Episode ID
+                        'name' => $extra['name'] ?? 'Épisode inconnu', // "Breaking Bad - S01 E01"
+                        'stream_icon' => $extra['cover'] ?? '/ressources/logo.png',
+                        'container_extension' => $extra['ext'] ?? 'mp4',
+                        // Special flag to redirect to series watch
+                        // Actually, 'watch_vod.php' vs 'watch_series.php' might differ.
+                        // But wait, our links on home.php point to /movies/watch...
+                        // We need to differentiate URL.
+                        'is_series' => true,
+                        'series_id' => $extra['series_id'] ?? 0 // Needed if we want to link back to details
+                    ];
+                }
+            }
+
+            if ($item) {
+                // Common Progress
+                $item['progress_percent'] = ($p['duration'] > 0) ? ($p['current_time'] / $p['duration']) * 100 : 0;
+
+                // Add to list
+                $final[] = $item;
+                if (count($final) >= $limit)
                     break;
             }
         }
-
-        return $results;
+        return $final;
     }
+
+
 
     // Helper for old simple search
     public function searchInternal($query)
@@ -956,6 +974,29 @@ class MoviesController
         }
 
         echo json_encode(['status' => 'success']);
+        exit;
+    }
+
+    public function removeProgress()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit;
+        }
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        if (!$input || !isset($input['stream_id'])) {
+            http_response_code(400);
+            return;
+        }
+
+        $streamId = $input['stream_id'];
+        $type = $input['type'] ?? 'movie';
+        $user = $_SESSION['auth_creds']['username'];
+
+        $model = new \App\Models\WatchProgress();
+        $model->remove($user, $streamId, $type);
+        echo json_encode(['status' => 'ok']);
         exit;
     }
 }

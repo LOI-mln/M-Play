@@ -215,9 +215,8 @@ ob_start();
                     <div>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
                             <?php foreach ($episodesSaison as $ep): ?>
-                                <a href="/series/watch?id=<?= $ep['id'] ?>&ext=<?= $ep['container_extension'] ?>&duration=<?= urlencode($ep['info']['duration'] ?? '') ?>"
+                                <a href="/series/watch?id=<?= $ep['id'] ?>&ext=<?= $ep['container_extension'] ?>&s=<?= $saisonNum ?>&e=<?= $ep['episode_num'] ?>&name=<?= urlencode($seriesInfo['name']) ?>&cover=<?= urlencode($seriesInfo['cover']) ?>&series_id=<?= $seriesId ?>&duration=<?= urlencode($ep['info']['duration'] ?? '') ?>"
                                     class="flex items-center gap-4 p-4 rounded-lg hover:bg-white/5 transition group border border-transparent hover:border-gray-800">
-
                                     <!-- Numéro Épisode -->
                                     <div
                                         class="w-10 h-10 flex items-center justify-center bg-gray-900 text-gray-500 rounded-full shrink-0 font-mono font-bold group-hover:bg-red-900 group-hover:text-red-100 transition">
