@@ -1,6 +1,8 @@
 # 🎬 M-Play - Modern Desktop IPTV Player
 
-![Electron](https://img.shields.io/badge/Electron-2B2E3A?style=for-the-badge&logo=electron&logoColor=9FEAF9) ![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) ![FFmpeg](https://img.shields.io/badge/FFmpeg-007808?style=for-the-badge&logo=ffmpeg&logoColor=white)
+![Build](https://img.shields.io/badge/build-passing-success?style=flat&logo=github) ![Version](https://img.shields.io/badge/version-0.5.0-blue?style=flat) ![License](https://img.shields.io/badge/license-ISC-green?style=flat) ![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey?style=flat)
+
+![Electron](https://img.shields.io/badge/Electron-2B2E3A?style=flat&logo=electron&logoColor=9FEAF9) ![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=flat&logo=node.js&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat&logo=php&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 
 **M-Play** est une application de bureau haute performance conçue pour transformer l'expérience de streaming IPTV. Elle combine une interface utilisateur moderne avec une architecture technique robuste capable de gérer d'immenses catalogues de VOD (Films & Séries) et de TV en direct.
 
