@@ -1,1 +1,86 @@
-M-Play
+# 🎬 M-Play - Modern Desktop IPTV Player
+
+**M-Play** est une application de bureau haute performance conçue pour transformer l'expérience de streaming IPTV. Elle combine une interface utilisateur "Netflix-like" soignée avec une architecture technique robuste capable de gérer d'immenses catalogues de VOD (Films & Séries) et de TV en direct.
+
+![M-Play Screenshot](/ressources/logo.png)
+
+## 🚀 Fonctionnalités Clés
+
+### 🎨 Expérience Utilisateur Premium
+- **Interface Immersive** : Design "Dark Mode" moderne avec effets de survol, animations fluides et Hero Headers dynamiques.
+- **Navigation Intuitive** : Accès rapide aux Films, Séries et Live TV via une sidebar latérale.
+- **Badges Intelligents** : Affichage clair des s-aisons et épisodes (ex: `S01 E05`) directement sur les cartes.
+
+### 🎥 Lecteur Vidéo Avancé
+- **Streaming Hybride** : Supporte la lecture directe (MKV/MP4) et le transcodage à la volée via FFmpeg pour une compatibilité maximale.
+- **Contrôle Total** : Gestion précise du *seeking* (avance/retour), choix des pistes audio et sous-titres.
+- **Performance** : Optimisé pour une lecture fluide même avec des fichiers lourds.
+
+### ⏱️ Reprendre la lecture (Continue Watching)
+- **Suivi Cross-Type** : Une section unifiée fusionnant Films et Séries, triée par date de visionnage.
+- **Sauvegarde Précise** : La progression est enregistrée automatiquement à la seconde près.
+- **Métadonnées Intelligentes** : Récupération automatique du contexte (Saison/Épisode) pour une reprise sans friction.
+
+## 🛠 Stack Technique
+
+Une architecture hybride puissante pour le bureau :
+
+- **Conteneur** : [Electron](https://www.electronjs.org/) (Build natif macOS/Windows)
+- **Backend UI** : PHP 8.x embarqué (Logique métier, Routing, Sessions)
+- **Streaming Engine** : [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/) + [Fluent-FFmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
+- **Frontend** : HTML5, Vanilla JS, [TailwindCSS](https://tailwindcss.com/)
+- **API** : Intégration Xtream Codes
+
+## 📦 Installation & Démarrage
+
+### Pré-requis
+- Node.js (v16+)
+- PHP (CLI installé et accessible dans le PATH)
+- FFmpeg (installé et accessible dans le PATH)
+
+### Installation
+
+```bash
+# Cloner le projet
+git clone https://github.com/votre-user/m-play.git
+
+# Installer les dépendances Node
+npm install
+```
+
+### Configuration
+1. Dupliquez `config.sample.php` vers `config.php`.
+2. Configurez vos accès base de données (si nécessaire) ou les paramètres par défaut.
+
+### Lancement (Développement)
+
+```bash
+# Lance l'application Electron avec les services PHP et Node en arrière-plan
+npm start
+```
+
+### Build (Production)
+
+Pour créer un exécutable (macOS app par défaut) :
+
+```bash
+npm run build
+```
+
+## 📂 Structure du Projet
+
+```
+m-play/
+├── main.js                 # Processus Principal Electron + Node Streamer
+├── index.php               # Point d'entrée Backend PHP
+├── public/                 # Assets statiques (JS, CSS, Images)
+├── src/
+│   ├── Controllers/        # Logique métier (Movies, Series, Auth...)
+│   ├── Models/             # Accès données (WatchProgress, etc.)
+│   └── Services/           # Services tiers (XtreamClient, FileCache...)
+├── views/                  # Templates PHP (Layouts, Pages)
+└── stream-config.json      # Configuration du transcodage
+```
+
+## 📝 Auteur
+Développé avec ❤️ par Milan.
