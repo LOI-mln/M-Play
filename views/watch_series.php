@@ -80,6 +80,33 @@
                         </svg>
                     </button>
 
+                    </button>
+
+                    <!-- Rewind 10s -->
+                    <button id="btn-rewind"
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+                            <text x="13" y="17" font-size="7" font-weight="bold" text-anchor="middle"
+                                fill="currentColor">10</text>
+                        </svg>
+                    </button>
+
+                    <!-- Forward 10s -->
+                    <button id="btn-forward"
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M10 8c4.65 0 8.58 3.03 9.96 7.22L17.59 16c-1.05-3.19-4.05-5.5-7.59-5.5-1.95 0-3.73.72-5.12 1.88L1.26 16H10v-8z"
+                                transform="scale(-1, 1) translate(-24, 0)" />
+                            <path
+                                d="M22 7l-3.6 3.6c-1.9-1.6-4.3-2.6-6.9-2.6-4.7 0-8.6 3-10 7.2l2.4.8C5 12.8 7.9 10.5 11.5 10.5c2 0 3.7.7 5.1 1.9L13 16h9V7z" />
+                            <text x="11" y="17" font-size="7" font-weight="bold" text-anchor="middle"
+                                fill="currentColor">10</text>
+                        </svg>
+                    </button>
+
                     <!-- Volume -->
                     <div class="flex items-center gap-2 group/vol">
                         <button id="btn-mute" class="text-white hover:text-red-600 transition">
@@ -146,7 +173,7 @@
             resumeTime: <?= json_encode($resumeTime ?? 0) ?>,
             duration: <?= json_encode($duration ?? '') ?>,
             type: 'series',
-        meta: <?= json_encode($metaData ?? []) ?>
+            meta: <?= json_encode($metaData ?? []) ?>
         };
     </script>
 

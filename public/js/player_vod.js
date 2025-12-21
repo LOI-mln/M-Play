@@ -127,19 +127,18 @@ let isTranscoding = false;
 let hls;
 
 function loadVideo() {
-    // USER REQUEST: Force transcode for series to avoid infinite loading
+    // USER REQUEST: Force transcode for series (Restored)
     if (window.VodConfig?.type === 'series') {
-        console.log("Series detected: Forcing TRANSCODE mode as requested.");
+        console.log("Series detected: Forcing TRANSCODE mode.");
         const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
         loadTranscode(start);
         return;
     }
 
-    // Si pas de HLS (ex: Film MP4/MKV), on passe direct au transcode/direct
-    // Note: Pour les MOVIES, on n'a jamais de HLS dans cette configuration, donc on force le fallback
+    // Si pas de HLS (ex: Film MP4/MKV), on passe direct au transcode
+    // On ne tente PAS le Direct Play car le user veut impérativement du Transcode.
     if (!streamUrlHls || streamUrlHls === '') {
-        console.log("No HLS URL provided, switching to TRANSCODE/DIRECT.");
-        // FIX: Pass resumeTime if set (Auto-Resume)
+        console.log("No HLS URL provided, switching to TRANSCODE.");
         const start = (resumeTime && resumeTime > 10) ? resumeTime : 0;
         loadTranscode(start);
         return;
