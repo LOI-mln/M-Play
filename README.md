@@ -29,6 +29,11 @@
 - **Sauvegarde Précise** : La progression est enregistrée automatiquement à la seconde près.
 - **Métadonnées Intelligentes** : Récupération automatique du contexte (Saison/Épisode) pour une reprise sans friction.
 
+### 🌟 Enrichissement TMDB
+- **Métadonnées Complètes** : Utilisation de l'[API TMDB](https://www.themoviedb.org/) pour récupérer automatiquement les affiches, résumés, notes et casting.
+- **Tendances** : Affichage des films et séries populaires basé sur les données mondiales de TMDB.
+- **Recherche Intelligente** : Amélioration de la pertinence des résultats grâce au matching de titres.
+
 ## 🛠 Stack Technique
 
 Une architecture hybride puissante pour le bureau :
@@ -37,7 +42,7 @@ Une architecture hybride puissante pour le bureau :
 - **Backend UI** : PHP 8.x embarqué (Logique métier, Routing, Sessions)
 - **Streaming Engine** : [Node.js](https://nodejs.org/) + [Express](https://expressjs.com/) + [Fluent-FFmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
 - **Frontend** : HTML5, Vanilla JS, [TailwindCSS](https://tailwindcss.com/)
-- **API** : Intégration Xtream Codes
+- **Data & APIs** : Xtream Codes (IPTV), [The Movie Database (TMDB)](https://developer.themoviedb.org/docs) (Metadata)
 
 ## 📦 Installation & Démarrage
 
