@@ -498,18 +498,48 @@ class SeriesController
             $fullName .= " - S" . str_pad($sNum, 2, '0', STR_PAD_LEFT) . " E" . str_pad($eNum, 2, '0', STR_PAD_LEFT);
         }
 
-        // Resume Time
+        // Resume Time & Metadata Recovery
         $user = $_SESSION['auth_creds']['username'];
         $progressModel = new \App\Models\WatchProgress();
         $prog = $progressModel->getProgress($user, $streamId, 'series');
         $resumeTime = $prog ? $prog['current_time'] : 0;
 
+        // Si on n'a pas les infos dans l'URL (cas "Reprendre la lecture"), on essaie de les récupérer du progrès sauvegardé
+        if ($prog && !empty($prog['extra_data'])) {
+            $savedExtra = json_decode($prog['extra_data'], true);
+
+            if ($sNum === '')
+                $sNum = $savedExtra['s'] ?? '';
+            if ($eNum === '')
+                $eNum = $savedExtra['e'] ?? '';
+            if ($sName === 'Série')
+                $sName = $savedExtra['series_name'] ?? ($savedExtra['name'] ?? 'Série'); // Fallback logic
+            if ($cover === '')
+                $cover = $savedExtra['cover'] ?? '';
+
+            // Si le nom complet était déjà construit, on peut le reprendre
+            if (empty($_GET['name']) && !empty($savedExtra['name'])) {
+                $fullName = $savedExtra['name'];
+            }
+        }
+
+        // Re-construct fullName if we recovered s/e but didn't have a saved full name
+        if ($fullName === 'Série' || $fullName === $sName) {
+            if ($sNum !== '' && $eNum !== '') {
+                // Si on a récupéré le nom de la série, on l'utilise
+                $fullName = $sName . " - S" . str_pad($sNum, 2, '0', STR_PAD_LEFT) . " E" . str_pad($eNum, 2, '0', STR_PAD_LEFT);
+            }
+        }
+
         // Meta object for JS
         $metaData = [
             'name' => $fullName,
+            'series_name' => $sName, // Save raw series name too
             'cover' => $cover,
             'ext' => $extension,
-            'series_id' => $_GET['series_id'] ?? 0 // To go back optionally
+            's' => $sNum,
+            'e' => $eNum,
+            'series_id' => $_GET['series_id'] ?? ($savedExtra['series_id'] ?? 0)
         ];
 
 
@@ -800,5 +830,94 @@ class SeriesController
         }
 
         return array_values($groupedSeries);
+    }
+
+    public function getContinueWatching($limit = 10)
+    {
+        $user = $_SESSION['auth_creds']['username'];
+        $progressModel = new \App\Models\WatchProgress();
+
+        $inProgressParams = $progressModel->getInProgress($user);
+
+        if (empty($inProgressParams)) {
+            return [];
+        }
+
+        // Charger toutes les séries (Image, Nom)
+        $cacheKeyAll = 'all_series_streams_v2';
+        $allSeries = $this->cache->get($cacheKeyAll);
+
+        if ($allSeries === null) {
+            $allSeries = $this->api->get('player_api.php', ['action' => 'get_series']);
+            if (!$allSeries)
+                $allSeries = [];
+            $this->cache->set($cacheKeyAll, $allSeries, 3600);
+        }
+
+        $mapSeriesId = [];
+        if ($allSeries) {
+            foreach ($allSeries as $s) {
+                $mapSeriesId[$s['series_id']] = $s;
+            }
+        }
+
+        $seriesList = [];
+        foreach ($inProgressParams as $p) {
+            if (!isset($p['type']) || $p['type'] !== 'series') {
+                continue;
+            }
+
+            $extra = isset($p['extra_data']) ? json_decode($p['extra_data'], true) : [];
+            $seriesId = $extra['series_id'] ?? null;
+
+            if (!$seriesId) {
+                continue;
+            }
+
+            if (isset($mapSeriesId[$seriesId])) {
+                $parentSeries = $mapSeriesId[$seriesId];
+
+                $item = $parentSeries;
+
+                $sNum = $extra['s'] ?? null;
+                $eNum = $extra['e'] ?? null;
+
+                // Si on a les infos S/E, on préfère afficher le nom de la série propre + badges
+                if ($sNum !== null && $eNum !== null) {
+                    $item['name'] = $extra['series_name'] ?? $parentSeries['name'];
+                } else {
+                    // Sinon on garde le nom complet (ex: Breaking Bad - S01 E04)
+                    $item['name'] = $extra['name'] ?? $parentSeries['name'];
+                    // Tentative de parsing si les champs s/e manquent mais sont dans le titre
+                    if (preg_match('/S(\d+)\s*E(\d+)/i', $item['name'], $matches)) {
+                        $sNum = $matches[1];
+                        $eNum = $matches[2];
+                        // On nettoie le nom pour l'affichage
+                        $clean = preg_replace('/-\s*S\d+\s*E\d+.*$/i', '', $item['name']);
+                        $item['name'] = trim($clean);
+                    }
+                }
+
+                $item['s'] = $sNum;
+                $item['e'] = $eNum;
+
+                // Ensure display_name is set, potentially using the cleaned name
+                $item['display_name'] = $this->normalizeName($item['name']);
+
+                $item['stream_id'] = $p['stream_id'];
+                $item['series_id'] = $seriesId;
+                $item['progress_percent'] = ($p['duration'] > 0) ? ($p['current_time'] / $p['duration']) * 100 : 0;
+                $item['type'] = 'series';
+                $item['updated_at'] = $p['updated_at'] ?? null;
+                $item['container_extension'] = $extra['ext'] ?? 'mp4';
+
+                // FIX: Map cover to stream_icon for home.php
+                $item['stream_icon'] = $extra['cover'] ?? $parentSeries['cover'];
+
+                $seriesList[] = $item;
+            }
+        }
+
+        return $seriesList;
     }
 }

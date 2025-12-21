@@ -23,40 +23,58 @@ ob_start();
         <!-- Scrollable Content -->
         <div
             class="flex-1 overflow-y-auto overflow-x-hidden pb-10 px-16 scrollbar-thin scrollbar-thumb-red-900 scrollbar-track-transparent">
-
+            <!-- Continue Watching Section -->
             <?php
-            $continueWatching = $moviesController->getContinueWatching(10);
-            ?>
+            // Récupere Films et Séries en cours
+            $moviesController = new \App\Controllers\MoviesController();
+            $cwMovies = $moviesController->getContinueWatching();
+            
+            $seriesController = new \App\Controllers\SeriesController();
+            $cwSeries = $seriesController->getContinueWatching();
 
-            <?php if (!empty($continueWatching)): ?>
-                <!-- Section Continue Watching -->
-                <div class="mb-12 relative group/slider">
-                    <div class="flex items-center justify-between mb-6 px-1">
-                        <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-2">
-                            <span class="text-red-600">▶</span> Reprendre la lecture
-                        </h2>
+            // Fusionner et Trier par date de visionnage
+            $continueWatching = array_merge($cwMovies, $cwSeries);
+            
+            usort($continueWatching, function($a, $b) {
+                // Tri décroissant sur updated_at
+                $tA = isset($a['updated_at']) ? strtotime($a['updated_at']) : 0;
+                $tB = isset($b['updated_at']) ? strtotime($b['updated_at']) : 0;
+                return $tB - $tA;
+            });
+
+            if (!empty($continueWatching)): 
+            ?>
+                <section class="mb-12">
+                    <div class="flex items-center gap-3 mb-6 px-4 md:px-0">
+                        <div class="w-1 h-6 bg-red-600 rounded-full"></div>
+                        <h2 class="text-xl md:text-2xl font-bold text-white tracking-wide">Reprendre la lecture</h2>
+                        <div class="h-px bg-gray-800 flex-grow ml-4"></div>
                     </div>
 
-                    <!-- Scroll Buttons -->
-                    <button
-                        class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-red-600/80 text-white p-3 rounded-full opacity-0 group-hover/slider:opacity-100 transition-all duration-300 backdrop-blur-sm -ml-4 shadow-xl border border-white/10 hidden md:hidden">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button
-                        class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/50 hover:bg-red-600/80 text-white p-3 rounded-full opacity-0 group-hover/slider:opacity-100 transition-all duration-300 backdrop-blur-sm -mr-4 shadow-xl border border-white/10 hidden md:block">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+                    <div class="relative group/slider">
+                        <!-- Navigation Buttons (Hidden by default, shown on hover) -->
+                        <button class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-red-600 text-white p-2 rounded-r-lg opacity-0 group-hover/slider:opacity-100 transition-all duration-300 backdrop-blur-sm" onclick="scrollSlider('slider-cw', -300)">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-red-600 text-white p-2 rounded-l-lg opacity-0 group-hover/slider:opacity-100 transition-all duration-300 backdrop-blur-sm" onclick="scrollSlider('slider-cw', 300)">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </button>
 
-                    <!-- Scroll Container -->
-                    <div class="flex gap-5 overflow-x-auto scroll-smooth pb-8 pt-2 pl-1 pr-2 scrollbar-hide snap-x">
-                        <?php foreach ($continueWatching as $m): ?>
-                            <a href="/movies/watch?id=<?= $m['stream_id'] ?>&ext=<?= $m['container_extension'] ?? 'mp4' ?>"
-                                class="group relative block w-32 md:w-40 lg:w-48 flex-shrink-0 snap-start cw-card"
-                                data-stream-id="<?= $m['stream_id'] ?>">
+                        <div id="slider-cw" class="flex gap-4 overflow-x-auto pb-4 px-4 md:px-0 scrollbar-hide scroll-smooth snap-x snap-mandatory">
+                            <?php foreach ($continueWatching as $m): 
+                                // Déterminer le lien selon le type
+                                $type = $m['type'] ?? 'movie';
+                                if ($type === 'series') {
+                                    // Lien vers l'épisode spécifique
+                                    $link = "/series/watch?id=" . $m['stream_id'] . "&series_id=" . ($m['series_id'] ?? 0) . "&ext=" . ($m['container_extension'] ?? 'mp4');
+                                } else {
+                                    $link = "/movies/watch?id=" . $m['stream_id'] . "&ext=" . ($m['container_extension'] ?? 'mp4');
+                                }
+                            ?>
+                                <a href="<?= $link ?>"
+                                    class="group relative block w-32 md:w-40 lg:w-48 flex-shrink-0 snap-start cw-card"
+                                    data-stream-id="<?= $m['stream_id'] ?>"
+                                    data-type="<?= $type ?>"> <!-- Added data-type for JS deletion -->
                                 <div
                                     class="aspect-[2/3] rounded-xl overflow-hidden bg-[#1a1a1a] shadow-lg shadow-black/50 transition-all duration-300 group-hover:shadow-red-900/20 ring-1 ring-white/5 group-hover:ring-red-600/40 relative z-0 transform-gpu">
                                     <div class="absolute inset-0 rounded-xl pointer-events-none border border-white/5 z-40"></div> <!-- Border Fix -->
@@ -65,36 +83,50 @@ ob_start();
                                         class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110 will-change-transform"
                                         loading="lazy">
 
-                                    <!-- Hover Overlay (Now behind progress bar) -->
-                                    <div
-                                        class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
-
-                                        <!-- Play Icon Hint -->
+                                        <!-- Hover Overlay (Now behind progress bar) -->
                                         <div
-                                            class="bg-red-600 rounded-full p-3 shadow-lg shadow-red-600/40 transform scale-90 group-hover:scale-105 transition-transform duration-300 mb-2 group/play">
-                                            <svg class="w-8 h-8 text-white pl-1" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M8 5v14l11-7z" />
-                                            </svg>
-                                        </div>
+                                            class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
 
-                                        <!-- Title & Meta -->
-                                        <div class="absolute bottom-4 left-0 w-full px-4 text-center">
-                                            <h3
-                                                class="text-white text-sm font-bold leading-tight line-clamp-2 drop-shadow-lg mb-2 tracking-wide font-outfit">
-                                                <?= htmlspecialchars($m['name']) ?>
-                                            </h3>
+                                            <!-- Play Icon Hint -->
                                             <div
-                                                class="flex items-center justify-center gap-3 text-xs text-gray-200 font-medium">
-                                                <div class="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-md">
-                                                    <span class="text-yellow-400">★</span>
-                                                    <span><?= number_format($m['rating'] ?? 0, 1) ?></span>
-                                                </div>
-                                                <div class="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-md">
-                                                    <span><?= round($m['progress_percent']) ?>%</span>
+                                                class="bg-red-600 rounded-full p-3 shadow-lg shadow-red-600/40 transform scale-90 group-hover:scale-105 transition-transform duration-300 mb-2 group/play">
+                                                <svg class="w-8 h-8 text-white pl-1" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M8 5v14l11-7z" />
+                                                </svg>
+                                            </div>
+
+                                            <!-- Title & Meta -->
+                                            <div class="absolute bottom-4 left-0 w-full px-4 text-center">
+                                                <h3
+                                                    class="text-white text-sm font-bold leading-tight line-clamp-2 drop-shadow-lg mb-2 tracking-wide font-outfit">
+                                                    <?= htmlspecialchars($m['name']) ?>
+                                                </h3>
+                                                
+                                                <!-- Metadata Row -->
+                                                <div class="flex items-center justify-center gap-2 text-xs text-gray-200 font-medium flex-wrap">
+                                                    
+                                                    <!-- Rating -->
+                                                    <?php if (isset($m['rating']) && $m['rating'] > 0): ?>
+                                                        <div class="hidden md:flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-md">
+                                                            <span class="text-yellow-400">★</span> 
+                                                            <span><?= number_format($m['rating'] ?? 0, 1) ?></span>
+                                                        </div>
+                                                    <?php endif; ?>
+
+                                                    <!-- Progress % -->
+                                                    <div class="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-md">
+                                                        <span><?= round($m['progress_percent']) ?>%</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+
+                                    <!-- Permanent S/E Badge for Series -->
+                                    <?php if (isset($m['s']) && isset($m['e'])): ?>
+                                        <div class="absolute top-2 left-2 z-20 bg-red-600/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded shadow-md border border-red-500/30">
+                                            S<?= str_pad($m['s'], 2, '0', STR_PAD_LEFT) ?> E<?= str_pad($m['e'], 2, '0', STR_PAD_LEFT) ?>
+                                        </div>
+                                    <?php endif; ?>
 
                                     <!-- Progress Bar (Floating & Rounded) -->
                                     <div
@@ -313,36 +345,6 @@ ob_start();
 <script>
     // Feature: Remove from Continue Watching
     document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.btn-remove-cw').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                e.preventDefault(); // Prevent link navigation
-                e.stopPropagation(); // Stop bubbling
-
-                const card = btn.closest('.cw-card');
-                const streamId = card.dataset.streamId;
-
-                if (!streamId) return;
-
-                // Optimistic UI: Remove immediately
-                card.style.transition = 'all 0.3s ease';
-                card.style.opacity = '0';
-                card.style.transform = 'scale(0.8)';
-
-                setTimeout(() => {
-                    card.remove();
-                }, 300);
-
-                try {
-                    await fetch('/movies/progress/remove', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ stream_id: streamId })
-                    });
-                    console.log(`Stream ${streamId} removed from CW.`);
-                } catch (err) {
-                    console.error("Failed to remove progress:", err);
-                }
-            });
         });
     });
 </script>

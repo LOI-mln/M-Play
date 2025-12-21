@@ -328,37 +328,47 @@ class MoviesController
             $progressModel = new \App\Models\WatchProgress();
             $inProgressParams = $progressModel->getInProgress($user, 'movie'); // [ {stream_id, current_time...} ]
 
-            // On doit mapper ces IDs vers les objets films complets
-            // On a besoin du catalogue complet pour ça (ou cache map)
-            $cacheKeyAll = 'all_vod_streams_v2';
-            $allFilms = $this->cache->get($cacheKeyAll);
+            if (empty($inProgressParams)) {
+                $rawFilms = [];
+            } else {
+                // On doit mapper ces IDs vers les objets films complets
+                $cacheKeyAll = 'all_vod_streams_v2';
+                $allFilms = $this->cache->get($cacheKeyAll);
 
-            if ($allFilms === null) {
-                $allFilms = $this->api->get('player_api.php', [
-                    'action' => 'get_vod_streams'
-                ]);
-                if ($allFilms) {
-                    $this->cache->set($cacheKeyAll, $allFilms, 3600);
-                }
-            }
-
-            if ($allFilms) {
-                // Map ID -> Film
-                $mapId = [];
-                foreach ($allFilms as $f) {
-                    $mapId[$f['stream_id']] = $f;
-                }
-
-                foreach ($inProgressParams as $p) {
-                    if (isset($mapId[$p['stream_id']])) {
-                        $film = $mapId[$p['stream_id']];
-                        // On injecte le temps pour l'afficher (optionnel, ou via JS)
-                        $film['progress_time'] = $p['current_time'];
-                        $film['progress_duration'] = $p['duration'];
-                        // Check si fini ? Non filtré en SQL déjà.
-                        $rawFilms[] = $film;
+                if ($allFilms === null) {
+                    $allFilms = $this->api->get('player_api.php', [
+                        'action' => 'get_vod_streams'
+                    ]);
+                    if ($allFilms) {
+                        $this->cache->set($cacheKeyAll, $allFilms, 3600);
                     }
                 }
+
+                $films = [];
+                if ($allFilms) {
+                    $mapId = [];
+                    foreach ($allFilms as $f) {
+                        $mapId[$f['stream_id']] = $f;
+                    }
+
+                    foreach ($inProgressParams as $p) {
+                        // S'assurer que c'est bien un film (legacy check)
+                        if (isset($p['type']) && $p['type'] !== 'movie') {
+                            continue;
+                        }
+
+                        if (isset($mapId[$p['stream_id']])) {
+                            $film = $mapId[$p['stream_id']];
+                            $film['progress_time'] = $p['current_time']; // Keep original for JS
+                            $film['progress_duration'] = $p['duration']; // Keep original for JS
+                            $film['progress_percent'] = ($p['duration'] > 0) ? ($p['current_time'] / $p['duration']) * 100 : 0;
+                            $film['type'] = 'movie'; // Marqueur
+                            $film['updated_at'] = $p['updated_at'] ?? null; // Pour le tri
+                            $films[] = $film;
+                        }
+                    }
+                }
+                $rawFilms = $films;
             }
 
         } elseif ($idCategorieSelectionnee) {
@@ -821,42 +831,22 @@ class MoviesController
         $final = [];
         foreach ($inProgressParams as $p) {
             $type = $p['type'] ?? 'movie';
-            $item = null;
 
-            if ($type === 'movie') {
-                if (isset($mapMovies[$p['stream_id']])) {
-                    $item = $mapMovies[$p['stream_id']];
-                }
-            } elseif ($type === 'series') {
-                // For series, much simpler: ALL info is (or should be) in extra_data
-                // Because mapping series stream_id (episode ID) back to series info is hard without API calls.
-                // We rely on what we saved.
-                $extra = json_decode($p['extra_data'] ?? '{}', true);
-                if (!empty($extra)) {
-                    $item = [
-                        'stream_id' => $p['stream_id'], // Episode ID
-                        'name' => $extra['name'] ?? 'Épisode inconnu', // "Breaking Bad - S01 E01"
-                        'stream_icon' => $extra['cover'] ?? '/ressources/logo.png',
-                        'container_extension' => $extra['ext'] ?? 'mp4',
-                        // Special flag to redirect to series watch
-                        // Actually, 'watch_vod.php' vs 'watch_series.php' might differ.
-                        // But wait, our links on home.php point to /movies/watch...
-                        // We need to differentiate URL.
-                        'is_series' => true,
-                        'series_id' => $extra['series_id'] ?? 0 // Needed if we want to link back to details
-                    ];
-                }
+            // STRICTLY MOVIES ONLY (Series handled by SeriesController)
+            if ($type !== 'movie') {
+                continue;
             }
 
-            if ($item) {
-                // Common Progress
+            if (isset($mapMovies[$p['stream_id']])) {
+                $item = $mapMovies[$p['stream_id']];
                 $item['progress_percent'] = ($p['duration'] > 0) ? ($p['current_time'] / $p['duration']) * 100 : 0;
-
-                // Add to list
+                $item['type'] = 'movie';
+                $item['updated_at'] = $p['updated_at'] ?? null;
                 $final[] = $item;
-                if (count($final) >= $limit)
-                    break;
             }
+
+            if (count($final) >= $limit)
+                break;
         }
         return $final;
     }
@@ -965,10 +955,13 @@ class MoviesController
         // Important: Close session to prevent locking concurrent requests (video stream)
         session_write_close();
 
+        $type = $input['type'] ?? 'movie';
+        $extra = $input['extra'] ?? [];
+
         try {
             $progressModel = new \App\Models\WatchProgress();
-            $progressModel->save($user, $streamId, $currentTime, $duration, 'movie');
-            file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - Saved for $user" . PHP_EOL, FILE_APPEND);
+            $progressModel->save($user, $streamId, $currentTime, $duration, $type, $extra);
+            file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - Saved for $user ($type)" . PHP_EOL, FILE_APPEND);
         } catch (\Exception $e) {
             file_put_contents(__DIR__ . '/../../debug_save.txt', date('H:i:s') . " - EXCEPTION: " . $e->getMessage() . PHP_EOL, FILE_APPEND);
         }
