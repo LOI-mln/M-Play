@@ -1,6 +1,8 @@
 # 🎬 M-Play - Modern Desktop IPTV Player
 
-**M-Play** est une application de bureau haute performance conçue pour transformer l'expérience de streaming IPTV. Elle combine une interface utilisateur "Netflix-like" soignée avec une architecture technique robuste capable de gérer d'immenses catalogues de VOD (Films & Séries) et de TV en direct.
+![Electron](https://img.shields.io/badge/Electron-2B2E3A?style=for-the-badge&logo=electron&logoColor=9FEAF9) ![NodeJS](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) ![FFmpeg](https://img.shields.io/badge/FFmpeg-007808?style=for-the-badge&logo=ffmpeg&logoColor=white)
+
+**M-Play** est une application de bureau haute performance conçue pour transformer l'expérience de streaming IPTV. Elle combine une interface utilisateur moderne avec une architecture technique robuste capable de gérer d'immenses catalogues de VOD (Films & Séries) et de TV en direct.
 
 ![M-Play Screenshot](/ressources/logo.png)
 
@@ -42,7 +44,7 @@ Une architecture hybride puissante pour le bureau :
 
 ```bash
 # Cloner le projet
-git clone https://github.com/votre-user/m-play.git
+git clone https://github.com/LOI-mln/m-play.git
 
 # Installer les dépendances Node
 npm install
@@ -83,4 +85,4 @@ m-play/
 ```
 
 ## 📝 Auteur
-Développé avec ❤️ par Milan.
+Développé avec ❤️ par МИЛАН.
