@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IPTV Player</title>
-    <title>IPTV Player</title>
+    <meta name="view-transition" content="same-origin" /> <!-- Native Page Transitions -->
+    <title>M-Play</title>
     <!-- Google Fonts: JetBrains Mono (Nerd Font style) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,20 +23,35 @@
                             dark: '#0f0f0f'
                         }
                     }
-                },
-                animation: {
-                    'fade-in-up': 'fadeInUp 0.8s ease-out forwards'
-                },
-                keyframes: {
-                    fadeInUp: {
-                        '0%': { opacity: '0', transform: 'translateY(20px)' },
-                        '100%': { opacity: '1', transform: 'translateY(0)' }
-                    }
                 }
             }
         }
-        }
     </script>
+    <style>
+        /* Custom Scrollbar for WebKit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* View Transitions Customization (Optional) */
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation-duration: 0.3s;
+        }
+    </style>
     <!-- Vue.js 3 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>

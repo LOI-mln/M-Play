@@ -65,7 +65,7 @@ async function startStreamServer() {
     // Endpoint de Streaming
     server.get('/stream', (req, res) => {
         const url = req.query.url; // L'URL source (encodée base64 ou brute, à voir)
-        const start = req.query.start || 0;
+        const start = parseFloat(req.query.start) || 0;
 
         if (!url) {
             return res.status(400).send("No URL provided");
@@ -117,7 +117,6 @@ async function startStreamServer() {
         const ffmpegCmd = ffmpeg(decodedUrl)
             .inputOptions([
                 '-reconnect', '1',
-                '-reconnect_streamed', '1',
                 '-reconnect_delay_max', '5',
                 '-rw_timeout', '15000000', // 15s timeout
                 '-user_agent', 'Mozilla/5.0',

@@ -54,30 +54,65 @@ ob_start();
                     <!-- Scroll Container -->
                     <div class="flex gap-5 overflow-x-auto scroll-smooth pb-8 pt-2 pl-1 pr-2 scrollbar-hide snap-x">
                         <?php foreach ($continueWatching as $m): ?>
-                            <a href="/movies/details?id=<?= $m['stream_id'] ?>&from=home"
-                                class="group relative block w-32 md:w-40 lg:w-48 flex-shrink-0 snap-start">
+                            <a href="/movies/watch?id=<?= $m['stream_id'] ?>&ext=<?= $m['container_extension'] ?? 'mp4' ?>"
+                                class="group relative block w-32 md:w-40 lg:w-48 flex-shrink-0 snap-start cw-card"
+                                data-stream-id="<?= $m['stream_id'] ?>">
                                 <div
-                                    class="aspect-[2/3] rounded-xl overflow-hidden bg-[#1a1a1a] shadow-lg shadow-black/50 transition-all duration-300 group-hover:shadow-red-900/20 ring-1 ring-white/5 group-hover:ring-red-600/40">
-                                    <img src="<?= htmlspecialchars($m['stream_icon'] ?? '') ?>"
-                                        class="w-full h-full object-cover transition-transform duration-500" loading="lazy"
-                                        onerror="this.src='https://via.placeholder.com/300x450?text=No+Poster'">
+                                    class="aspect-[2/3] rounded-xl overflow-hidden bg-[#1a1a1a] shadow-lg shadow-black/50 transition-all duration-300 group-hover:shadow-red-900/20 ring-1 ring-white/5 group-hover:ring-red-600/40 relative z-0 transform-gpu">
+                                    <div class="absolute inset-0 rounded-xl pointer-events-none border border-white/5 z-40"></div> <!-- Border Fix -->
+                                    <img src="<?= !empty($m['stream_icon']) ? $m['stream_icon'] : '/ressources/logo.png' ?>"
+                                        alt="<?= htmlspecialchars($m['name']) ?>"
+                                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110 will-change-transform"
+                                        loading="lazy">
 
-                                    <!-- Progress Bar Overlay -->
+                                    <!-- Hover Overlay (Now behind progress bar) -->
                                     <div
-                                        class="absolute bottom-2 left-2 right-2 h-1.5 bg-gray-800/80 rounded-full overflow-hidden backdrop-blur-sm shadow-md z-20">
-                                        <div class="h-full bg-red-600 rounded-full"
-                                            style="width: <?= $m['progress_percent'] ?? 0 ?>%"></div>
-                                    </div>
+                                        class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center">
 
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 pb-8 rounded-xl">
-                                        <h3 class="font-bold text-white text-sm leading-tight line-clamp-2 drop-shadow-md">
-                                            <?= htmlspecialchars($m['display_name'] ?? $m['name'] ?? 'Inconnu') ?>
-                                        </h3>
-                                        <div class="text-xs text-gray-300 mt-1">
-                                            <?= round($m['progress_percent'] ?? 0) ?>% vu
+                                        <!-- Play Icon Hint -->
+                                        <div
+                                            class="bg-red-600 rounded-full p-3 shadow-lg shadow-red-600/40 transform scale-90 group-hover:scale-105 transition-transform duration-300 mb-2 group/play">
+                                            <svg class="w-8 h-8 text-white pl-1" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 5v14l11-7z" />
+                                            </svg>
+                                        </div>
+
+                                        <!-- Title & Meta -->
+                                        <div class="absolute bottom-4 left-0 w-full px-4 text-center">
+                                            <h3
+                                                class="text-white text-sm font-bold leading-tight line-clamp-2 drop-shadow-lg mb-2 tracking-wide font-outfit">
+                                                <?= htmlspecialchars($m['name']) ?>
+                                            </h3>
+                                            <div
+                                                class="flex items-center justify-center gap-3 text-xs text-gray-200 font-medium">
+                                                <div class="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-md">
+                                                    <span class="text-yellow-400">★</span>
+                                                    <span><?= number_format($m['rating'] ?? 0, 1) ?></span>
+                                                </div>
+                                                <div class="flex items-center gap-1 bg-black/60 px-2 py-0.5 rounded-md">
+                                                    <span><?= round($m['progress_percent']) ?>%</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <!-- Progress Bar (Floating & Rounded) -->
+                                    <div
+                                        class="absolute bottom-2 left-2 right-2 h-1 bg-gray-700 rounded-full overflow-hidden z-20">
+                                        <div class="h-full bg-red-600 rounded-full"
+                                            style="width: <?= $m['progress_percent'] ?>%"></div>
+                                    </div>
+
+                                    <!-- Remove Button -->
+                                    <button
+                                        class="btn-remove-cw absolute top-2 right-2 bg-black/60 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all z-30 hover:scale-110"
+                                        title="Retirer de la liste">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
                             </a>
                         <?php endforeach; ?>
@@ -274,6 +309,43 @@ ob_start();
         /* Firefox */
     }
 </style>
+
+<script>
+    // Feature: Remove from Continue Watching
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.btn-remove-cw').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault(); // Prevent link navigation
+                e.stopPropagation(); // Stop bubbling
+
+                const card = btn.closest('.cw-card');
+                const streamId = card.dataset.streamId;
+
+                if (!streamId) return;
+
+                // Optimistic UI: Remove immediately
+                card.style.transition = 'all 0.3s ease';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.8)';
+
+                setTimeout(() => {
+                    card.remove();
+                }, 300);
+
+                try {
+                    await fetch('/movies/progress/remove', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ stream_id: streamId })
+                    });
+                    console.log(`Stream ${streamId} removed from CW.`);
+                } catch (err) {
+                    console.error("Failed to remove progress:", err);
+                }
+            });
+        });
+    });
+</script>
 
 <?php $content = ob_get_clean(); ?>
 <?php require __DIR__ . '/layout.php'; ?>

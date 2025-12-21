@@ -82,6 +82,9 @@ switch ($url) {
     case '/movies/progress':
         (new App\Controllers\MoviesController())->saveProgress();
         break;
+    case '/movies/progress/remove':
+        (new App\Controllers\MoviesController())->removeProgress();
+        break;
     case '/stream/transcode':
         (new App\Controllers\ProxyController())->transcode();
         break;

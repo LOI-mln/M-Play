@@ -19,11 +19,30 @@
             font-family: 'Outfit', sans-serif;
             background-color: #000;
         }
+
         /* Fullscreen Fixes */
-        :fullscreen, ::backdrop { background-color: black; width: 100%; height: 100%; }
-        :-webkit-full-screen { background-color: black; width: 100%; height: 100%; }
-        #conteneur-video:fullscreen { width: 100vw; height: 100vh; }
-        #conteneur-video:-webkit-full-screen { width: 100vw; height: 100vh; }
+        :fullscreen,
+        ::backdrop {
+            background-color: black;
+            width: 100%;
+            height: 100%;
+        }
+
+        :-webkit-full-screen {
+            background-color: black;
+            width: 100%;
+            height: 100%;
+        }
+
+        #conteneur-video:fullscreen {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #conteneur-video:-webkit-full-screen {
+            width: 100vw;
+            height: 100vh;
+        }
     </style>
 </head>
 
@@ -34,7 +53,7 @@
         <!-- Header (Retour) -->
         <div id="player-header"
             class="absolute top-0 left-0 w-full p-6 bg-gradient-to-b from-black/90 to-transparent z-50 transition-opacity duration-500 opacity-100 flex justify-between items-start">
-            <a href="/movies" onclick="if(history.length > 1){ history.back(); return false; }"
+            <a href="/movies" id="btn-back"
                 class="text-white hover:text-red-600 transition flex items-center gap-2 font-bold uppercase tracking-wider w-fit">
                 <span>&larr;</span> Retour aux films
             </a>
