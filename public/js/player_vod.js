@@ -375,6 +375,50 @@ function majIcons(isPlaying) {
 btnLecture.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
 video.addEventListener('click', (e) => { e.stopPropagation(); togglePlay(); });
 
+// SKIP BUTTONS (+/- 10s)
+const btnRewind = document.getElementById('btn-rewind');
+const btnForward = document.getElementById('btn-forward');
+
+function seekRelative(seconds) {
+    const d = getDuration();
+    if (d <= 0) return;
+
+    // Calcul du temps actuel (en prenant en compte l'offset transcode)
+    let current = isTranscoding ? (video.currentTime + currentTranscodeOffset) : video.currentTime;
+    let target = current + seconds;
+
+    // Clamp
+    if (target < 0) target = 0;
+    if (target > d) target = d;
+
+    console.log(`Seek Relative: ${seconds}s -> Target: ${target}`);
+
+    if (isTranscoding && staticDuration > 0) {
+        // En transcode, on recharge le flux à la nouvelle position
+        loadTranscode(target);
+    } else {
+        // En direct, on change juste le temps
+        if (isFinite(video.duration)) {
+            video.currentTime = target;
+        }
+    }
+    resetInactivityTimer();
+}
+
+if (btnRewind) {
+    btnRewind.addEventListener('click', (e) => {
+        e.stopPropagation();
+        seekRelative(-10);
+    });
+}
+
+if (btnForward) {
+    btnForward.addEventListener('click', (e) => {
+        e.stopPropagation();
+        seekRelative(10);
+    });
+}
+
 // Helper to get real duration
 function getDuration() {
     if (staticDuration > 0) return staticDuration;

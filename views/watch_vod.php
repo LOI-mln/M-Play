@@ -94,13 +94,36 @@
                 <!-- Controls Row -->
                 <div class="flex items-center gap-4">
 
+                    <!-- Rewind 10s -->
+                    <button id="btn-rewind"
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1 group">
+                        <svg class="w-8 h-8 opacity-80 group-hover:opacity-100" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
+                            <text x="12" y="13" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                                text-anchor="middle" dominant-baseline="middle" fill="currentColor">10</text>
+                        </svg>
+                    </button>
+
                     <!-- Play/Pause -->
-                    <button id="btn-lecture" class="text-white hover:text-red-600 transition transform hover:scale-110">
-                        <svg id="icone-play" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <button id="btn-lecture"
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 mx-2">
+                        <svg id="icone-play" class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z" />
                         </svg>
-                        <svg id="icone-pause" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
+                        <svg id="icone-pause" class="w-10 h-10 hidden" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                        </svg>
+                    </button>
+
+                    <!-- Forward 10s -->
+                    <button id="btn-forward"
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1 group">
+                        <svg class="w-8 h-8 opacity-80 group-hover:opacity-100" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" />
+                            <text x="12" y="13" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                                text-anchor="middle" dominant-baseline="middle" fill="currentColor">10</text>
                         </svg>
                     </button>
 
