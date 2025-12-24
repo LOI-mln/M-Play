@@ -86,7 +86,7 @@ async function startStreamServer() {
         //HEADERS
         // Important: On dit au navigateur que c'est un FLUX CONTINU (pas de longueur finie)
         res.writeHead(200, {
-            'Content-Type': 'video/webm', // WebM pour VP8
+            'Content-Type': 'video/mp4', // MP4 pour H.264
             'Transfer-Encoding': 'chunked',
             'Accept-Ranges': 'none',
             'Cache-Control': 'no-cache',
@@ -96,9 +96,9 @@ async function startStreamServer() {
 
         // LOAD CONFIG
         let streamConfig = {
-            videoBitrate: '3000k',
-            audioBitrate: '128k',
-            cpuUsed: '8',
+            videoBitrate: '5000k', // Increased for H.264 efficiency
+            audioBitrate: '192k',
+            cpuUsed: 'ultrafast', // H.264 preset name
             quality: 'realtime'
         };
 
@@ -114,23 +114,27 @@ async function startStreamServer() {
         }
 
         // FFMPEG NATIVE (Pas de proxy PHP instable !)
+        // H.264 (libx264) + AAC (aac) in Fragmented MP4 (fMP4)
         const ffmpegCmd = ffmpeg(decodedUrl)
             .inputOptions([
                 '-reconnect', '1',
                 '-reconnect_delay_max', '5',
-                '-rw_timeout', '15000000', // 15s timeout
+                '-rw_timeout', '60000000', // 60s timeout
+                '-analyzeduration', '10000000', // 10s probe limit (faster load)
+                '-probesize', '10000000', // 10MB probe limit
                 '-user_agent', 'Mozilla/5.0',
                 (start > 0) ? `-ss ${start}` : null
-            ].filter(Boolean)) // Enlever les nulls
-            .videoCodec('libvpx')
+            ].filter(Boolean))
+            .videoCodec('libx264')
             .videoBitrate(streamConfig.videoBitrate)
-            .audioCodec('libvorbis')
+            .audioCodec('aac')
             .audioBitrate(streamConfig.audioBitrate)
             .outputOptions([
-                `-quality ${streamConfig.quality}`,
-                `-cpu-used ${streamConfig.cpuUsed}`,
-                '-f', 'webm', // WebM est le plus robuste pour le streaming
-                '-deadline', 'realtime',
+                '-preset ultrafast', // Low CPU usage
+                '-tune zerolatency', // For streaming
+                '-pix_fmt yuv420p',  // Compatibility
+                '-movflags frag_keyframe+empty_moov+default_base_moof', // fMP4 vital flags
+                '-f', 'mp4',
                 '-ac', '2'
             ])
             .on('error', (err) => {

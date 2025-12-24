@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <!-- Contrôles Custom -->
+        <!-- Contrôles Custom (Barre du bas - Structure identique Live TV + Seekbar au dessus) -->
         <div id="player-controls"
             class="absolute bottom-0 left-0 w-full z-50 transition-opacity duration-500 opacity-100">
 
@@ -70,40 +70,36 @@
                 <!-- Controls Row -->
                 <div class="flex items-center gap-4">
 
-                    <!-- Play/Pause -->
-                    <button id="btn-lecture" class="text-white hover:text-red-600 transition transform hover:scale-110">
-                        <svg id="icone-play" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z" />
-                        </svg>
-                        <svg id="icone-pause" class="w-8 h-8 hidden" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                        </svg>
-                    </button>
-
-                    </button>
-
                     <!-- Rewind 10s -->
                     <button id="btn-rewind"
-                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1 group">
+                        <svg class="w-8 h-8 opacity-80 group-hover:opacity-100" fill="currentColor" viewBox="0 0 24 24">
                             <path
-                                d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
-                            <text x="13" y="17" font-size="7" font-weight="bold" text-anchor="middle"
-                                fill="currentColor">10</text>
+                                d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
+                            <text x="12" y="13" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                                text-anchor="middle" dominant-baseline="middle" fill="currentColor">10</text>
+                        </svg>
+                    </button>
+
+                    <!-- Play/Pause -->
+                    <button id="btn-lecture"
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 mx-2">
+                        <svg id="icone-play" class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        <svg id="icone-pause" class="w-10 h-10 hidden" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                         </svg>
                     </button>
 
                     <!-- Forward 10s -->
                     <button id="btn-forward"
-                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1">
-                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        class="text-white hover:text-red-600 transition transform hover:scale-110 p-1 group">
+                        <svg class="w-8 h-8 opacity-80 group-hover:opacity-100" fill="currentColor" viewBox="0 0 24 24">
                             <path
-                                d="M10 8c4.65 0 8.58 3.03 9.96 7.22L17.59 16c-1.05-3.19-4.05-5.5-7.59-5.5-1.95 0-3.73.72-5.12 1.88L1.26 16H10v-8z"
-                                transform="scale(-1, 1) translate(-24, 0)" />
-                            <path
-                                d="M22 7l-3.6 3.6c-1.9-1.6-4.3-2.6-6.9-2.6-4.7 0-8.6 3-10 7.2l2.4.8C5 12.8 7.9 10.5 11.5 10.5c2 0 3.7.7 5.1 1.9L13 16h9V7z" />
-                            <text x="11" y="17" font-size="7" font-weight="bold" text-anchor="middle"
-                                fill="currentColor">10</text>
+                                d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" />
+                            <text x="12" y="13" font-family="Arial, sans-serif" font-size="6" font-weight="bold"
+                                text-anchor="middle" dominant-baseline="middle" fill="currentColor">10</text>
                         </svg>
                     </button>
 

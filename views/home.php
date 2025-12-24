@@ -65,8 +65,15 @@ ob_start();
                                 // Déterminer le lien selon le type
                                 $type = $m['type'] ?? 'movie';
                                 if ($type === 'series') {
-                                    // Lien vers l'épisode spécifique
-                                    $link = "/series/watch?id=" . $m['stream_id'] . "&series_id=" . ($m['series_id'] ?? 0) . "&ext=" . ($m['container_extension'] ?? 'mp4');
+                                    // Lien vers l'épisode spécifique avec métadonnées COMPLÈTES pour éviter le chargement infini
+                                    $link = "/series/watch?id=" . $m['stream_id'] 
+                                        . "&series_id=" . ($m['series_id'] ?? 0) 
+                                        . "&ext=" . ($m['container_extension'] ?? 'mp4')
+                                        . "&s=" . ($m['s'] ?? '')
+                                        . "&e=" . ($m['e'] ?? '')
+                                        . "&name=" . urlencode($m['name'] ?? '')
+                                        . "&cover=" . urlencode($m['stream_icon'] ?? '')
+                                        . "&duration=" . urlencode($m['duration'] ?? '');
                                 } else {
                                     $link = "/movies/watch?id=" . $m['stream_id'] . "&ext=" . ($m['container_extension'] ?? 'mp4');
                                 }
@@ -80,7 +87,7 @@ ob_start();
                                     <div class="absolute inset-0 rounded-xl pointer-events-none border border-white/5 z-40"></div> <!-- Border Fix -->
                                     <img src="<?= !empty($m['stream_icon']) ? $m['stream_icon'] : '/ressources/logo.png' ?>"
                                         alt="<?= htmlspecialchars($m['name']) ?>"
-                                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110 will-change-transform"
+                                        class="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-all duration-500 will-change-transform"
                                         loading="lazy">
 
                                         <!-- Hover Overlay (Now behind progress bar) -->
@@ -89,7 +96,7 @@ ob_start();
 
                                             <!-- Play Icon Hint -->
                                             <div
-                                                class="bg-red-600 rounded-full p-3 shadow-lg shadow-red-600/40 transform scale-90 group-hover:scale-105 transition-transform duration-300 mb-2 group/play">
+                                                class="bg-red-600 rounded-full p-3 shadow-lg shadow-red-600/40 transform scale-90 transition-transform duration-300 mb-2 group/play">
                                                 <svg class="w-8 h-8 text-white pl-1" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M8 5v14l11-7z" />
                                                 </svg>
@@ -137,7 +144,7 @@ ob_start();
 
                                     <!-- Remove Button -->
                                     <button
-                                        class="btn-remove-cw absolute top-2 right-2 bg-black/60 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all z-30 hover:scale-110"
+                                        class="btn-remove-cw absolute top-2 right-2 bg-black/60 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all z-30"
                                         title="Retirer de la liste">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor">

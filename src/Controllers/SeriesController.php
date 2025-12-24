@@ -913,6 +913,8 @@ class SeriesController
 
                 // FIX: Map cover to stream_icon for home.php
                 $item['stream_icon'] = $extra['cover'] ?? $parentSeries['cover'];
+                $item['duration'] = $extra['duration'] ?? ($p['duration'] > 0 ? gmdate("H:i:s", $p['duration']) : '');
+
 
                 $seriesList[] = $item;
             }

@@ -393,8 +393,29 @@ function seekRelative(seconds) {
     console.log(`Seek Relative: ${seconds}s -> Target: ${target}`);
 
     if (isTranscoding && staticDuration > 0) {
-        // En transcode, on recharge le flux à la nouvelle position
-        loadTranscode(target);
+        // SMART SEEK: Vérifier si la cible est dans le buffer actuel
+        let targetVideoTime = target - currentTranscodeOffset;
+        let isBuffered = false;
+
+        // On ne peut pas seek dans le passé du stream actuel (avant le start)
+        if (targetVideoTime >= 0) {
+            for (let i = 0; i < video.buffered.length; i++) {
+                // On ajoute une marge de tolérance de 0.5s
+                if (targetVideoTime >= video.buffered.start(i) && targetVideoTime <= video.buffered.end(i)) {
+                    isBuffered = true;
+                    break;
+                }
+            }
+        }
+
+        if (isBuffered) {
+            console.log(`Smart Seek: ${targetVideoTime}s found in buffer. Instant jump.`);
+            video.currentTime = targetVideoTime;
+        } else {
+            // Pas dans le buffer (ou trop loin, ou dans le passé absolu du stream) -> On recharge
+            console.log("Smart Seek: Not in buffer. Reloading stream.");
+            loadTranscode(target);
+        }
     } else {
         // En direct, on change juste le temps
         if (isFinite(video.duration)) {
